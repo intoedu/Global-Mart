@@ -10,6 +10,7 @@ import type { Locale } from "@/lib/i18n";
 import type { BizPost } from "@/lib/types";
 import { Icon } from "../Icon";
 import { Pagination } from "./Pagination";
+import { RegionMap } from "./RegionMap";
 
 const PAGE_SIZE = 15;
 
@@ -51,12 +52,22 @@ export function BizBoard({ posts, locale }: { posts: BizPost[]; locale: Locale }
   }, [posts, region, category, q]);
 
   const items = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  // 지도에 표시할 지역별 글 수 ('전체' 글은 모든 지역에 포함)
+  const counts = useMemo(() => {
+    const c: Record<string, number> = {};
+    for (const r of REGIONS) c[r.id] = posts.filter((p) => r.id === "all" || p.region === r.id || p.region === "all").length;
+    return c;
+  }, [posts]);
   const current = REGION_MAP[region];
   const regionLabel = (r: string) => (isRegionId(r) ? t(REGION_MAP[r].label) : r);
   const detail = (id: number) => lp(locale, `/biz/${id}`);
 
   return (
-    <div className="container-x grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-12">
+    <div className="container-x">
+    <div className="mb-10">
+      <RegionMap locale={locale} active={region} counts={counts} hrefFor={(id) => href({ region: id, page: 1 })} />
+    </div>
+    <div className="grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-12">
       <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start">
         <p className="mb-3 hidden text-xs font-bold uppercase tracking-widest text-muted lg:block">{ko ? "지역" : "Region"}</p>
         <nav className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] lg:mx-0 lg:flex-col lg:px-0" aria-label={ko ? "지역" : "Regions"}>
@@ -192,6 +203,7 @@ export function BizBoard({ posts, locale }: { posts: BizPost[]; locale: Locale }
 
         <Pagination page={page} total={filtered.length} pageSize={PAGE_SIZE} makeHref={(n) => href({ page: n })} />
       </div>
+    </div>
     </div>
   );
 }

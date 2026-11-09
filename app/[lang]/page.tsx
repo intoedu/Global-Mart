@@ -9,6 +9,7 @@ import { REGION_MAP, bizCategoryLabel, isRegionId } from "@/lib/regions";
 import { getBizPosts } from "@/lib/biz";
 import { WorldMap } from "@/components/WorldMap";
 import { TradeTicker } from "@/components/TradeTicker";
+import { NetworkSection } from "@/components/NetworkSection";
 import { Icon } from "@/components/Icon";
 import { SectionTitle } from "@/components/PageHero";
 import { formatDate } from "@/lib/format";
@@ -140,6 +141,9 @@ export default async function HomePage({ params }: LangParams) {
           </div>
         </div>
       </section>
+
+      {/* ---------------- GLOBAL NETWORK (세계 지도) ---------------- */}
+      <NetworkSection locale={locale} />
 
       {/* ---------------- PROCESS ---------------- */}
       <section className="py-20 lg:py-28">

@@ -21,8 +21,11 @@ export function WorldMap({
   activeRegion,
   dark = true,
   showArcs = true,
+  labels,
   className = "",
 }: {
+  /** 지도에 이름을 표시할 거점 id 목록 */
+  labels?: string[];
   locale: Locale;
   activeRegion?: string | null;
   dark?: boolean;
@@ -73,6 +76,22 @@ export function WorldMap({
               className="transition-opacity duration-500"
             />
           ))}
+        {labels &&
+          pins
+            .filter((p) => labels.includes(p.id))
+            .map((p) => {
+              const name = officeById.get(p.id)?.[locale] ?? "";
+              const isHq = p.region === "hq";
+              const w = name.length * (locale === "ko" ? 1.45 : 0.85) + 2.4;
+              return (
+                <g key={`l-${p.id}`} className="pointer-events-none" opacity={isOn(p.region) ? 1 : 0.25}>
+                  <rect x={p.x + 1.1} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#fff"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "#d5dcec"} strokeWidth={0.08} />
+                  <text x={p.x + 2.3} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0f1830" : dark ? "#fff" : "#0f1830"} fontFamily="inherit">
+                    {name}
+                  </text>
+                </g>
+              );
+            })}
         {pins.map((p) => {
           const on = isOn(p.region);
           const isHq = p.region === "hq";
