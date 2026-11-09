@@ -51,7 +51,13 @@ export default async function HomePage({ params }: LangParams) {
             <h1 className="reveal mt-5 text-[40px] font-extrabold leading-[1.12] tracking-[-0.025em] sm:text-6xl lg:mt-6 lg:text-[68px]">
               {heroLines[0]}
               <br />
-              <span className="bg-gradient-to-r from-[#0a6fd6] to-accent bg-clip-text text-transparent">{heroFirst}</span>
+              <span className="relative inline-block">
+                <span className="relative z-10">{heroFirst}</span>
+                <span
+                  className="absolute inset-x-0 -bottom-[0.02em] z-0 h-[0.16em] origin-left animate-[underline_0.9s_0.5s_cubic-bezier(0.6,0,0.2,1)_both] rounded-full bg-orange"
+                  aria-hidden
+                />
+              </span>
               {heroRest}
             </h1>
             <p className="reveal mt-5 max-w-xl text-[16px] leading-relaxed text-ink-3 sm:text-[17px] lg:mt-7 lg:text-[19px]">{t(HOME.heroLead)}</p>
