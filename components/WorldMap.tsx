@@ -25,8 +25,11 @@ export function WorldMap({
   showArcs = true,
   labels,
   animated = false,
+  strong = false,
   className = "",
 }: {
+  /** 배경용: 점·항로를 더 진하고 굵게 */
+  strong?: boolean;
   /** 항로선이 그려지고 화물 점이 오가는 애니메이션 */
   animated?: boolean;
   /** 지도에 이름을 표시할 거점 id 목록 */
@@ -53,7 +56,7 @@ export function WorldMap({
     [pins, hq]
   );
 
-  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : "rgb(13 14 18 / 0.2)";
+  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : strong ? "rgb(13 14 18 / 0.3)" : "rgb(13 14 18 / 0.2)";
   const pinColor = dark ? "#8fb2ff" : "#0d0e12";
   const arcColor = dark ? "#8fb2ff" : "#2d3f7a";
   const isOn = (region: string) => !activeRegion || region === activeRegion || region === "hq";
@@ -69,7 +72,7 @@ export function WorldMap({
           </linearGradient>
         </defs>
         {dots.map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r={0.24} fill={dotColor} />
+          <circle key={i} cx={x} cy={y} r={strong ? 0.28 : 0.24} fill={dotColor} />
         ))}
         {showArcs &&
           arcs.map((a, i) => (
@@ -79,7 +82,7 @@ export function WorldMap({
               pathLength={1}
               fill="none"
               stroke="url(#arc)"
-              strokeWidth={0.12}
+              strokeWidth={strong ? 0.17 : 0.12}
               style={animated ? { animationDelay: `${0.4 + i * 0.07}s` } : undefined}
               data-draw={animated ? "" : undefined}
               opacity={isOn(a.region) ? 0.9 : 0.12}
@@ -128,7 +131,7 @@ export function WorldMap({
               return (
                 <g
                   key={`l-${p.id}`}
-                  className="pointer-events-none"
+                  className="map-label pointer-events-none"
                   opacity={isOn(p.region) ? 1 : 0.25}
                   data-pop={animated ? "" : undefined}
                   style={animated ? { animationDelay: `${isHq ? 0.3 : 1.2 + labels.indexOf(p.id) * 0.12}s` } : undefined}

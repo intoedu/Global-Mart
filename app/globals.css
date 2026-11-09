@@ -205,3 +205,10 @@ html.js [data-reveal].is-in {
 .dark-section .eyebrow {
   color: rgb(255 255 255 / 0.7);
 }
+
+/* 모바일 첫 화면 배경 지도: 이름표는 숨겨 문구와 겹치지 않게 */
+@media (max-width: 639px) {
+  .hero-map .map-label {
+    display: none;
+  }
+}

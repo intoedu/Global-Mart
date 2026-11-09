@@ -37,11 +37,16 @@ export default async function HomePage({ params }: LangParams) {
     <>
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden bg-paper text-ink">
+        {/* 배경: 세계 지도 (서울 → 해외 거점 항로) */}
         <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" aria-hidden />
-        <div className="absolute -left-40 top-0 size-[520px] rounded-full bg-accent/10 blur-[120px]" aria-hidden />
+        <div className="hero-map absolute right-[-18%] top-[34%] w-[215%] opacity-50 sm:right-[-25%] sm:top-1/2 sm:w-[130%] sm:-translate-y-1/2 sm:opacity-70 lg:right-[-2%] lg:w-[80%] lg:opacity-100" aria-hidden>
+          <WorldMap locale={locale} labels={HERO_LABELS} animated strong dark={false} />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-paper/90 via-paper/70 to-paper/30 sm:from-paper sm:via-paper/70 sm:to-paper/0 lg:via-paper/60 lg:to-transparent" aria-hidden />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-paper to-transparent" aria-hidden />
 
-        <div className="container-x relative grid items-center gap-10 pb-12 pt-[88px] lg:min-h-[calc(100svh-52px)] lg:grid-cols-[1fr_1.08fr] lg:gap-12 lg:pb-16 lg:pt-28">
-          <div>
+        <div className="container-x relative flex items-center pb-12 pt-[88px] lg:min-h-[calc(100svh-52px)] lg:pb-16 lg:pt-28">
+          <div className="w-full max-w-[640px]">
             <p className="eyebrow reveal !tracking-[0.08em] !normal-case !text-[14px] sm:!text-[15px]">{t(HOME.heroTag)}</p>
             <h1 className="reveal mt-5 text-[40px] font-black leading-[1.1] tracking-[-0.03em] sm:text-6xl lg:mt-6 lg:text-[76px]">
               {heroLines[0]}
@@ -82,42 +87,6 @@ export default async function HomePage({ params }: LangParams) {
             </div>
           </div>
 
-          {/* 오른쪽: 검정 지도 패널 */}
-          <div className="reveal relative">
-            <div className="relative overflow-hidden rounded-[32px] bg-ink p-4 shadow-[0_40px_80px_-30px_rgb(13_14_18/0.55)] sm:p-6">
-              <div className="bg-grid absolute inset-0 opacity-60" aria-hidden />
-              <div className="absolute -right-20 -top-20 size-72 rounded-full bg-accent/20 blur-[90px]" aria-hidden />
-              <div className="absolute -bottom-24 left-10 size-72 rounded-full bg-brand/30 blur-[90px]" aria-hidden />
-              <div className="relative flex items-center justify-between px-1 pb-2 text-white">
-                <span className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.2em] text-white/70">
-                  <span className="relative flex size-2">
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75" />
-                    <span className="relative inline-flex size-2 rounded-full bg-accent" />
-                  </span>
-                  Global Network
-                </span>
-                <span className="text-[12px] font-semibold text-white/50">Seoul HQ → {officeCount} {ko ? "거점" : "bases"}</span>
-              </div>
-              {/* 아시아·중동 쪽을 크게 보이도록 확대 */}
-              <div className="relative -mx-4 overflow-hidden sm:-mx-6">
-                <div className="-ml-[38%] w-[146%]">
-                  <WorldMap locale={locale} labels={HERO_LABELS} animated />
-                </div>
-              </div>
-              <div className="relative mt-1 grid grid-cols-3 gap-2 text-white">
-                {[
-                  { v: "2004", l: ko ? "설립" : "Founded" },
-                  { v: "20+", l: ko ? "거점 국가" : "Countries" },
-                  { v: ko ? "성과제" : "Success fee", l: ko ? "Agent 수수료" : "Commission" },
-                ].map((x) => (
-                  <div key={x.l} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3 backdrop-blur sm:px-4">
-                    <p className="text-[11px] text-white/50 sm:text-xs">{x.l}</p>
-                    <p className="mt-0.5 text-lg font-extrabold sm:text-2xl">{/^\d/.test(x.v) ? <CountUp value={x.v} /> : x.v}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="relative">
