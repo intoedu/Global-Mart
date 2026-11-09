@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NAV, SITE } from "@/lib/site";
+import { lp } from "@/lib/paths";
 import type { Locale } from "@/lib/i18n";
 import { PageHero } from "./PageHero";
 import { SectionNav } from "./SectionNav";
@@ -30,6 +31,7 @@ export function BusinessShell({
   return (
     <>
       <PageHero
+        locale={locale}
         image={image}
         eyebrow={eyebrow}
         title={items[idx].label[locale]}
@@ -41,7 +43,7 @@ export function BusinessShell({
       <section className="border-t border-line py-12">
         <div className="container-x grid gap-4 sm:grid-cols-2">
           {prev ? (
-            <Link href={prev.href} className="group rounded-2xl border border-line p-6 transition hover:border-brand">
+            <Link href={lp(locale, prev.href)} className="group rounded-2xl border border-line p-6 transition hover:border-brand">
               <span className="flex items-center gap-1 text-sm text-muted">
                 <Icon name="chevron-left" className="size-4" /> {ko ? "이전" : "Previous"}
               </span>
@@ -51,7 +53,7 @@ export function BusinessShell({
             <span className="hidden sm:block" />
           )}
           {next && (
-            <Link href={next.href} className="group rounded-2xl border border-line p-6 text-right transition hover:border-brand">
+            <Link href={lp(locale, next.href)} className="group rounded-2xl border border-line p-6 text-right transition hover:border-brand">
               <span className="flex items-center justify-end gap-1 text-sm text-muted">
                 {ko ? "다음" : "Next"} <Icon name="chevron-right" className="size-4" />
               </span>
@@ -67,7 +69,7 @@ export function BusinessShell({
                 {ko ? `전화 ${SITE.tel} 또는 온라인으로 문의해 주세요.` : `Call ${SITE.telIntl} or send us an inquiry online.`}
               </p>
             </div>
-            <Link href="/contact#inquiry" className="btn-light shrink-0">
+            <Link href={lp(locale, "/contact#inquiry")} className="btn-light shrink-0">
               {ko ? "상담 신청" : "Inquire"} <Icon name="arrow-right" className="size-4" />
             </Link>
           </div>

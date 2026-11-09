@@ -1,54 +1,55 @@
 # 글로벌마트 홈페이지 (globalmart21.com 리뉴얼)
 
-(주)글로벌마트의 새 홈페이지입니다. 기존 사이트(globalmart21.com/default/…)의 내용을 옮기고, 의뢰서(PPT)에서 요청한 **해외 Biz정보** 게시판과 **해외주재원 전용** 게시판을 추가했습니다.
+(주)글로벌마트의 새 홈페이지입니다. 기존 사이트의 내용을 옮기고, 의뢰서(PPT)에서 요청한 **해외 Biz정보** 게시판과 **해외주재원 전용** 게시판을 추가했습니다.
 
-- Next.js 16 (App Router) · TypeScript · Tailwind CSS 4
-- Supabase (PostgreSQL) — 게시판, 관리자 로그인, 상담 신청
-- PC·모바일 반응형, 한국어/English 전환
+- Next.js 16 정적 사이트(static export) · TypeScript · Tailwind CSS 4
+- **GitHub Pages** 무료 호스팅 — 별도 서버·데이터베이스 없음
+- PC·모바일 반응형, 한국어(`/ko/`) / English(`/en/`)
 
-## 메뉴 구성 (PPT 9쪽 기준)
+주소: https://intoedu.github.io/Global-Mart/
+
+## 메뉴
 
 | 메뉴 | 주소 | 비고 |
 |---|---|---|
-| 메인 (Open Page) | `/` | PPT의 모바일 4개 블록(서비스·가능지역·유망아이템·연락처)을 그대로 배치 |
-| 회사소개 | `/company/greeting` `/history` `/partners` `/location` | 인사말·연혁·제휴사·주소 |
-| 해외지사 | `/offices` | 지역별로 거르는 세계 지도와 사무소 이메일 |
-| 사업내용 | `/business/agency` `/research` `/buyers` `/branch` `/field-research` `/software` | 해외출장조사 추가, 소프트웨어 무역은 사업내용 아래로 이동 |
-| 해외 Biz정보 | `/biz` | 지역 11개 탭, 종류(산업정보/인콰이어리), 검색, 페이지 넘김. 목록에서 게시자 숨김. 지역 '전체'로 쓴 글은 모든 지역에 표시 |
-| 해외주재원 전용 | `/resident` | **회원가입 없음**. 공용 비밀번호를 넣어야 열람 가능 |
-| Contact Us | `/contact` | 온라인 상담 신청서 |
-| 관리자 | `/admin` | 글쓰기·수정·삭제, 상담 신청 처리, 주재원 비밀번호 변경 |
+| 메인 | `/ko/` | PPT 모바일 4개 블록 + 무역 항로 띠·세계 지도 |
+| 회사소개 | `/ko/company/greeting` 외 | 인사말·연혁·제휴사·주소 |
+| 해외지사 | `/ko/offices` | 지역별 지도·사무소 이메일 |
+| 사업내용 | `/ko/business/agency` 외 6개 | 해외출장조사 추가, 소프트웨어 무역 포함 |
+| 해외 Biz정보 | `/ko/biz` | 지역 11개, 종류(산업정보/인콰이어리), 검색, 게시자 숨김, '전체' 글은 모든 지역 표시 |
+| 해외주재원 전용 | `/ko/resident` | 공용 비밀번호 입력 후 열람 (글은 암호화 저장) |
+| Contact Us | `/ko/contact` | 상담 신청 → FormSubmit 으로 gvmart@hanmail.net 에 메일 전달 |
+| 관리자 | `/ko/admin` | GitHub 토큰으로 로그인해 게시글 작성·수정·삭제, 주재원 비밀번호 변경 |
 
-기존 주소(`/default/01/01.php` 등)로 들어오면 새 페이지로 자동 이동합니다(`next.config.ts`).
+## 게시판 데이터
+
+- 해외 Biz정보: `data/biz.json`
+- 해외주재원 전용: `public/data/resident.json` — 공용 비밀번호로 **AES-GCM 암호화**되어 있어 저장소가 공개여도 비밀번호 없이는 읽을 수 없습니다.
+- 관리자 화면에서 저장하면 저장소 파일이 바뀌고, GitHub Actions(`.github/workflows/pages.yml`)가 1~2분 안에 사이트를 다시 배포합니다.
+
+## 관리자 토큰 만들기
+
+GitHub › Settings › Developer settings › Personal access tokens › Fine-grained tokens › Generate new token
+- Repository access: `intoedu/Global-Mart` 만 선택
+- Repository permissions › **Contents: Read and write**
+
+## 상담 신청서 (FormSubmit)
+
+첫 접수 때 gvmart@hanmail.net 으로 FormSubmit 의 확인(Activate) 메일이 옵니다. 버튼을 한 번 눌러야 이후 접수가 전달됩니다. 전송이 실패하면 방문자의 메일 앱으로 같은 내용을 보내도록 안내합니다.
+
+## 수정 위치
+
+- 회사 정보: `lib/site.ts` · 본문(한/영): `lib/content.ts` · 사진: `lib/photos.ts`
+- Biz정보 지역·국가: `lib/regions.ts` · 해외지사: `lib/offices.json` (수정 후 `npm run gen:map`)
 
 ## 로컬 실행
 
 ```bash
 npm install
-cp .env.example .env.local   # 값을 비워 두면 미리보기 모드
-npm run dev
+npm run dev     # http://localhost:3000/ko/
 ```
 
-## 운영 설정 (처음 한 번)
+## 자체 도메인(globalmart21.com) 연결 시
 
-1. **Supabase 프로젝트 생성** 후 SQL Editor 에서 `supabase/migrations/20261109000000_init.sql` 을 실행합니다.
-2. **회원가입 끄기**: Authentication › Sign In / Providers 에서 *Allow new users to sign up* 을 끕니다.
-3. **관리자 계정**: Authentication › Users › *Add user* 로 관리자 이메일/비밀번호를 만들고, SQL 로 권한을 줍니다.
-   ```sql
-   update public.profiles set role = 'admin' where email = '관리자@이메일';
-   ```
-4. **환경변수**: 배포 환경(Vercel 등)에 `.env.example` 의 값을 넣습니다. `SUPABASE_SERVICE_ROLE_KEY` 는 서버 전용입니다.
-5. 사이트 하단 **관리자** 링크로 로그인한 뒤 › **주재원 비밀번호** 에서 공용 비밀번호를 정해 주재원들에게 알려 줍니다.
-
-## 콘텐츠 수정 위치
-
-- 회사 정보(전화·주소·대표 등): `lib/site.ts`
-- 본문 문구(한/영): `lib/content.ts`
-- Biz정보 지역·국가 목록: `lib/regions.ts`
-- 해외지사 목록: `lib/offices.json` → 수정 후 `npm run gen:map` 으로 지도 갱신
-
-## 보안 메모
-
-- 게시판 쓰기·수정·삭제와 상담 신청 열람은 DB 보안 규칙(RLS)으로 관리자만 가능합니다.
-- 주재원 게시판은 DB에서 관리자만 읽을 수 있고, 공용 비밀번호를 확인한 경우에만 서버가 대신 읽어 보여 줍니다.
-- 공용 비밀번호는 해시로만 저장되며, 바꾸면 기존 입장 쿠키가 모두 무효가 됩니다.
+1. 워크플로의 `NEXT_PUBLIC_BASE_PATH` 를 빈 값으로, `NEXT_PUBLIC_SITE_URL` 을 새 도메인으로 바꿉니다.
+2. Settings › Pages › Custom domain 에 도메인 입력, 도메인 업체 DNS 에 GitHub Pages 주소를 연결합니다.

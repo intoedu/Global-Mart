@@ -5,7 +5,11 @@ import type { L } from "./i18n";
  * 정보가 바뀌면 이 파일만 고치면 됩니다.
  */
 export const SITE = {
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.globalmart21.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://intoedu.github.io/Global-Mart",
+  /** 게시판 데이터가 저장된 GitHub 저장소 (관리자 화면에서 사용) */
+  repo: { owner: "intoedu", name: "Global-Mart" },
+  /** 상담 신청서를 메일로 받는 주소 (FormSubmit) */
+  formEndpoint: "https://formsubmit.co/ajax/gvmart@hanmail.net",
   name: { ko: "(주)글로벌마트", en: "Globalmart Inc." } satisfies L,
   shortName: { ko: "글로벌마트", en: "Globalmart" } satisfies L,
   slogan: {

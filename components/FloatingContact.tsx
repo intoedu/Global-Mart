@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
 import { Icon } from "./Icon";
+import { lp } from "@/lib/paths";
 
 /** 모바일 하단 고정 상담 바 (전화 / 상담신청) */
 export function FloatingContact({ locale }: { locale: Locale }) {
@@ -13,7 +14,7 @@ export function FloatingContact({ locale }: { locale: Locale }) {
         <a href={SITE.telHref} className="btn-ghost !py-3">
           <Icon name="phone" className="size-4" /> {ko ? "전화 상담" : "Call us"}
         </a>
-        <Link href="/contact#inquiry" className="btn-primary !py-3">
+        <Link href={lp(locale, "/contact#inquiry")} className="btn-primary !py-3">
           <Icon name="mail" className="size-4" /> {ko ? "상담 신청" : "Inquire"}
         </Link>
       </div>

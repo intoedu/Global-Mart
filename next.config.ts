@@ -1,34 +1,18 @@
 import type { NextConfig } from "next";
 
+/**
+ * GitHub Pages 정적 배포
+ * - 프로젝트 페이지 주소(https://intoedu.github.io/Global-Mart/)에 맞춰 basePath 를 사용합니다.
+ * - 나중에 globalmart21.com 같은 자체 도메인을 연결하면 NEXT_PUBLIC_BASE_PATH 를 빈 값으로 빌드하세요.
+ */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const nextConfig: NextConfig = {
+  output: "export",
+  basePath: basePath || undefined,
+  trailingSlash: true,
+  images: { unoptimized: true },
   poweredByHeader: false,
-  images: { remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }] },
-  async redirects() {
-    // 기존 사이트(globalmart21.com/default/...) 주소로 들어오는 방문자를 새 페이지로 연결
-    const map: Record<string, string> = {
-      "00/01": "/",
-      "01/01": "/company/greeting",
-      "01/02": "/company/history",
-      "01/03": "/company/partners",
-      "01/04": "/company/location",
-      "02/01": "/offices",
-      "02/02": "/offices",
-      "03/01": "/business/agency",
-      "03/02": "/business/research",
-      "03/03": "/business/buyers",
-      "03/04": "/business/branch",
-      "04/01": "/business/software",
-      "04/02": "/business/software#messenger",
-      "04/03": "/business/software#blockchain",
-      "04/04": "/business/software#various",
-      "05/01": "/contact",
-    };
-    return Object.entries(map).map(([from, to]) => ({
-      source: `/default/${from}.php`,
-      destination: to,
-      permanent: true,
-    }));
-  },
 };
 
 export default nextConfig;

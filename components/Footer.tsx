@@ -3,15 +3,17 @@ import Link from "next/link";
 import { NAV, SITE } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
 import { Icon } from "./Icon";
+import { asset, lp } from "@/lib/paths";
 
 export function Footer({ locale }: { locale: Locale }) {
   const t = (l: { ko: string; en: string }) => l[locale];
   const ko = locale === "ko";
   return (
     <footer className="bg-ink text-white/70">
+      <div className="container-stripes" aria-hidden />
       <div className="container-x grid gap-12 py-16 lg:grid-cols-[1.2fr_2fr] lg:py-20">
         <div>
-          <Image src="/images/logo-full-white.png" alt={t(SITE.name)} width={480} height={96} className="h-8 w-auto" />
+          <Image src={asset("/images/logo-full-white.png")} alt={t(SITE.name)} width={480} height={96} className="h-8 w-auto" />
           <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/60">{t(SITE.tagline)}</p>
           <div className="mt-8 space-y-3 text-[15px]">
             <a href={SITE.telHref} className="flex items-center gap-3 text-2xl font-bold text-white hover:text-sky">
@@ -32,7 +34,7 @@ export function Footer({ locale }: { locale: Locale }) {
               <ul className="mt-4 space-y-2.5 text-[14px]">
                 {n.children!.map((c) => (
                   <li key={c.href}>
-                    <Link href={c.href} className="hover:text-white">
+                    <Link href={lp(locale, c.href)} className="hover:text-white">
                       {t(c.label)}
                     </Link>
                   </li>
@@ -45,7 +47,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <ul className="mt-4 space-y-2.5 text-[14px]">
               {NAV.filter((n) => !n.children).map((n) => (
                 <li key={n.href}>
-                  <Link href={n.href} className="hover:text-white">
+                  <Link href={lp(locale, n.href)} className="hover:text-white">
                     {t(n.label)}
                   </Link>
                 </li>
@@ -69,12 +71,12 @@ export function Footer({ locale }: { locale: Locale }) {
             </p>
           </div>
           <div className="flex flex-col gap-2 lg:items-end">
-            <Link href="/privacy" className="font-semibold text-white/80 hover:text-white">
+            <Link href={lp(locale, "/privacy")} className="font-semibold text-white/80 hover:text-white">
               {ko ? "개인정보처리방침" : "Privacy Policy"}
             </Link>
             <p>
               © {new Date().getFullYear()} Globalmart Inc. All rights reserved. ·{" "}
-              <Link href="/admin" className="hover:text-white">
+              <Link href={lp("ko", "/admin")} className="hover:text-white">
                 {ko ? "관리자" : "Admin"}
               </Link>
             </p>

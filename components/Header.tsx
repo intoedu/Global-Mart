@@ -2,26 +2,22 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
-import { setLocale } from "@/app/actions/locale";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { NAV, SITE } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
+import { asset, lp, swapLang } from "@/lib/paths";
 import { Icon } from "./Icon";
 
-type Props = {
-  locale: Locale;
-  user: { name: string; isAdmin: boolean } | null;
-  authEnabled: boolean;
-};
-
-export function Header({ locale, user, authEnabled }: Props) {
-  const pathname = usePathname();
-  const router = useRouter();
+export function Header({ locale }: { locale: Locale }) {
+  const fullPath = usePathname();
+  // 언어 접두어(/ko, /en)를 뺀 경로
+  const pathname = fullPath.replace(/^\/(ko|en)(?=\/|$)/, "").replace(/\/$/, "") || "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [, startTransition] = useTransition();
   const t = (l: { ko: string; en: string }) => l[locale];
+  const L = (href: string) => lp(locale, href);
+  const otherLang: Locale = locale === "ko" ? "en" : "ko";
   const isHome = pathname === "/";
   const solid = scrolled || !isHome || open;
 
@@ -41,12 +37,6 @@ export function Header({ locale, user, authEnabled }: Props) {
     };
   }, [open]);
 
-  const switchLang = () =>
-    startTransition(async () => {
-      await setLocale(locale === "ko" ? "en" : "ko");
-      router.refresh();
-    });
-
   const isActive = (href: string) => {
     const base = "/" + href.split("/")[1];
     return pathname === href || (base !== "/" && pathname.startsWith(base));
@@ -59,9 +49,9 @@ export function Header({ locale, user, authEnabled }: Props) {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 lg:h-20">
-        <Link href="/" className="flex shrink-0 items-center" aria-label={t(SITE.name)}>
+        <Link href={L("/")} className="flex shrink-0 items-center" aria-label={t(SITE.name)}>
           <Image
-            src={solid ? "/images/logo-full.png" : "/images/logo-full-white.png"}
+            src={asset(solid ? "/images/logo-full.png" : "/images/logo-full-white.png")}
             alt={t(SITE.name)}
             width={480}
             height={96}
@@ -75,7 +65,7 @@ export function Header({ locale, user, authEnabled }: Props) {
           {NAV.map((item) => (
             <div key={item.href} className="group relative">
               <Link
-                href={item.href}
+                href={L(item.href)}
                 className={`flex items-center gap-1 px-3.5 py-7 text-[15px] font-semibold transition xl:px-4 ${
                   solid ? "text-ink hover:text-brand" : "text-white/90 hover:text-white"
                 } ${isActive(item.href) ? (solid ? "!text-brand" : "!text-white") : ""}`}
@@ -89,7 +79,7 @@ export function Header({ locale, user, authEnabled }: Props) {
                     {item.children.map((c) => (
                       <Link
                         key={c.href}
-                        href={c.href}
+                        href={L(c.href)}
                         className={`block rounded-xl px-4 py-2.5 text-[14px] font-medium transition hover:bg-brand-soft hover:text-brand ${
                           pathname === c.href ? "bg-brand-soft text-brand" : "text-ink-3"
                         }`}
@@ -105,9 +95,8 @@ export function Header({ locale, user, authEnabled }: Props) {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={switchLang}
+          <Link
+            href={swapLang(fullPath, otherLang)}
             className={`hidden rounded-full px-3 py-1.5 text-[13px] font-bold tracking-wide transition sm:inline-flex ${
               solid ? "text-ink-3 hover:bg-paper" : "text-white/85 hover:bg-white/10"
             }`}
@@ -116,32 +105,9 @@ export function Header({ locale, user, authEnabled }: Props) {
             <span className={locale === "ko" ? "" : "opacity-50"}>KO</span>
             <span className="mx-1 opacity-30">/</span>
             <span className={locale === "en" ? "" : "opacity-50"}>EN</span>
-          </button>
-          {authEnabled && (
-            <div className="hidden items-center gap-1.5 md:flex">
-              {user ? (
-                <>
-                  {user.isAdmin && (
-                    <Link
-                      href="/admin"
-                      className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${solid ? "text-brand hover:bg-brand-soft" : "text-white hover:bg-white/10"}`}
-                    >
-                      {locale === "ko" ? "관리자" : "Admin"}
-                    </Link>
-                  )}
-                  <form action="/auth/signout" method="post">
-                    <button
-                      className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${solid ? "text-ink-3 hover:bg-paper" : "text-white/85 hover:bg-white/10"}`}
-                    >
-                      {locale === "ko" ? "로그아웃" : "Log out"}
-                    </button>
-                  </form>
-                </>
-              ) : null}
-            </div>
-          )}
+          </Link>
           <Link
-            href="/contact#inquiry"
+            href={L("/contact#inquiry")}
             className={`hidden sm:inline-flex btn !py-2 !px-4 !text-[14px] ${solid ? "bg-brand text-white hover:bg-ink-2" : "bg-white text-ink hover:bg-brand-soft"}`}
           >
             {locale === "ko" ? "상담 신청" : "Get in touch"}
@@ -169,7 +135,7 @@ export function Header({ locale, user, authEnabled }: Props) {
         <nav className="container-x pb-10 pt-2" aria-label="Mobile">
           {NAV.map((item) => (
             <div key={item.href} className="border-b border-line py-3">
-              <Link href={item.href} className="block py-1.5 text-lg font-bold text-ink">
+              <Link href={L(item.href)} className="block py-1.5 text-lg font-bold text-ink">
                 {t(item.label)}
               </Link>
               {item.children && (
@@ -177,7 +143,7 @@ export function Header({ locale, user, authEnabled }: Props) {
                   {item.children.map((c) => (
                     <Link
                       key={c.href}
-                      href={c.href}
+                      href={L(c.href)}
                       className={`py-1.5 text-[15px] ${pathname === c.href ? "font-semibold text-brand" : "text-muted"}`}
                     >
                       {t(c.label)}
@@ -191,22 +157,9 @@ export function Header({ locale, user, authEnabled }: Props) {
             <a href={SITE.telHref} className="btn-primary">
               <Icon name="phone" className="size-4" /> {SITE.tel}
             </a>
-            <button type="button" onClick={switchLang} className="btn-ghost">
+            <Link href={swapLang(fullPath, otherLang)} className="btn-ghost">
               {locale === "ko" ? "English" : "한국어"}
-            </button>
-            {authEnabled &&
-              (user ? (
-                <>
-                  {user.isAdmin && (
-                    <Link href="/admin" className="btn-ghost">
-                      {locale === "ko" ? "관리자" : "Admin"}
-                    </Link>
-                  )}
-                  <form action="/auth/signout" method="post">
-                    <button className="btn-ghost">{locale === "ko" ? "로그아웃" : "Log out"}</button>
-                  </form>
-                </>
-              ) : null)}
+            </Link>
           </div>
         </nav>
       </div>

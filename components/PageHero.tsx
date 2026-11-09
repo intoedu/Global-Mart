@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { photo, type PhotoKey } from "@/lib/photos";
+import { lp } from "@/lib/paths";
+import type { Locale } from "@/lib/i18n";
 import { Icon } from "./Icon";
 
 type Crumb = { href?: string; label: string };
@@ -12,9 +14,11 @@ export function PageHero({
   lead,
   crumbs,
   image,
+  locale = "ko",
   children,
 }: {
   image?: PhotoKey;
+  locale?: Locale;
   eyebrow?: string;
   title: string;
   lead?: string;
@@ -37,14 +41,14 @@ export function PageHero({
       <div className={`container-x relative ${image ? "py-16 lg:py-24" : "py-12 lg:py-16"}`}>
         {crumbs && (
           <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-white/50">
-            <Link href="/" className="hover:text-white" aria-label="Home">
+            <Link href={lp(locale, "/")} className="hover:text-white" aria-label="Home">
               <Icon name="home" className="size-4" />
             </Link>
             {crumbs.map((c, i) => (
               <span key={i} className="flex items-center gap-1.5">
                 <Icon name="chevron-right" className="size-3.5 opacity-60" />
                 {c.href ? (
-                  <Link href={c.href} className="hover:text-white">
+                  <Link href={lp(locale, c.href)} className="hover:text-white">
                     {c.label}
                   </Link>
                 ) : (
@@ -59,6 +63,7 @@ export function PageHero({
         {lead && <p className="reveal mt-4 max-w-2xl text-[16px] leading-relaxed text-white/70 lg:text-lg">{lead}</p>}
         {children}
       </div>
+      <div className="container-stripes relative" aria-hidden />
     </section>
   );
 }
@@ -70,7 +75,7 @@ export function SubNav({ items, current }: { items: { href: string; label: strin
       <div className="container-x">
         <nav className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="Section">
           {items.map((i) => {
-            const active = i.href === current;
+            const active = i.href.replace(/\/$/, "").endsWith(current);
             return (
               <Link
                 key={i.href}
