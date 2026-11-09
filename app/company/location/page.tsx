@@ -22,7 +22,7 @@ export default async function LocationPage() {
   ];
   return (
     <>
-      <PageHero
+      <PageHero image="seoul"
         eyebrow="Location"
         title={ko ? "오시는 길" : "Location"}
         crumbs={[{ label: ko ? "회사소개" : "Company" }, { label: ko ? "주소" : "Location" }]}

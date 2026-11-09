@@ -47,7 +47,7 @@ export default async function BizListPage({ searchParams }: { searchParams: SP }
 
   return (
     <>
-      <PageHero eyebrow="Global Biz Info" title={ko ? "해외 Biz정보" : "Global Biz Info"} lead={t(BIZ_INTRO)} crumbs={[{ label: ko ? "해외 Biz정보" : "Global Biz Info" }]} />
+      <PageHero image="mumbai" eyebrow="Global Biz Info" title={ko ? "해외 Biz정보" : "Global Biz Info"} lead={t(BIZ_INTRO)} crumbs={[{ label: ko ? "해외 Biz정보" : "Global Biz Info" }]} />
 
       <section className="py-10 lg:py-16">
         <div className="container-x grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-12">

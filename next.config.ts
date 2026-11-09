@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: { remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }] },
   async redirects() {
     // 기존 사이트(globalmart21.com/default/...) 주소로 들어오는 방문자를 새 페이지로 연결
     const map: Record<string, string> = {

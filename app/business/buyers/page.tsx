@@ -12,7 +12,7 @@ export default async function BuyersPage() {
   const { locale, t } = await getT();
   const ko = locale === "ko";
   return (
-    <BusinessShell locale={locale} current="/business/buyers" eyebrow="The Discovery of Overseas Buyers" lead={t(BUYERS.lead)}>
+    <BusinessShell image="handshake" locale={locale} current="/business/buyers" eyebrow="The Discovery of Overseas Buyers" lead={t(BUYERS.lead)}>
       <section className="py-16 lg:py-24">
         <div className="container-x">
           <ol className="relative grid gap-4 lg:grid-cols-4">

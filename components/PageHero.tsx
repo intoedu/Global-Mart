@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { photo, type PhotoKey } from "@/lib/photos";
 import { Icon } from "./Icon";
 
 type Crumb = { href?: string; label: string };
@@ -9,8 +11,10 @@ export function PageHero({
   title,
   lead,
   crumbs,
+  image,
   children,
 }: {
+  image?: PhotoKey;
   eyebrow?: string;
   title: string;
   lead?: string;
@@ -19,12 +23,18 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden bg-ink pt-16 text-white lg:pt-20">
+      {image && (
+        <>
+          <Image src={photo(image, 2000)} alt="" fill priority sizes="100vw" className="object-cover opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/25" aria-hidden />
+        </>
+      )}
       <div className="bg-grid absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" aria-hidden />
       <div
         className="absolute -right-40 -top-40 size-[520px] rounded-full bg-brand/40 blur-[120px]"
         aria-hidden
       />
-      <div className="container-x relative py-12 lg:py-16">
+      <div className={`container-x relative ${image ? "py-16 lg:py-24" : "py-12 lg:py-16"}`}>
         {crumbs && (
           <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-white/50">
             <Link href="/" className="hover:text-white" aria-label="Home">

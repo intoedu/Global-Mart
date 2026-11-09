@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { photo } from "@/lib/photos";
 import { getT, getLocale } from "@/lib/i18n";
 import { AGENCY, PROCESS } from "@/lib/content";
 import { BusinessShell } from "@/components/BusinessShell";
@@ -14,7 +16,7 @@ export default async function AgencyPage() {
   const { locale, t } = await getT();
   const ko = locale === "ko";
   return (
-    <BusinessShell locale={locale} current="/business/agency" eyebrow="Overseas Branch Agency" lead={t(AGENCY.lead)}>
+    <BusinessShell image="meeting" locale={locale} current="/business/agency" eyebrow="Overseas Branch Agency" lead={t(AGENCY.lead)}>
       <section className="py-16 lg:py-24">
         <div className="container-x">
           <SectionTitle eyebrow={ko ? "두 가지 방식" : "Two models"} title={ko ? "해외지사대행의 종류" : "How we can work together"} />
@@ -40,7 +42,12 @@ export default async function AgencyPage() {
         </div>
       </section>
 
-      <section className="bg-paper py-16 lg:py-24">
+      <div className="container-x">
+        <div className="relative aspect-[21/8] overflow-hidden rounded-3xl">
+          <Image src={photo("docs", 1800)} alt="" fill sizes="100vw" className="object-cover" />
+        </div>
+      </div>
+      <section className="bg-paper py-16 lg:py-24 mt-16 lg:mt-24">
         <div className="container-x">
           <SectionTitle eyebrow="Process" title={ko ? "업무 진행 절차" : "Our process"} lead={ko ? "업무는 다음 절차에 따라 진행됩니다." : "Engagements follow these steps."} />
           <ol className="mt-10 grid gap-4 md:grid-cols-3">

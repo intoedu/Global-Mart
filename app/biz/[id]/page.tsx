@@ -24,7 +24,7 @@ export default async function BizPostPage({ params }: { params: P }) {
 
   return (
     <>
-      <PageHero eyebrow="Global Biz Info" title={ko ? "해외 Biz정보" : "Global Biz Info"} crumbs={[{ href: "/biz", label: ko ? "해외 Biz정보" : "Global Biz Info" }, { label: regionLabel }]} />
+      <PageHero image="mumbai" eyebrow="Global Biz Info" title={ko ? "해외 Biz정보" : "Global Biz Info"} crumbs={[{ href: "/biz", label: ko ? "해외 Biz정보" : "Global Biz Info" }, { label: regionLabel }]} />
       <PostView
         post={post}
         ko={ko}

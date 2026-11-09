@@ -20,7 +20,7 @@ export default async function HistoryPage() {
 
   return (
     <>
-      <PageHero
+      <PageHero image="hcmc"
         eyebrow="History"
         title={ko ? "연혁" : "History"}
         lead={ko ? "전 세계로 뻗어 나가는 글로벌 비즈니스 기업" : "A global business reaching across the world"}

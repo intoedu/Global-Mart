@@ -11,8 +11,10 @@ export function BusinessShell({
   current,
   eyebrow,
   lead,
+  image,
   children,
 }: {
+  image?: import("@/lib/photos").PhotoKey;
   locale: Locale;
   current: string;
   eyebrow: string;
@@ -28,6 +30,7 @@ export function BusinessShell({
   return (
     <>
       <PageHero
+        image={image}
         eyebrow={eyebrow}
         title={items[idx].label[locale]}
         lead={lead}

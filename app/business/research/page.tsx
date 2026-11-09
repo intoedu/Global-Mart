@@ -11,7 +11,7 @@ export default async function ResearchPage() {
   const { locale, t } = await getT();
   const ko = locale === "ko";
   return (
-    <BusinessShell locale={locale} current="/business/research" eyebrow="Overseas Market Research" lead={t(RESEARCH.lead)}>
+    <BusinessShell image="analytics" locale={locale} current="/business/research" eyebrow="Overseas Market Research" lead={t(RESEARCH.lead)}>
       <section className="py-16 lg:py-24">
         <div className="container-x">
           <div className="mb-8 flex flex-wrap gap-3">

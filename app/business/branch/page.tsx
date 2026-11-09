@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BranchPage() {
   const { locale, t } = await getT();
   return (
-    <BusinessShell locale={locale} current="/business/branch" eyebrow="The Agency of Overseas Branch Work" lead={t(BRANCH.lead)}>
+    <BusinessShell image="towers" locale={locale} current="/business/branch" eyebrow="The Agency of Overseas Branch Work" lead={t(BRANCH.lead)}>
       <section className="py-16 lg:py-24">
         <div className="container-x">
           <FeatureGrid items={BRANCH.points} locale={locale} cols={3} />

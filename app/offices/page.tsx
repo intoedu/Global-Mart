@@ -15,7 +15,7 @@ export default async function OfficesPage() {
   const ko = locale === "ko";
   return (
     <>
-      <PageHero
+      <PageHero image="earth"
         eyebrow="Our Overseas Offices"
         title={ko ? "해외지사 현황" : "Global Offices"}
         lead={

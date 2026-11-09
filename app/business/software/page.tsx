@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getT, getLocale } from "@/lib/i18n";
+import { photo, type PhotoKey } from "@/lib/photos";
+
+const SECTION_PHOTOS: Record<string, PhotoKey> = { messenger: "devices", blockchain: "blockchain", various: "dashboard" };
 import { SOFTWARE } from "@/lib/content";
 import { BusinessShell } from "@/components/BusinessShell";
 import { Icon } from "@/components/Icon";
@@ -12,7 +16,7 @@ export default async function SoftwarePage() {
   const { locale, t } = await getT();
   const ko = locale === "ko";
   return (
-    <BusinessShell locale={locale} current="/business/software" eyebrow="Software Trading & Service" lead={t(SOFTWARE.lead)}>
+    <BusinessShell image="code" locale={locale} current="/business/software" eyebrow="Software Trading & Service" lead={t(SOFTWARE.lead)}>
       <section className="py-16 lg:py-20">
         <div className="container-x grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
           <p className="text-[17px] leading-relaxed text-ink-3">{t(SOFTWARE.lead2)}</p>
@@ -52,10 +56,15 @@ export default async function SoftwarePage() {
                 ))}
               </ul>
             </div>
-            <div className="prose-gm">
-              {s.paragraphs.map((p, j) => (
-                <p key={j}>{t(p)}</p>
-              ))}
+            <div>
+              <div className="relative mb-8 aspect-[16/8] overflow-hidden rounded-2xl">
+                <Image src={photo(SECTION_PHOTOS[s.id], 1200)} alt="" fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
+              </div>
+              <div className="prose-gm">
+                {s.paragraphs.map((p, j) => (
+                  <p key={j}>{t(p)}</p>
+                ))}
+              </div>
             </div>
           </div>
         </section>

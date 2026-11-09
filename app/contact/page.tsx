@@ -17,7 +17,7 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHero
+      <PageHero image="success"
         eyebrow="Contact Us"
         title="Contact Us"
         lead={ko ? "해외시장 진출에 관한 무엇이든 편하게 문의해 주세요." : "Ask us anything about taking your business abroad."}

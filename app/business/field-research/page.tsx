@@ -12,7 +12,7 @@ export default async function FieldResearchPage() {
   const { locale, t } = await getT();
   const ko = locale === "ko";
   return (
-    <BusinessShell locale={locale} current="/business/field-research" eyebrow="Overseas Field Research" lead={t(FIELD.lead)}>
+    <BusinessShell image="plane" locale={locale} current="/business/field-research" eyebrow="Overseas Field Research" lead={t(FIELD.lead)}>
       <section className="py-16 lg:py-24">
         <div className="container-x">
           <FeatureGrid items={FIELD.points} locale={locale} numbered cols={4} />

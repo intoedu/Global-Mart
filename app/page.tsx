@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { photo, type PhotoKey } from "@/lib/photos";
 import { getT } from "@/lib/i18n";
 import { HOME, PROCESS, SOFTWARE } from "@/lib/content";
 import { SITE } from "@/lib/site";
@@ -10,6 +12,8 @@ import { SectionTitle } from "@/components/PageHero";
 import { formatDate } from "@/lib/format";
 
 const SERVICE_ICONS = ["briefcase", "chart", "handshake"];
+const SERVICE_PHOTOS: PhotoKey[] = ["meeting", "ship", "tax"];
+const SOFTWARE_PHOTOS: PhotoKey[] = ["devices", "blockchain", "dashboard"];
 
 export default async function HomePage() {
   const { locale, t } = await getT();
@@ -20,6 +24,8 @@ export default async function HomePage() {
     <>
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden bg-ink text-white">
+        <Image src={photo("port", 2400)} alt="" fill priority sizes="100vw" className="object-cover opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/50" aria-hidden />
         <div className="bg-grid absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" aria-hidden />
         <div className="absolute -left-40 top-20 size-[560px] rounded-full bg-brand/45 blur-[140px]" aria-hidden />
         <div className="absolute -right-20 bottom-0 size-[420px] rounded-full bg-sky/15 blur-[120px]" aria-hidden />
@@ -80,13 +86,24 @@ export default async function HomePage() {
               <Link
                 key={s.no}
                 href={s.href}
-                className="card group relative flex flex-col overflow-hidden p-7 transition hover:-translate-y-1 hover:shadow-lift lg:p-8"
+                className="card group relative flex flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lift"
               >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={photo(SERVICE_PHOTOS[i], 800)}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
+                </div>
+                <div className="flex flex-1 flex-col p-7 lg:p-8">
                 <div className="flex items-center justify-between">
-                  <span className="grid size-12 place-items-center rounded-2xl bg-brand-soft text-brand transition group-hover:bg-brand group-hover:text-white">
+                  <span className="-mt-14 grid size-12 place-items-center rounded-2xl bg-white text-brand shadow-card ring-4 ring-white transition group-hover:bg-brand group-hover:text-white">
                     <Icon name={SERVICE_ICONS[i]} className="size-6" />
                   </span>
-                  <span className="text-4xl font-black text-line">{s.no}</span>
+                  <span className="text-3xl font-black text-line">{s.no}</span>
                 </div>
                 <h3 className="mt-6 text-xl font-bold text-ink">{t(s.title)}</h3>
                 <ul className="mt-4 flex-1 space-y-2.5">
@@ -101,6 +118,7 @@ export default async function HomePage() {
                   {ko ? "자세히 보기" : "Learn more"}
                   <Icon name="arrow-right" className="size-4 transition group-hover:translate-x-1" />
                 </span>
+                </div>
               </Link>
             ))}
           </div>
@@ -166,7 +184,9 @@ export default async function HomePage() {
 
       {/* ---------------- REGIONS (PPT 4쪽) ---------------- */}
       <section className="relative overflow-hidden bg-ink-2 py-20 text-white lg:py-28">
-        <div className="container-x grid items-center gap-12 lg:grid-cols-[1fr_1.2fr]">
+        <Image src={photo("earth", 2400)} alt="" fill sizes="100vw" className="object-cover opacity-25" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink-2/80 via-ink-2/60 to-ink-2/90" aria-hidden />
+        <div className="container-x relative grid items-center gap-12 lg:grid-cols-[1fr_1.2fr]">
           <div>
             <p className="eyebrow !text-sky">Coverage</p>
             <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">{t(HOME.regionsTitle)}</h2>
@@ -255,16 +275,20 @@ export default async function HomePage() {
         <div className="container-x grid items-center gap-10 lg:grid-cols-[1fr_1.3fr]">
           <SectionTitle eyebrow="Software Trading" title={ko ? "한국 소프트웨어를\n세계로" : "Korean software,\nworldwide"} lead={t(SOFTWARE.lead)} />
           <div className="grid gap-4 sm:grid-cols-3">
-            {SOFTWARE.sections.map((s) => (
+            {SOFTWARE.sections.map((s, i) => (
               <Link
                 key={s.id}
                 href={`/business/software#${s.id}`}
-                className="card group flex flex-col p-6 transition hover:-translate-y-1 hover:shadow-lift"
+                className="card group flex flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lift"
               >
-                <Icon name="code" className="size-6 text-brand" />
-                <h3 className="mt-4 text-lg font-bold">{t(s.title)}</h3>
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image src={photo(SOFTWARE_PHOTOS[i], 600)} alt="" fill sizes="(min-width: 640px) 25vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                <h3 className="text-lg font-bold">{t(s.title)}</h3>
                 <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted">{t(s.paragraphs[0])}</p>
                 <span className="mt-4 text-sm font-semibold text-brand">{ko ? "자세히" : "More"} →</span>
+                </div>
               </Link>
             ))}
           </div>
@@ -275,6 +299,7 @@ export default async function HomePage() {
       <section className="py-20 lg:py-28">
         <div className="container-x">
           <div className="relative overflow-hidden rounded-[28px] bg-brand px-7 py-12 text-white sm:px-12 lg:px-16 lg:py-16">
+            <Image src={photo("cranes", 2000)} alt="" fill sizes="100vw" className="object-cover opacity-20 mix-blend-luminosity" />
             <div className="absolute -right-24 -top-24 size-80 rounded-full bg-white/10" aria-hidden />
             <div className="absolute -bottom-32 right-32 size-64 rounded-full bg-ink/20" aria-hidden />
             <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">

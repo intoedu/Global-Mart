@@ -14,7 +14,7 @@ export default async function PartnersPage() {
   const ko = locale === "ko";
   return (
     <>
-      <PageHero
+      <PageHero image="training"
         eyebrow="Partners"
         title={ko ? "제휴사" : "Partners"}
         lead={t(PARTNERS.lead)}

@@ -15,7 +15,7 @@ export default async function ResidentPostPage({ params }: { params: Promise<{ i
   const ko = locale === "ko";
   const viewer = await getViewer();
   const hero = (
-    <PageHero eyebrow="For Overseas Staff" title={ko ? "해외주재원 전용" : "For Overseas Staff"} crumbs={[{ href: "/resident", label: ko ? "해외주재원 전용" : "For Overseas Staff" }]} />
+    <PageHero image="warehouse" eyebrow="For Overseas Staff" title={ko ? "해외주재원 전용" : "For Overseas Staff"} crumbs={[{ href: "/resident", label: ko ? "해외주재원 전용" : "For Overseas Staff" }]} />
   );
   // DB 미연결(미리보기)에서는 예시 공개. 운영 시에는 공용 비밀번호 입장 또는 관리자만 열람
   const access = await residentAccess(!!viewer?.isAdmin);
