@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /ko/admin/
+Disallow: /en/admin/
+Disallow: /ko/resident/
+Disallow: /en/resident/
+
+Sitemap: https://intoedu.github.io/Global-Mart/sitemap.xml

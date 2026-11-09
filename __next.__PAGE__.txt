@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:"/Global-Mart/_next/static/chunks/3qfy96eoyh-ek.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+8:I[97367,["$2"],"OutletBoundary"]
+9:"$Sreact.suspense"
+c:"ViewportBoundary"
+d:I[97367,["$2"],"$c"]
+e:"MetadataBoundary"
+f:I[97367,["$2"],"$e"]
+10:I[27201,["$2"],"IconMark"]
+:HL["/Global-Mart/_next/static/chunks/0alcs-ejufc54.css","style"]
+:HL["https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css","style"]
+6:X
+7:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[[["$","meta",null,{"httpEquiv":"refresh","content":"0; url=/Global-Mart/ko/"}],["$","script",null,{"dangerouslySetInnerHTML":{"__html":"location.replace(\"/Global-Mart/ko/\")"}}],["$","p",null,{"style":{"padding":40,"fontFamily":"sans-serif"},"children":[["$","a",null,{"href":"/Global-Mart/ko/","children":"글로벌마트 홈페이지로 이동"}]," · ",["$","a",null,{"href":"/Global-Mart/en/","children":"English"}]]}]],null,["$","$L8",null,{"children":["$","$9",null,{"name":"Next.MetadataOutlet","children":"$@a"}]}]]}],"p":"$@b","v":null,"s":"$6"}}]]
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/Global-Mart/_next/static/chunks/0alcs-ejufc54.css","precedence":"next"}],["$","script","script-0",{"src":"/Global-Mart/_next/static/chunks/3qfy96eoyh-ek.js","async":true}]],["$","html",null,{"lang":"ko","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://cdn.jsdelivr.net","crossOrigin":""}],["$","link",null,{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"}],["$","script",null,{"dangerouslySetInnerHTML":{"__html":"if(/\\/en(\\/|$)/.test(location.pathname))document.documentElement.lang=\"en\";"}}]]}],["$","body",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","section",null,{"className":"flex min-h-screen flex-col items-center justify-center px-4 text-center","children":[["$","p",null,{"className":"text-7xl font-black text-brand/20","children":"404"}],["$","h1",null,{"className":"mt-4 text-2xl font-extrabold","children":"페이지를 찾을 수 없습니다"}],["$","p",null,{"className":"mt-2 text-muted","children":"Page not found"}],["$","a",null,{"href":"/Global-Mart/ko/","className":"btn-primary mt-8","children":"홈으로 / Home"}]]}],[]]}]}]]}]]}],"p":"$@5","v":null,"s":"$6"},"c":"$Q7"},"h":{"r":["$","$1","h",{"children":[null,["$","$Ld",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#0f1830"}]]}],["$","$Lf",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$9",null,{"name":"Next.Metadata","children":[["$","link","0",{"rel":"icon","href":"/Global-Mart/icon.png?icon.363r_8h4u6qb1.png","sizes":"32x32","type":"image/png"}],["$","link","1",{"rel":"apple-touch-icon","href":"/Global-Mart/apple-icon.png?apple-icon.27dg6e69fyt8c.png","sizes":"180x180","type":"image/png"}],["$","$L10","2",{}]]}]}],null]}],null]}],"p":"$@11","v":null,"s":"$6"}},"a":"$@12","u":"$@13","b":"T9ukdY0kc593NJtbdHzKV"}
+a:null
+6:300
+13:true
+6:C
+12:0
+5:"$undefined"
+11:"$undefined"
+b:"$undefined"

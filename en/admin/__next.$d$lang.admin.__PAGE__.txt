@@ -1,0 +1,30 @@
+3:"$Sreact.fragment"
+4:"/Global-Mart/_next/static/chunks/3qfy96eoyh-ek.js"
+5:I[39756,["$4"],"default"]
+6:I[37457,["$4"],"default"]
+b:"/Global-Mart/_next/static/chunks/09tadpr7evg_7.js"
+c:"/Global-Mart/_next/static/chunks/1h5ccsp1m6fdf.js"
+d:"/Global-Mart/_next/static/chunks/1s3wupey-d553.js"
+e:I[67701,["$4","$b","$c","$d"],"AdminApp"]
+f:I[97367,["$4"],"OutletBoundary"]
+10:"$Sreact.suspense"
+13:"ViewportBoundary"
+14:I[97367,["$4"],"$13"]
+15:"MetadataBoundary"
+16:I[97367,["$4"],"$15"]
+17:I[27201,["$4"],"IconMark"]
+8:X
+8:C
+9:X
+a:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$3","c",{"children":[[["$","section",null,{"className":"relative overflow-hidden bg-ink pt-16 text-white lg:pt-20","children":["$undefined",["$","div",null,{"className":"bg-grid absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]","aria-hidden":true}],["$","div",null,{"className":"absolute -right-40 -top-40 size-[520px] rounded-full bg-brand/40 blur-[120px]","aria-hidden":true}],["$","div",null,{"className":"container-x relative py-12 lg:py-16","children":["$undefined",["$","p",null,{"className":"eyebrow !text-sky","children":"Admin"}],["$","h1",null,{"className":"reveal mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl","children":"관리자"}],["$","p",null,{"className":"reveal mt-4 max-w-2xl text-[16px] leading-relaxed text-white/70 lg:text-lg","children":"해외 Biz정보와 해외주재원 전용 게시판의 글을 쓰고 고칩니다."}],"$undefined"]}],["$","div",null,{"className":"container-stripes relative","aria-hidden":true}]]}],["$","$Le",null,{}]],[["$","script","script-0",{"src":"/Global-Mart/_next/static/chunks/1s3wupey-d553.js","async":true}]],["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}],"p":"$@12","v":null,"s":"$9"}}]]
+2:[["children",{"s":"admin","h":64,"d":{"r":["$","$3","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","template":["$","$L6",null,{}]}]]}],"p":"$@7","v":"$8","s":"$9"},"c":"$Qa"}]]
+1:[["children",{"s":{"n":"lang","t":"d","k":"en","s":[]},"h":65568,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":131152,"c":"$Q1"},"h":{"r":["$","$3","h",{"children":[null,["$","$L14",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#0f1830"}]]}],["$","$L16",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$10",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"관리자 | Globalmart"}],["$","meta","1",{"name":"description","content":"Go global with Globalmart: overseas branch agency, market research, buyer discovery and software export, delivered by local specialists."}],["$","meta","2",{"name":"robots","content":"noindex"}],["$","meta","3",{"property":"og:title","content":"Globalmart | Overseas Branch Agency & Market Entry"}],["$","meta","4",{"property":"og:description","content":"Go global with Globalmart: overseas branch agency, market research, buyer discovery and software export, delivered by local specialists."}],["$","meta","5",{"property":"og:site_name","content":"Globalmart"}],["$","meta","6",{"property":"og:locale","content":"en_US"}],["$","meta","7",{"property":"og:type","content":"website"}],["$","meta","8",{"name":"twitter:card","content":"summary"}],["$","meta","9",{"name":"twitter:title","content":"Globalmart | Overseas Branch Agency & Market Entry"}],["$","meta","10",{"name":"twitter:description","content":"Go global with Globalmart: overseas branch agency, market research, buyer discovery and software export, delivered by local specialists."}],["$","link","11",{"rel":"icon","href":"/Global-Mart/icon.png?icon.363r_8h4u6qb1.png","sizes":"32x32","type":"image/png"}],["$","link","12",{"rel":"apple-touch-icon","href":"/Global-Mart/apple-icon.png?apple-icon.27dg6e69fyt8c.png","sizes":"180x180","type":"image/png"}],["$","$L17","13",{}]]}]}],null]}],null]}],"p":"$@18","v":null,"s":"$9"}},"a":"$@19","u":"$@1a","b":"T9ukdY0kc593NJtbdHzKV"}
+11:null
+1a:true
+9:300
+9:C
+19:0
+7:"$undefined"
+18:"$undefined"
+12:"$undefined"
