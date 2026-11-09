@@ -70,7 +70,7 @@
   @apply inline-flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.2em] text-ink-3;
   &::before {
     content: "";
-    @apply inline-block h-0.5 w-7 bg-accent;
+    @apply inline-block h-0.5 w-7 bg-orange;
   }
 }
 @utility btn {

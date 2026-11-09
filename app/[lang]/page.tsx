@@ -66,7 +66,7 @@ export default async function HomePage({ params }: LangParams) {
               <span className="relative inline-block">
                 <span className="relative z-10">{heroFirst}</span>
                 <span
-                  className="absolute inset-x-0 -bottom-[0.02em] z-0 h-[0.16em] origin-left animate-[underline_0.9s_0.5s_cubic-bezier(0.6,0,0.2,1)_both] rounded-full bg-orange"
+                  className="absolute inset-x-0 bottom-[0.08em] z-0 h-[0.32em] origin-left animate-[underline_1s_0.6s_cubic-bezier(0.6,0,0.2,1)_both] bg-orange"
                   aria-hidden
                 />
               </span>
