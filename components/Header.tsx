@@ -70,7 +70,7 @@ export function Header({ locale }: { locale: Locale }) {
                 href={L(item.href)}
                 className={`flex items-center gap-1 px-3.5 py-7 text-[15px] font-semibold transition xl:px-4 ${
                   solid ? "text-ink-3 hover:text-ink" : "text-white/90 hover:text-white"
-                } ${isActive(item.href) ? (solid ? "!text-ink underline decoration-accent decoration-2 underline-offset-[10px]" : "!text-white") : ""}`}
+                } ${isActive(item.href) ? (solid ? "!text-ink underline decoration-orange decoration-2 underline-offset-[10px]" : "!text-white") : ""}`}
               >
                 {t(item.label)}
                 {item.children && <Icon name="chevron-down" className="size-3.5 opacity-50" />}

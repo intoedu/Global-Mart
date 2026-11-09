@@ -11,7 +11,7 @@ export function TradeTicker({ locale }: { locale: Locale }) {
       <div className="flex w-max animate-[ticker_60s_linear_infinite] gap-10 whitespace-nowrap text-[13px] font-semibold tracking-wider text-white/55">
         {items.map((name, i) => (
           <span key={i} className="flex items-center gap-3">
-            <span className="text-accent">{hq}</span>
+            <span className="text-orange">{hq}</span>
             <svg viewBox="0 0 24 12" className="h-3 w-6 text-white/40" fill="none" stroke="currentColor" strokeWidth="1.6">
               <path d="M1 6h20M16 1l5 5-5 5" />
             </svg>

@@ -56,7 +56,7 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
                 return (
                   <li key={o.id} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 text-[15px]">
                     <span className="flex items-center gap-2 font-medium text-ink">
-                      <span className="size-1.5 rounded-full bg-accent" />
+                      <span className="size-1.5 rounded-full bg-orange" />
                       {o[locale]}
                     </span>
                     {email && (

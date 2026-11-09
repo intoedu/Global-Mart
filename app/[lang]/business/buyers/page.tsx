@@ -31,7 +31,7 @@ export default async function BuyersPage({ params }: LangParams) {
             ))}
           </ol>
           <div className="mt-6 flex items-start gap-4 rounded-2xl bg-ink p-7 text-white">
-            <Icon name="handshake" className="mt-0.5 size-6 shrink-0 text-accent" />
+            <Icon name="handshake" className="mt-0.5 size-6 shrink-0 text-orange" />
             <div>
               <p className="font-bold">{ko ? "계약 체결까지 동행" : "With you until the contract is signed"}</p>
               <p className="mt-1 text-[15px] leading-relaxed text-white/70">{t(BUYERS.outro)}</p>

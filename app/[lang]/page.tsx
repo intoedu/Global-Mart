@@ -140,7 +140,7 @@ export default async function HomePage({ params }: LangParams) {
 
           <div data-reveal className="mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl bg-ink px-7 py-6 text-white sm:flex-row sm:items-center lg:px-8">
             <p className="flex items-center gap-3 text-[16px] font-medium">
-              <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-ink">{ko ? "수수료" : "Fee"}</span>
+              <span className="rounded-full bg-orange px-2.5 py-0.5 text-xs font-bold text-ink">{ko ? "수수료" : "Fee"}</span>
               {t(HOME.fee)}
             </p>
             <a href={SITE.telHref} className="flex items-center gap-2 text-lg font-bold text-sky hover:text-white">
@@ -181,7 +181,7 @@ export default async function HomePage({ params }: LangParams) {
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white">
                   <p className="text-lg font-bold">{t(r.title)}</p>
                   <p className="mt-2 flex items-start gap-2 text-sm text-white/75">
-                    <Icon name="ship" className="mt-0.5 size-4 shrink-0 text-accent" />
+                    <Icon name="ship" className="mt-0.5 size-4 shrink-0 text-orange" />
                     {t(r.items)}
                   </p>
                 </div>
@@ -238,14 +238,14 @@ export default async function HomePage({ params }: LangParams) {
             </Link>
           </div>
           <ol className="relative mt-14 grid gap-8 md:grid-cols-4 md:gap-5">
-            <span className="absolute left-6 top-6 hidden h-0.5 w-[calc(100%-3rem)] bg-gradient-to-r from-brand via-sky to-accent md:block" aria-hidden />
-            <span className="absolute bottom-6 left-6 top-6 w-0.5 bg-gradient-to-b from-brand via-sky to-accent md:hidden" aria-hidden />
+            <span className="absolute left-6 top-6 hidden h-0.5 w-[calc(100%-3rem)] bg-gradient-to-r from-accent via-sky to-orange md:block" aria-hidden />
+            <span className="absolute bottom-6 left-6 top-6 w-0.5 bg-gradient-to-b from-accent via-sky to-orange md:hidden" aria-hidden />
             {[
               ...PROCESS.map((p) => ({ href: p.href, title: p.title, period: p.period })),
               { href: "/business/field-research", title: { ko: "해외출장조사", en: "Field research" }, period: { ko: "필요 시 · 회계 고객 연 1회", en: "As needed" } },
             ].map((p, i) => (
               <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative pl-16 md:pl-0">
-                <span className="absolute left-0 top-0 grid size-12 place-items-center rounded-full bg-ink text-sm font-black text-white ring-8 ring-white md:relative">
+                <span className="absolute left-0 top-0 grid size-12 place-items-center rounded-full bg-ink text-sm font-black text-orange ring-8 ring-white md:relative">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <Link href={lp(locale, p.href)} className="group mt-0 block md:mt-6">
@@ -299,7 +299,7 @@ export default async function HomePage({ params }: LangParams) {
                   <Link href={lp(locale, `/biz/${p.id}`)} className="group flex items-center gap-4 px-5 py-4 transition hover:bg-brand-soft/50">
                     <span
                       className={`w-[68px] shrink-0 rounded-md py-1 text-center text-[11px] font-bold ${
-                        p.category === "inquiry" ? "bg-accent/15 text-[#0a6fd6]" : "bg-brand-soft text-brand"
+                        p.category === "inquiry" ? "bg-orange/15 text-[#b45f06]" : "bg-brand-soft text-brand"
                       }`}
                     >
                       {t(bizCategoryLabel(p.category))}

@@ -34,7 +34,7 @@ export default async function HistoryPage({ params }: LangParams) {
           <ol className="relative border-l-2 border-ink pl-8 sm:pl-12">
             {years.map((y) => (
               <li key={y} data-reveal className="relative pb-12 last:pb-0">
-                <span className="absolute -left-[41px] top-1.5 grid size-5 place-items-center rounded-full border-4 border-white bg-accent ring-2 ring-ink sm:-left-[57px]" />
+                <span className="absolute -left-[41px] top-1.5 grid size-5 place-items-center rounded-full border-4 border-white bg-orange ring-2 ring-ink sm:-left-[57px]" />
                 <p className="text-3xl font-black tracking-tight text-ink lg:text-5xl">{y}</p>
                 <ul className="mt-4 space-y-3">
                   {byYear[y].map((h) => (

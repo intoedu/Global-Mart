@@ -50,7 +50,7 @@ export default async function PartnersPage({ params }: LangParams) {
           <ol className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
             {PARTNERS.steps.map((s, i) => (
               <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-white/10 bg-ink-2 p-7">
-                <span className="text-5xl font-black text-accent">0{i + 1}</span>
+                <span className="text-5xl font-black text-orange">0{i + 1}</span>
                 <h3 className="mt-2 text-lg font-bold">{t(s.title)}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-white/60">{t(s.body)}</p>
               </li>
