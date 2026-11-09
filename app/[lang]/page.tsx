@@ -28,34 +28,34 @@ export default async function HomePage({ params }: LangParams) {
   return (
     <>
       {/* ---------------- HERO ---------------- */}
-      <section className="relative overflow-hidden bg-ink text-white">
+      <section className="relative overflow-hidden bg-gradient-to-b from-paper via-white to-paper text-ink">
         {/* 배경: 화면 전체 세계 지도 (서울 → 해외 거점 항로) */}
-        <div className="bg-grid absolute inset-0 opacity-70" aria-hidden />
-        <div className="absolute -left-40 top-10 size-[560px] rounded-full bg-brand/40 blur-[140px]" aria-hidden />
-        <div className="reveal absolute right-[-70%] top-[46%] w-[200%] -translate-y-1/2 opacity-70 sm:right-[-30%] sm:w-[140%] lg:right-[3%] lg:top-[47%] lg:w-[74%] lg:opacity-100">
-          <WorldMap locale={locale} labels={HERO_LABELS} animated />
+        <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" aria-hidden />
+        <div className="absolute -left-40 top-10 size-[520px] rounded-full bg-brand-soft blur-[120px]" aria-hidden />
+        <div className="absolute right-0 top-1/3 size-[420px] rounded-full bg-accent/10 blur-[120px]" aria-hidden />
+        <div className="reveal absolute right-[-70%] top-[46%] w-[200%] -translate-y-1/2 opacity-25 sm:right-[-30%] sm:w-[140%] sm:opacity-50 lg:right-[3%] lg:top-[47%] lg:w-[74%] lg:opacity-100">
+          <WorldMap locale={locale} labels={HERO_LABELS} animated dark={false} />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/0 lg:from-ink lg:via-ink/40" aria-hidden />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/75 to-white/0 lg:from-paper lg:via-white/40" aria-hidden />
 
         <div className="container-x relative pb-24 pt-28 lg:pb-40 lg:pt-44">
           <div className="max-w-2xl">
-            <p className="eyebrow reveal !text-sky">Globalmart Inc. · Since 2004</p>
+            <p className="eyebrow reveal">Globalmart Inc. · Since 2004</p>
             <h1 className="reveal mt-5 whitespace-pre-line text-[40px] font-extrabold leading-[1.15] tracking-tight sm:text-5xl lg:text-[64px]">
               {t(HOME.heroTitle)}
             </h1>
-            <p className="reveal mt-6 max-w-xl text-[17px] leading-relaxed text-white/75 lg:text-lg">{t(HOME.heroLead)}</p>
+            <p className="reveal mt-6 max-w-xl text-[17px] leading-relaxed text-ink-3 lg:text-lg">{t(HOME.heroLead)}</p>
             <div className="reveal mt-9 flex flex-wrap gap-3">
-              <Link href={lp(locale, "/contact#inquiry")} className="btn-light btn-shine">
+              <Link href={lp(locale, "/contact#inquiry")} className="btn-primary btn-shine">
                 {ko ? "무료 상담 신청" : "Free consultation"} <Icon name="arrow-right" className="size-4" />
               </Link>
-              <a href={SITE.telHref} className="btn-outline-light">
+              <a href={SITE.telHref} className="btn-ghost">
                 <Icon name="phone" className="size-4" /> {ko ? SITE.tel : SITE.telIntl}
               </a>
             </div>
-            <p className="reveal mt-10 text-xs text-white/50">
+            <p className="reveal mt-10 text-xs text-muted">
               <span className="text-accent">●</span> {ko ? "서울 본사" : "Seoul HQ"}
-              <span className="ml-3 text-sky">●</span> {ko ? "해외 거점" : "Overseas offices"}
+              <span className="ml-3 text-brand">●</span> {ko ? "해외 거점" : "Overseas offices"}
             </p>
           </div>
         </div>
@@ -68,12 +68,12 @@ export default async function HomePage({ params }: LangParams) {
             {HOME.stats.map((s, i) => (
               <div
                 key={i}
-                className={`py-6 lg:py-8 ${i % 2 ? "pl-6" : ""} ${i > 1 ? "border-t border-white/10 lg:border-t-0" : ""} ${
-                  i > 0 ? "lg:border-l lg:border-white/10 lg:pl-8" : ""
+                className={`py-6 lg:py-8 ${i % 2 ? "pl-6" : ""} ${i > 1 ? "border-t border-line lg:border-t-0" : ""} ${
+                  i > 0 ? "lg:border-l lg:border-line lg:pl-8" : ""
                 }`}
               >
-                <dt className="text-[13px] text-white/50">{t(s.label)}</dt>
-                <dd className="mt-1 text-2xl font-extrabold tracking-tight lg:text-3xl">
+                <dt className="text-[13px] text-muted">{t(s.label)}</dt>
+                <dd className="mt-1 text-2xl font-extrabold tracking-tight text-ink lg:text-3xl">
                   {typeof s.value === "string" ? <CountUp value={s.value} /> : t(s.value)}
                 </dd>
               </div>

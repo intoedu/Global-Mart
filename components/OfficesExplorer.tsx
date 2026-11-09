@@ -13,12 +13,12 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <div className="rounded-3xl bg-ink p-4 sm:p-8 lg:p-10">
+      <div className="rounded-3xl bg-paper p-4 ring-1 ring-line sm:p-8 lg:p-10">
         <div className="mb-4 flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => setActive(null)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!active ? "bg-white text-ink" : "bg-white/10 text-white/70 hover:bg-white/15"}`}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!active ? "bg-ink text-white" : "bg-white text-ink-3 ring-1 ring-line hover:text-brand"}`}
           >
             {ko ? "전체" : "All"} <span className="opacity-50">{total}</span>
           </button>
@@ -28,14 +28,14 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
               type="button"
               onClick={() => setActive(active === r.id ? null : r.id)}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                active === r.id ? "bg-white text-ink" : "bg-white/10 text-white/70 hover:bg-white/15"
+                active === r.id ? "bg-ink text-white" : "bg-white text-ink-3 ring-1 ring-line hover:text-brand"
               }`}
             >
               {r[locale]} <span className="opacity-50">{r.offices.length}</span>
             </button>
           ))}
         </div>
-        <WorldMap locale={locale} activeRegion={active} animated />
+        <WorldMap locale={locale} activeRegion={active} animated dark={false} />
       </div>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

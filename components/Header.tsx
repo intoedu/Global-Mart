@@ -19,7 +19,9 @@ export function Header({ locale }: { locale: Locale }) {
   const L = (href: string) => lp(locale, href);
   const otherLang: Locale = locale === "ko" ? "en" : "ko";
   const isHome = pathname === "/";
-  const solid = scrolled || !isHome || open;
+  // 밝은 디자인: 글자는 항상 어두운 색, 메인 맨 위에서만 배경을 투명하게
+  const bgSolid = scrolled || !isHome || open;
+  const solid = true;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -45,7 +47,7 @@ export function Header({ locale }: { locale: Locale }) {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        solid ? "border-b border-line bg-white/90 backdrop-blur-xl" : "bg-transparent"
+        bgSolid ? "border-b border-line bg-white/90 backdrop-blur-xl" : "bg-transparent"
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 lg:h-20">

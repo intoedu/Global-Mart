@@ -26,41 +26,38 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-ink pt-16 text-white lg:pt-20">
+    <section className="relative overflow-hidden bg-paper pt-16 text-ink lg:pt-20">
       {image && (
-        <>
-          <Image src={photo(image, 2000)} alt="" fill priority sizes="100vw" className="object-cover opacity-70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/25" aria-hidden />
-        </>
+        <div className="absolute inset-y-0 right-0 hidden w-[46%] md:block" aria-hidden>
+          <Image src={photo(image, 1600)} alt="" fill priority sizes="46vw" className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/40 to-transparent" />
+        </div>
       )}
-      <div className="bg-grid absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" aria-hidden />
-      <div
-        className="absolute -right-40 -top-40 size-[520px] rounded-full bg-brand/40 blur-[120px]"
-        aria-hidden
-      />
+      <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" aria-hidden />
+      <div className="absolute -left-40 -top-40 size-[480px] rounded-full bg-brand-soft blur-[110px]" aria-hidden />
       <div className={`container-x relative ${image ? "py-16 lg:py-24" : "py-12 lg:py-16"}`}>
         {crumbs && (
-          <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-white/50">
-            <Link href={lp(locale, "/")} className="hover:text-white" aria-label="Home">
+          <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
+            <Link href={lp(locale, "/")} className="hover:text-brand" aria-label="Home">
               <Icon name="home" className="size-4" />
             </Link>
             {crumbs.map((c, i) => (
               <span key={i} className="flex items-center gap-1.5">
                 <Icon name="chevron-right" className="size-3.5 opacity-60" />
                 {c.href ? (
-                  <Link href={lp(locale, c.href)} className="hover:text-white">
+                  <Link href={lp(locale, c.href)} className="hover:text-brand">
                     {c.label}
                   </Link>
                 ) : (
-                  <span className="text-white/80">{c.label}</span>
+                  <span className="text-ink-3">{c.label}</span>
                 )}
               </span>
             ))}
           </nav>
         )}
-        {eyebrow && <p className="eyebrow !text-sky">{eyebrow}</p>}
-        <h1 className="reveal mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        {lead && <p className="reveal mt-4 max-w-2xl text-[16px] leading-relaxed text-white/70 lg:text-lg">{lead}</p>}
+        {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+        <h1 className="reveal mt-3 max-w-2xl text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl">{title}</h1>
+        {lead && <p className="reveal mt-4 max-w-xl text-[16px] leading-relaxed text-ink-3 lg:text-lg">{lead}</p>}
         {children}
       </div>
       <div className="container-stripes relative" aria-hidden />

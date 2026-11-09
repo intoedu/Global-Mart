@@ -53,7 +53,9 @@ export function WorldMap({
     [pins, hq]
   );
 
-  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : "rgb(15 24 48 / 0.14)";
+  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : "rgb(15 24 48 / 0.13)";
+  const pinColor = dark ? "#8fb2ff" : "#3d5aa8";
+  const arcColor = dark ? "#8fb2ff" : "#3d5aa8";
   const isOn = (region: string) => !activeRegion || region === activeRegion || region === "hq";
   const label = hover ? officeById.get(hover.id)?.[locale] : null;
 
@@ -62,8 +64,8 @@ export function WorldMap({
       <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label={locale === "ko" ? "글로벌마트 해외 거점 지도" : "Globalmart global network map"}>
         <defs>
           <linearGradient id="arc" x1="0" x2="1">
-            <stop offset="0" stopColor="#8fb2ff" stopOpacity="0.05" />
-            <stop offset="1" stopColor="#8fb2ff" stopOpacity="0.9" />
+            <stop offset="0" stopColor={arcColor} stopOpacity="0.05" />
+            <stop offset="1" stopColor={arcColor} stopOpacity={dark ? 0.9 : 0.75} />
           </linearGradient>
         </defs>
         {dots.map(([x, y], i) => (
@@ -89,7 +91,7 @@ export function WorldMap({
           arcs
             .filter((_, i) => i % 2 === 0)
             .map((a, i) => (
-              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#e8a33d" : "#ffffff"} className="map-packet" opacity={0}>
+              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#e8a33d" : dark ? "#ffffff" : "#3d5aa8"} className="map-packet" opacity={0}>
                 <animateMotion dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" path={a.d} keyPoints={i % 2 ? "0;1" : "1;0"} keyTimes="0;1" calcMode="linear" />
                 <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" />
               </circle>
@@ -107,8 +109,8 @@ export function WorldMap({
               className="cursor-default transition-opacity duration-500"
               opacity={on ? 1 : 0.2}
             >
-              {on && <circle cx={p.x} cy={p.y} r={0.5} fill="none" stroke={isHq ? "#e8a33d" : "#8fb2ff"} strokeWidth={0.1} className="animate-pulse-ring" />}
-              <circle cx={p.x} cy={p.y} r={isHq ? 0.75 : 0.5} fill={isHq ? "#e8a33d" : "#8fb2ff"} />
+              {on && <circle cx={p.x} cy={p.y} r={0.5} fill="none" stroke={isHq ? "#e8a33d" : pinColor} strokeWidth={0.1} className="animate-pulse-ring" />}
+              <circle cx={p.x} cy={p.y} r={isHq ? 0.75 : 0.5} fill={isHq ? "#e8a33d" : pinColor} stroke={dark ? "none" : "#fff"} strokeWidth={0.12} />
               <circle cx={p.x} cy={p.y} r={1.6} fill="transparent" />
             </g>
           );

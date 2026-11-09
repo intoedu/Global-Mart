@@ -102,6 +102,13 @@
   }
 }
 
+.bg-grid-light {
+  background-image:
+    linear-gradient(to right, rgb(15 24 48 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(15 24 48 / 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
 .bg-grid {
   background-image:
     linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
