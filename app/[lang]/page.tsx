@@ -14,6 +14,7 @@ import { CountUp } from "@/components/CountUp";
 import { Icon } from "@/components/Icon";
 import { SectionTitle } from "@/components/PageHero";
 import { formatDate } from "@/lib/format";
+import offices from "@/lib/offices.json";
 
 const SERVICE_ICONS = ["briefcase", "chart", "handshake"];
 const HERO_LABELS = ["seoul", "vietnam", "mumbai", "russia", "uzbekistan", "egypt", "indonesia"];
@@ -23,62 +24,93 @@ const SOFTWARE_PHOTOS: PhotoKey[] = ["devices", "blockchain", "dashboard"];
 export default async function HomePage({ params }: LangParams) {
   const { locale, t } = getT((await params).lang);
   const ko = locale === "ko";
+  // 헤드라인: 둘째 줄 첫 단어(글로벌마트)를 주황색으로 강조
+  const heroLines = t(HOME.heroTitle).split("\n");
+  const second = heroLines[1] ?? "";
+  const cut = ko ? second.indexOf("와") : second.indexOf(" ");
+  const heroFirst = cut > 0 ? second.slice(0, cut) : second;
+  const heroRest = cut > 0 ? second.slice(cut) : "";
+  const officeCount = offices.regions.reduce((n, r) => n + r.offices.length, 0);
   const latest = getBizPosts().slice(0, 5);
 
   return (
     <>
       {/* ---------------- HERO ---------------- */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-paper via-white to-paper text-ink">
-        {/* 배경: 화면 전체 세계 지도 (서울 → 해외 거점 항로) */}
-        <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" aria-hidden />
-        <div className="absolute -left-40 top-10 size-[520px] rounded-full bg-brand-soft blur-[120px]" aria-hidden />
-        <div className="absolute right-0 top-1/3 size-[420px] rounded-full bg-accent/10 blur-[120px]" aria-hidden />
-        <div className="reveal absolute right-[-70%] top-[46%] w-[200%] -translate-y-1/2 opacity-25 sm:right-[-30%] sm:w-[140%] sm:opacity-50 lg:right-[3%] lg:top-[47%] lg:w-[74%] lg:opacity-100">
-          <WorldMap locale={locale} labels={HERO_LABELS} animated dark={false} />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/75 to-white/0 lg:from-paper lg:via-white/40" aria-hidden />
+      <section className="relative overflow-hidden bg-paper text-ink">
+        <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" aria-hidden />
+        <div className="absolute -left-40 top-0 size-[520px] rounded-full bg-accent/10 blur-[120px]" aria-hidden />
 
-        <div className="container-x relative pb-20 pt-28 lg:pb-32 lg:pt-40">
-          <div className="max-w-2xl">
+        <div className="container-x relative grid items-center gap-10 pb-14 pt-24 lg:min-h-[calc(100svh-52px)] lg:grid-cols-[1fr_1.08fr] lg:gap-12 lg:pb-16 lg:pt-28">
+          <div>
             <p className="eyebrow reveal">Globalmart Inc. · Since 2004</p>
-            <h1 className="reveal mt-5 whitespace-pre-line text-[40px] font-extrabold leading-[1.15] tracking-tight sm:text-5xl lg:text-[64px]">
-              {t(HOME.heroTitle)}
+            <h1 className="reveal mt-6 text-[44px] font-black leading-[1.08] tracking-[-0.03em] sm:text-6xl lg:text-[78px]">
+              {heroLines[0]}
+              <br />
+              <span className="relative inline-block">
+                <span className="relative z-10">{heroFirst}</span>
+                <span className="absolute inset-x-0 bottom-[0.08em] z-0 h-[0.32em] origin-left animate-[underline_1s_0.6s_cubic-bezier(0.6,0,0.2,1)_both] bg-accent" aria-hidden />
+              </span>
+              {heroRest}
             </h1>
-            <p className="reveal mt-6 max-w-xl text-[17px] leading-relaxed text-ink-3 lg:text-lg">{t(HOME.heroLead)}</p>
+            <p className="reveal mt-7 max-w-xl text-[17px] leading-relaxed text-ink-3 lg:text-[19px]">{t(HOME.heroLead)}</p>
+            <ul className="reveal mt-8 flex flex-wrap gap-2.5">
+              {HOME.services[0].points.map((pt, i) => (
+                <li key={i} className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-ink shadow-card ring-1 ring-line">
+                  <Icon name="check" className="size-4 text-accent" strokeWidth={2.6} />
+                  {t(pt)}
+                </li>
+              ))}
+            </ul>
             <div className="reveal mt-9 flex flex-wrap gap-3">
-              <Link href={lp(locale, "/contact#inquiry")} className="btn-primary btn-shine">
+              <Link href={lp(locale, "/contact#inquiry")} className="btn-primary btn-shine !px-7 !py-4 !text-base">
                 {ko ? "무료 상담 신청" : "Free consultation"} <Icon name="arrow-right" className="size-4" />
               </Link>
-              <a href={SITE.telHref} className="btn-ghost">
+              <a href={SITE.telHref} className="btn-ghost !px-7 !py-4 !text-base">
                 <Icon name="phone" className="size-4" /> {ko ? SITE.tel : SITE.telIntl}
               </a>
             </div>
-            <p className="reveal mt-10 text-xs text-muted">
-              <span className="text-accent">●</span> {ko ? "서울 본사" : "Seoul HQ"}
-              <span className="ml-3 text-ink">●</span> {ko ? "해외 거점" : "Overseas offices"}
-            </p>
+          </div>
+
+          {/* 오른쪽: 검정 지도 패널 */}
+          <div className="reveal relative">
+            <div className="relative overflow-hidden rounded-[32px] bg-ink p-4 shadow-[0_40px_80px_-30px_rgb(13_14_18/0.55)] sm:p-6">
+              <div className="bg-grid absolute inset-0 opacity-60" aria-hidden />
+              <div className="absolute -right-20 -top-20 size-72 rounded-full bg-accent/20 blur-[90px]" aria-hidden />
+              <div className="absolute -bottom-24 left-10 size-72 rounded-full bg-brand/30 blur-[90px]" aria-hidden />
+              <div className="relative flex items-center justify-between px-1 pb-2 text-white">
+                <span className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.2em] text-white/70">
+                  <span className="relative flex size-2">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75" />
+                    <span className="relative inline-flex size-2 rounded-full bg-accent" />
+                  </span>
+                  Global Network
+                </span>
+                <span className="text-[12px] font-semibold text-white/50">Seoul HQ → {officeCount} {ko ? "거점" : "bases"}</span>
+              </div>
+              {/* 아시아·중동 쪽을 크게 보이도록 확대 */}
+              <div className="relative -mx-4 overflow-hidden sm:-mx-6">
+                <div className="-ml-[38%] w-[146%]">
+                  <WorldMap locale={locale} labels={HERO_LABELS} animated />
+                </div>
+              </div>
+              <div className="relative mt-1 grid grid-cols-3 gap-2 text-white">
+                {[
+                  { v: "2004", l: ko ? "설립" : "Founded" },
+                  { v: "20+", l: ko ? "거점 국가" : "Countries" },
+                  { v: ko ? "성과제" : "Success fee", l: ko ? "Agent 수수료" : "Commission" },
+                ].map((x) => (
+                  <div key={x.l} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3 backdrop-blur sm:px-4">
+                    <p className="text-[11px] text-white/50 sm:text-xs">{x.l}</p>
+                    <p className="mt-0.5 text-lg font-extrabold sm:text-2xl">{/^\d/.test(x.v) ? <CountUp value={x.v} /> : x.v}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="relative">
           <TradeTicker locale={locale} />
-        </div>
-        <div className="relative bg-ink text-white">
-          <dl className="container-x grid grid-cols-2 lg:grid-cols-4">
-            {HOME.stats.map((s, i) => (
-              <div
-                key={i}
-                className={`py-6 lg:py-8 ${i % 2 ? "pl-6" : ""} ${i > 1 ? "border-t border-white/10 lg:border-t-0" : ""} ${
-                  i > 0 ? "lg:border-l lg:border-white/10 lg:pl-8" : ""
-                }`}
-              >
-                <dt className="text-[13px] text-white/50">{t(s.label)}</dt>
-                <dd className="mt-1 text-2xl font-extrabold tracking-tight text-white lg:text-4xl">
-                  {typeof s.value === "string" ? <CountUp value={s.value} /> : t(s.value)}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </section>
 
