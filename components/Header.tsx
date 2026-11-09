@@ -63,7 +63,7 @@ export function Header({ locale }: { locale: Locale }) {
         </Link>
 
         {/* PC 메뉴 */}
-        <nav className="hidden items-center lg:flex" aria-label="Main">
+        <nav className="hidden items-center whitespace-nowrap xl:flex" aria-label="Main">
           {NAV.map((item) => (
             <div key={item.href} className="group relative">
               <Link
@@ -116,7 +116,7 @@ export function Header({ locale }: { locale: Locale }) {
           </Link>
           <button
             type="button"
-            className={`grid size-10 place-items-center rounded-full lg:hidden ${solid ? "text-ink hover:bg-paper" : "text-white hover:bg-white/10"}`}
+            className={`grid size-10 place-items-center rounded-full xl:hidden ${solid ? "text-ink hover:bg-paper" : "text-white hover:bg-white/10"}`}
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -130,7 +130,7 @@ export function Header({ locale }: { locale: Locale }) {
       {/* 모바일 메뉴 */}
       <div
         id="mobile-menu"
-        className={`fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-white transition lg:hidden ${
+        className={`fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-white transition lg:top-20 xl:hidden ${
           open ? "visible opacity-100" : "invisible opacity-0"
         }`}
       >
