@@ -15,6 +15,7 @@ import { SectionTitle } from "@/components/PageHero";
 import { formatDate } from "@/lib/format";
 
 const SERVICE_ICONS = ["briefcase", "chart", "handshake"];
+const HERO_LABELS = ["seoul", "vietnam", "mumbai", "saudi", "russia", "uzbekistan", "egypt", "indonesia"];
 const SERVICE_PHOTOS: PhotoKey[] = ["meeting", "ship", "tax"];
 const SOFTWARE_PHOTOS: PhotoKey[] = ["devices", "blockchain", "dashboard"];
 
@@ -27,19 +28,22 @@ export default async function HomePage({ params }: LangParams) {
     <>
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden bg-ink text-white">
-        <Image src={photo("port", 2400)} alt="" fill priority sizes="100vw" className="object-cover opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/50" aria-hidden />
-        <div className="bg-grid absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" aria-hidden />
-        <div className="absolute -left-40 top-20 size-[560px] rounded-full bg-brand/45 blur-[140px]" aria-hidden />
-        <div className="absolute -right-20 bottom-0 size-[420px] rounded-full bg-sky/15 blur-[120px]" aria-hidden />
+        {/* 배경: 화면 전체 세계 지도 (서울 → 해외 거점 항로) */}
+        <div className="bg-grid absolute inset-0 opacity-70" aria-hidden />
+        <div className="absolute -left-40 top-10 size-[560px] rounded-full bg-brand/40 blur-[140px]" aria-hidden />
+        <div className="reveal absolute right-[-70%] top-[46%] w-[200%] -translate-y-1/2 opacity-70 sm:right-[-30%] sm:w-[140%] lg:right-[3%] lg:top-[47%] lg:w-[74%] lg:opacity-100">
+          <WorldMap locale={locale} labels={HERO_LABELS} />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/0 lg:from-ink lg:via-ink/40" aria-hidden />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" aria-hidden />
 
-        <div className="container-x relative grid items-center gap-10 pb-16 pt-28 lg:grid-cols-[1fr_1.1fr] lg:gap-6 lg:pb-24 lg:pt-36">
-          <div>
+        <div className="container-x relative pb-24 pt-28 lg:pb-40 lg:pt-44">
+          <div className="max-w-2xl">
             <p className="eyebrow reveal !text-sky">Globalmart Inc. · Since 2004</p>
             <h1 className="reveal mt-5 whitespace-pre-line text-[40px] font-extrabold leading-[1.15] tracking-tight sm:text-5xl lg:text-[64px]">
               {t(HOME.heroTitle)}
             </h1>
-            <p className="reveal mt-6 max-w-xl text-[17px] leading-relaxed text-white/70 lg:text-lg">{t(HOME.heroLead)}</p>
+            <p className="reveal mt-6 max-w-xl text-[17px] leading-relaxed text-white/75 lg:text-lg">{t(HOME.heroLead)}</p>
             <div className="reveal mt-9 flex flex-wrap gap-3">
               <Link href={lp(locale, "/contact#inquiry")} className="btn-light">
                 {ko ? "무료 상담 신청" : "Free consultation"} <Icon name="arrow-right" className="size-4" />
@@ -48,10 +52,7 @@ export default async function HomePage({ params }: LangParams) {
                 <Icon name="phone" className="size-4" /> {ko ? SITE.tel : SITE.telIntl}
               </a>
             </div>
-          </div>
-          <div className="reveal relative">
-            <WorldMap locale={locale} />
-            <p className="mt-2 text-center text-xs text-white/40">
+            <p className="reveal mt-10 text-xs text-white/50">
               <span className="text-accent">●</span> {ko ? "서울 본사" : "Seoul HQ"}
               <span className="ml-3 text-sky">●</span> {ko ? "해외 거점" : "Overseas offices"}
             </p>
