@@ -98,7 +98,7 @@ export function SubNav({ items, current }: { items: { href: string; label: strin
 
 export function SectionTitle({ eyebrow, title, lead, center }: { eyebrow?: string; title: string; lead?: string; center?: boolean }) {
   return (
-    <div className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
+    <div data-reveal className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
       <h2 className="mt-3 whitespace-pre-line text-2xl font-extrabold tracking-tight text-ink sm:text-3xl lg:text-4xl">{title}</h2>
       {lead && <p className="mt-4 text-[16px] leading-relaxed text-muted lg:text-lg">{lead}</p>}

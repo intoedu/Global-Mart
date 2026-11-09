@@ -35,7 +35,7 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
             </button>
           ))}
         </div>
-        <WorldMap locale={locale} activeRegion={active} />
+        <WorldMap locale={locale} activeRegion={active} animated />
       </div>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

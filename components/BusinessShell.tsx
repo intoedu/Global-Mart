@@ -94,7 +94,7 @@ export function FeatureGrid({
   return (
     <ol className={`grid gap-4 ${grid}`}>
       {items.map((it, i) => (
-        <li key={i} className="card relative p-7">
+        <li key={i} data-reveal style={{ "--d": `${i * 0.1}s` } as React.CSSProperties} className="card relative p-7">
           {numbered ? (
             <span className="grid size-10 place-items-center rounded-full bg-brand text-sm font-bold text-white">{i + 1}</span>
           ) : (

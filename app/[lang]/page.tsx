@@ -10,12 +10,13 @@ import { getBizPosts } from "@/lib/biz";
 import { WorldMap } from "@/components/WorldMap";
 import { TradeTicker } from "@/components/TradeTicker";
 import { NetworkSection } from "@/components/NetworkSection";
+import { CountUp } from "@/components/CountUp";
 import { Icon } from "@/components/Icon";
 import { SectionTitle } from "@/components/PageHero";
 import { formatDate } from "@/lib/format";
 
 const SERVICE_ICONS = ["briefcase", "chart", "handshake"];
-const HERO_LABELS = ["seoul", "vietnam", "mumbai", "saudi", "russia", "uzbekistan", "egypt", "indonesia"];
+const HERO_LABELS = ["seoul", "vietnam", "mumbai", "russia", "uzbekistan", "egypt", "indonesia"];
 const SERVICE_PHOTOS: PhotoKey[] = ["meeting", "ship", "tax"];
 const SOFTWARE_PHOTOS: PhotoKey[] = ["devices", "blockchain", "dashboard"];
 
@@ -32,7 +33,7 @@ export default async function HomePage({ params }: LangParams) {
         <div className="bg-grid absolute inset-0 opacity-70" aria-hidden />
         <div className="absolute -left-40 top-10 size-[560px] rounded-full bg-brand/40 blur-[140px]" aria-hidden />
         <div className="reveal absolute right-[-70%] top-[46%] w-[200%] -translate-y-1/2 opacity-70 sm:right-[-30%] sm:w-[140%] lg:right-[3%] lg:top-[47%] lg:w-[74%] lg:opacity-100">
-          <WorldMap locale={locale} labels={HERO_LABELS} />
+          <WorldMap locale={locale} labels={HERO_LABELS} animated />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/0 lg:from-ink lg:via-ink/40" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" aria-hidden />
@@ -45,7 +46,7 @@ export default async function HomePage({ params }: LangParams) {
             </h1>
             <p className="reveal mt-6 max-w-xl text-[17px] leading-relaxed text-white/75 lg:text-lg">{t(HOME.heroLead)}</p>
             <div className="reveal mt-9 flex flex-wrap gap-3">
-              <Link href={lp(locale, "/contact#inquiry")} className="btn-light">
+              <Link href={lp(locale, "/contact#inquiry")} className="btn-light btn-shine">
                 {ko ? "무료 상담 신청" : "Free consultation"} <Icon name="arrow-right" className="size-4" />
               </Link>
               <a href={SITE.telHref} className="btn-outline-light">
@@ -73,7 +74,7 @@ export default async function HomePage({ params }: LangParams) {
               >
                 <dt className="text-[13px] text-white/50">{t(s.label)}</dt>
                 <dd className="mt-1 text-2xl font-extrabold tracking-tight lg:text-3xl">
-                  {typeof s.value === "string" ? s.value : t(s.value)}
+                  {typeof s.value === "string" ? <CountUp value={s.value} /> : t(s.value)}
                 </dd>
               </div>
             ))}
@@ -93,6 +94,8 @@ export default async function HomePage({ params }: LangParams) {
               <Link
                 key={s.no}
                 href={lp(locale, s.href)}
+                data-reveal
+                style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}
                 className="card group relative flex flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lift"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
@@ -165,7 +168,7 @@ export default async function HomePage({ params }: LangParams) {
           </div>
           <ol className="mt-12 grid gap-4 md:grid-cols-3">
             {PROCESS.map((p, i) => (
-              <li key={p.key}>
+              <li key={p.key} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}>
                 <Link href={lp(locale, p.href)} className="group relative block h-full rounded-2xl border border-line p-7 transition hover:border-brand">
                   <span className="text-sm font-bold text-brand">STEP {i + 1}</span>
                   <h3 className="mt-2 text-xl font-bold">{t(p.title)}</h3>
@@ -228,7 +231,7 @@ export default async function HomePage({ params }: LangParams) {
             <SectionTitle eyebrow="Opportunities" title={t(HOME.itemsTitle)} />
             <ol className="mt-10 space-y-4">
               {HOME.items.map((it, i) => (
-                <li key={i} className="flex gap-5 rounded-2xl border border-line p-6">
+                <li key={i} data-reveal style={{ "--d": `${i * 0.1}s` } as React.CSSProperties} className="flex gap-5 rounded-2xl border border-line p-6">
                   <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ink text-sm font-bold text-white">{i + 1}</span>
                   <div>
                     <h3 className="text-lg font-bold">{t(it.title)}</h3>
@@ -239,7 +242,7 @@ export default async function HomePage({ params }: LangParams) {
             </ol>
           </div>
 
-          <div className="flex flex-col rounded-3xl bg-paper p-7 lg:p-9">
+          <div data-reveal className="flex flex-col rounded-3xl bg-paper p-7 lg:p-9">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="eyebrow">Global Biz Info</p>
@@ -288,6 +291,8 @@ export default async function HomePage({ params }: LangParams) {
             {SOFTWARE.sections.map((s, i) => (
               <Link
                 key={s.id}
+                data-reveal
+                style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}
                 href={lp(locale, `/business/software#${s.id}`)}
                 className="card group flex flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lift"
               >
@@ -308,7 +313,7 @@ export default async function HomePage({ params }: LangParams) {
       {/* ---------------- CONTACT (PPT 6쪽) ---------------- */}
       <section className="py-20 lg:py-28">
         <div className="container-x">
-          <div className="relative overflow-hidden rounded-[28px] bg-brand px-7 py-12 text-white sm:px-12 lg:px-16 lg:py-16">
+          <div data-reveal className="relative overflow-hidden rounded-[28px] bg-brand px-7 py-12 text-white sm:px-12 lg:px-16 lg:py-16">
             <Image src={photo("cranes", 2000)} alt="" fill sizes="100vw" className="object-cover opacity-20 mix-blend-luminosity" />
             <div className="absolute -right-24 -top-24 size-80 rounded-full bg-white/10" aria-hidden />
             <div className="absolute -bottom-32 right-32 size-64 rounded-full bg-ink/20" aria-hidden />

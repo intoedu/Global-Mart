@@ -1,6 +1,7 @@
 import type { Viewport } from "next";
 import "./globals.css";
 import { SITE } from "@/lib/site";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export const metadata = { metadataBase: new URL(SITE.url + "/") };
 
@@ -23,11 +24,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* 주소의 언어(/en/...)에 맞춰 문서 언어 표시 */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `if(/\\/en(\\/|$)/.test(location.pathname))document.documentElement.lang="en";`,
+            __html: `document.documentElement.classList.add("js");if(/\\/en(\\/|$)/.test(location.pathname))document.documentElement.lang="en";`,
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ScrollReveal />
+      </body>
     </html>
   );
 }

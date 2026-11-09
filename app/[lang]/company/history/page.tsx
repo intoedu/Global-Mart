@@ -33,7 +33,7 @@ export default async function HistoryPage({ params }: LangParams) {
         <div className="container-x max-w-4xl">
           <ol className="relative border-l-2 border-line pl-8 sm:pl-12">
             {years.map((y) => (
-              <li key={y} className="relative pb-12 last:pb-0">
+              <li key={y} data-reveal className="relative pb-12 last:pb-0">
                 <span className="absolute -left-[41px] top-1.5 grid size-5 place-items-center rounded-full border-4 border-white bg-brand ring-2 ring-brand/20 sm:-left-[57px]" />
                 <p className="text-3xl font-black tracking-tight text-brand lg:text-4xl">{y}</p>
                 <ul className="mt-4 space-y-3">

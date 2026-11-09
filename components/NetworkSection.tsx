@@ -4,8 +4,9 @@ import type { Locale } from "@/lib/i18n";
 import { lp } from "@/lib/paths";
 import { WorldMap } from "./WorldMap";
 import { Icon } from "./Icon";
+import { CountUp } from "./CountUp";
 
-const LABELS = ["seoul", "vietnam", "mumbai", "dalian", "saudi", "russia", "uzbekistan", "egypt", "indonesia", "turkey", "usa", "mongolia"];
+const LABELS = ["seoul", "vietnam", "mumbai", "dalian", "russia", "uzbekistan", "egypt", "indonesia", "turkey", "usa", "mongolia"];
 
 /** 메인 — 화면 전체 폭 글로벌 네트워크 세계 지도 */
 export function NetworkSection({ locale }: { locale: Locale }) {
@@ -32,16 +33,16 @@ export function NetworkSection({ locale }: { locale: Locale }) {
           </Link>
         </div>
 
-        <div className="mt-12 rounded-[28px] border border-white/10 bg-ink-2/60 p-3 sm:p-6 lg:p-10">
-          <WorldMap locale={locale} labels={LABELS} />
+        <div data-reveal className="mt-12 rounded-[28px] border border-white/10 bg-ink-2/60 p-3 sm:p-6 lg:p-10">
+          <WorldMap locale={locale} labels={LABELS} animated />
         </div>
 
         <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-          {offices.regions.map((r) => (
-            <div key={r.id} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+          {offices.regions.map((r, i) => (
+            <div key={r.id} data-reveal style={{ "--d": `${i * 0.06}s` } as React.CSSProperties} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
               <dt className="text-[12px] text-white/50">{r[locale]}</dt>
               <dd className="mt-0.5 text-xl font-extrabold">
-                {r.offices.length}
+                <CountUp value={String(r.offices.length)} />
                 <span className="ml-1 text-xs font-medium text-white/40">{ko ? "곳" : "bases"}</span>
               </dd>
             </div>

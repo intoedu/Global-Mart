@@ -22,8 +22,11 @@ export function WorldMap({
   dark = true,
   showArcs = true,
   labels,
+  animated = false,
   className = "",
 }: {
+  /** 항로선이 그려지고 화물 점이 오가는 애니메이션 */
+  animated?: boolean;
   /** 지도에 이름을 표시할 거점 id 목록 */
   labels?: string[];
   locale: Locale;
@@ -65,17 +68,30 @@ export function WorldMap({
           <circle key={i} cx={x} cy={y} r={0.24} fill={dotColor} />
         ))}
         {showArcs &&
-          arcs.map((a) => (
+          arcs.map((a, i) => (
             <path
               key={a.id}
               d={a.d}
+              pathLength={1}
               fill="none"
               stroke="url(#arc)"
               strokeWidth={0.12}
+              style={animated ? { animationDelay: `${0.4 + i * 0.07}s` } : undefined}
+              data-draw={animated ? "" : undefined}
               opacity={isOn(a.region) ? 0.9 : 0.12}
               className="transition-opacity duration-500"
             />
           ))}
+        {animated &&
+          showArcs &&
+          arcs
+            .filter((_, i) => i % 2 === 0)
+            .map((a, i) => (
+              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#e8a33d" : "#ffffff"} className="map-packet" opacity={0}>
+                <animateMotion dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" path={a.d} keyPoints={i % 2 ? "0;1" : "1;0"} keyTimes="0;1" calcMode="linear" />
+                <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" />
+              </circle>
+            ))}
         {labels &&
           pins
             .filter((p) => labels.includes(p.id))
@@ -84,7 +100,13 @@ export function WorldMap({
               const isHq = p.region === "hq";
               const w = name.length * (locale === "ko" ? 1.45 : 0.85) + 2.4;
               return (
-                <g key={`l-${p.id}`} className="pointer-events-none" opacity={isOn(p.region) ? 1 : 0.25}>
+                <g
+                  key={`l-${p.id}`}
+                  className="pointer-events-none"
+                  opacity={isOn(p.region) ? 1 : 0.25}
+                  data-pop={animated ? "" : undefined}
+                  style={animated ? { animationDelay: `${isHq ? 0.3 : 1.2 + labels.indexOf(p.id) * 0.12}s` } : undefined}
+                >
                   <rect x={p.x + 1.1} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#fff"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "#d5dcec"} strokeWidth={0.08} />
                   <text x={p.x + 2.3} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0f1830" : dark ? "#fff" : "#0f1830"} fontFamily="inherit">
                     {name}
@@ -92,12 +114,14 @@ export function WorldMap({
                 </g>
               );
             })}
-        {pins.map((p) => {
+        {pins.map((p, i) => {
           const on = isOn(p.region);
           const isHq = p.region === "hq";
           return (
             <g
               key={p.id}
+              data-pop={animated ? "" : undefined}
+              style={animated ? { animationDelay: `${isHq ? 0.2 : 0.5 + i * 0.06}s` } : undefined}
               onMouseEnter={() => setHover(p)}
               onMouseLeave={() => setHover(null)}
               className="cursor-default transition-opacity duration-500"

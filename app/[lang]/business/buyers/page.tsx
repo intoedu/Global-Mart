@@ -18,7 +18,7 @@ export default async function BuyersPage({ params }: LangParams) {
         <div className="container-x">
           <ol className="relative grid gap-4 lg:grid-cols-4">
             {BUYERS.steps.map((s, i) => (
-              <li key={i} className="relative rounded-2xl border border-line p-7">
+              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-line p-7">
                 <span className="text-5xl font-black text-brand/15">0{i + 1}</span>
                 <h3 className="mt-2 text-lg font-bold">{t(s.title)}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">{t(s.body)}</p>

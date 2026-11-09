@@ -23,7 +23,7 @@ export default async function AgencyPage({ params }: LangParams) {
           <SectionTitle eyebrow={ko ? "두 가지 방식" : "Two models"} title={ko ? "해외지사대행의 종류" : "How we can work together"} />
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
             {AGENCY.types.map((ty, i) => (
-              <article key={i} className={`rounded-3xl p-8 lg:p-10 ${i === 0 ? "bg-ink text-white" : "border border-line bg-white"}`}>
+              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className={`rounded-3xl p-8 lg:p-10 ${i === 0 ? "bg-ink text-white" : "border border-line bg-white"}`}>
                 <span className={`rounded-full px-3 py-1 text-xs font-bold ${i === 0 ? "bg-accent text-ink" : "bg-brand-soft text-brand"}`}>
                   {t(ty.tag)}
                 </span>

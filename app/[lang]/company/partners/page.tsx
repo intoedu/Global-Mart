@@ -27,7 +27,7 @@ export default async function PartnersPage({ params }: LangParams) {
         <div className="container-x">
           <div className="grid gap-5 md:grid-cols-2">
             {PARTNERS.orgs.map((o, i) => (
-              <article key={i} className="card p-8 lg:p-10">
+              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="card p-8 lg:p-10">
                 <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-3 py-1 text-xs font-bold text-brand">
                   <Icon name={i === 0 ? "globe" : "building"} className="size-3.5" />
                   {t(o.kind)}
@@ -49,7 +49,7 @@ export default async function PartnersPage({ params }: LangParams) {
           />
           <ol className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
             {PARTNERS.steps.map((s, i) => (
-              <li key={i} className="relative rounded-2xl bg-white p-7 shadow-card">
+              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl bg-white p-7 shadow-card">
                 <span className="text-5xl font-black text-brand/15">0{i + 1}</span>
                 <h3 className="mt-2 text-lg font-bold">{t(s.title)}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">{t(s.body)}</p>
