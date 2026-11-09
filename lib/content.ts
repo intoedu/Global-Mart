@@ -13,10 +13,20 @@ export const HOME = {
     ko: "해외시장진출은\n글로벌마트와 함께",
     en: "Your partner for\nglobal market entry",
   } satisfies L,
-  heroLead: {
-    ko: "현지 전문 인력이 귀사의 해외지사가 되어 시장조사부터 바이어 발굴, 계약까지 함께합니다. 단기 운영이 가능하며, 성과가 날 때 수수료를 받습니다.",
-    en: "Our local specialists act as your overseas branch, from market research and buyer discovery to closing the deal. Short-term engagements available. We are paid on results.",
+  heroTag: {
+    ko: "한국 기업 해외지사대행 · 해외시장개척 전문",
+    en: "Overseas branch agency for Korean companies",
   } satisfies L,
+  heroLead: {
+    ko: "글로벌마트는 한국 기업의 해외지사 역할을 대신하는 회사입니다. 현지 전문 인력이 시장조사부터 바이어 발굴, 계약까지 함께하며 성과가 날 때 수수료를 받습니다.",
+    en: "Globalmart acts as the overseas branch of Korean companies. Our local specialists handle market research, buyer discovery and contracts, and we are paid only on results.",
+  } satisfies L,
+  heroServices: [
+    { icon: "briefcase", href: "/business/agency", label: { ko: "해외지사대행", en: "Branch agency" }, sub: { ko: "현지 직원 배치", en: "Local staff" } },
+    { icon: "chart", href: "/business/research", label: { ko: "해외시장조사", en: "Market research" }, sub: { ko: "가격·경쟁·관세", en: "Prices · tariffs" } },
+    { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어 발굴", en: "Buyer discovery" }, sub: { ko: "계약까지 동행", en: "Through to contract" } },
+    { icon: "code", href: "/business/software", label: { ko: "소프트웨어 수출", en: "Software export" }, sub: { ko: "메신저·블록체인", en: "Messenger · blockchain" } },
+  ],
   stats: [
     { value: "2004", label: { ko: "설립", en: "Founded" } },
     { value: "20+", label: { ko: "해외 거점 국가", en: "Countries covered" } },

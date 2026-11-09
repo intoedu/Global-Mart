@@ -40,10 +40,10 @@ export default async function HomePage({ params }: LangParams) {
         <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" aria-hidden />
         <div className="absolute -left-40 top-0 size-[520px] rounded-full bg-accent/10 blur-[120px]" aria-hidden />
 
-        <div className="container-x relative grid items-center gap-10 pb-14 pt-24 lg:min-h-[calc(100svh-52px)] lg:grid-cols-[1fr_1.08fr] lg:gap-12 lg:pb-16 lg:pt-28">
+        <div className="container-x relative grid items-center gap-10 pb-12 pt-[88px] lg:min-h-[calc(100svh-52px)] lg:grid-cols-[1fr_1.08fr] lg:gap-12 lg:pb-16 lg:pt-28">
           <div>
-            <p className="eyebrow reveal">Globalmart Inc. · Since 2004</p>
-            <h1 className="reveal mt-6 text-[44px] font-black leading-[1.08] tracking-[-0.03em] sm:text-6xl lg:text-[78px]">
+            <p className="eyebrow reveal !tracking-[0.08em] !normal-case !text-[14px] sm:!text-[15px]">{t(HOME.heroTag)}</p>
+            <h1 className="reveal mt-5 text-[40px] font-black leading-[1.1] tracking-[-0.03em] sm:text-6xl lg:mt-6 lg:text-[76px]">
               {heroLines[0]}
               <br />
               <span className="relative inline-block">
@@ -52,20 +52,31 @@ export default async function HomePage({ params }: LangParams) {
               </span>
               {heroRest}
             </h1>
-            <p className="reveal mt-7 max-w-xl text-[17px] leading-relaxed text-ink-3 lg:text-[19px]">{t(HOME.heroLead)}</p>
-            <ul className="reveal mt-8 flex flex-wrap gap-2.5">
-              {HOME.services[0].points.map((pt, i) => (
-                <li key={i} className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-ink shadow-card ring-1 ring-line">
-                  <Icon name="check" className="size-4 text-accent" strokeWidth={2.6} />
-                  {t(pt)}
+            <p className="reveal mt-5 max-w-xl text-[16px] leading-relaxed text-ink-3 sm:text-[17px] lg:mt-7 lg:text-[19px]">{t(HOME.heroLead)}</p>
+            {/* 무엇을 하는 회사인지 한눈에: 핵심 서비스 4가지 */}
+            <ul className="reveal mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:mt-8">
+              {HOME.heroServices.map((sv) => (
+                <li key={sv.href}>
+                  <Link
+                    href={lp(locale, sv.href)}
+                    className="group flex h-full items-center gap-3 rounded-2xl bg-white p-3 shadow-card ring-1 ring-line transition hover:-translate-y-0.5 hover:ring-ink sm:flex-col sm:items-start sm:gap-2.5 sm:p-4"
+                  >
+                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-accent transition group-hover:bg-accent group-hover:text-ink">
+                      <Icon name={sv.icon} className="size-5" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[14px] font-bold leading-tight text-ink sm:text-[15px]">{t(sv.label)}</span>
+                      <span className="mt-0.5 block text-[12px] text-muted">{t(sv.sub)}</span>
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
-            <div className="reveal mt-9 flex flex-wrap gap-3">
-              <Link href={lp(locale, "/contact#inquiry")} className="btn-primary btn-shine !px-7 !py-4 !text-base">
+            <div className="reveal mt-7 flex flex-wrap gap-3 lg:mt-9">
+              <Link href={lp(locale, "/contact#inquiry")} className="btn-primary btn-shine w-full !px-7 !py-4 !text-base sm:w-auto">
                 {ko ? "무료 상담 신청" : "Free consultation"} <Icon name="arrow-right" className="size-4" />
               </Link>
-              <a href={SITE.telHref} className="btn-ghost !px-7 !py-4 !text-base">
+              <a href={SITE.telHref} className="btn-ghost hidden !px-7 !py-4 !text-base sm:inline-flex">
                 <Icon name="phone" className="size-4" /> {ko ? SITE.tel : SITE.telIntl}
               </a>
             </div>
