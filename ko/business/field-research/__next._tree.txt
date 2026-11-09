@@ -1,7 +1,7 @@
-:HL["/Global-Mart/_next/static/chunks/3ocmh9zh8f1j2.css","style"]
+:HL["/Global-Mart/_next/static/chunks/0uk35ww062cs-.css","style"]
 :HL["https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css","style"]
 4:[["children",{"s":"__PAGE__","h":160}]]
 3:[["children",{"s":"field-research","h":96,"c":"$Q4"}]]
 2:[["children",{"s":"business","h":64,"c":"$Q3"}]]
 1:[["children",{"s":{"n":"lang","t":"d","k":"ko","s":[]},"h":65568,"c":"$Q2"}]]
-0:{"b":"gyIXrJ1R0lOUqnBzNoU9n","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"u9mOi8y-nPXaqAPWDmPl1","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
