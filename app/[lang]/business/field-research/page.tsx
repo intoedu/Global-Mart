@@ -17,11 +17,11 @@ export default async function FieldResearchPage({ params }: LangParams) {
       <section className="py-16 lg:py-24">
         <div className="container-x">
           <FeatureGrid items={FIELD.points} locale={locale} numbered cols={4} />
-          <div className="mt-6 flex items-start gap-4 rounded-2xl bg-brand-soft p-7">
-            <Icon name="info" className="mt-0.5 size-6 shrink-0 text-brand" />
+          <div className="mt-6 flex items-start gap-4 rounded-2xl bg-ink p-7 text-white">
+            <Icon name="info" className="mt-0.5 size-6 shrink-0 text-accent" />
             <div>
-              <p className="font-bold text-ink">{ko ? "회계·세무 고객 특전" : "Perk for accounting clients"}</p>
-              <p className="mt-1 text-[15px] leading-relaxed text-ink-3">{t(FIELD.perk)}</p>
+              <p className="font-bold">{ko ? "회계·세무 고객 특전" : "Perk for accounting clients"}</p>
+              <p className="mt-1 text-[15px] leading-relaxed text-white/70">{t(FIELD.perk)}</p>
             </div>
           </div>
         </div>

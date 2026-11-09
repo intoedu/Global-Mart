@@ -32,13 +32,13 @@ export default async function OfficesPage({ params }: LangParams) {
 
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
             <div className="rounded-2xl bg-paper p-7">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand">Head Office</p>
+              <p className="eyebrow">Head Office</p>
               <p className="mt-2 text-lg font-bold">{t(SITE.address)}</p>
               <p className="mt-2 text-[15px] text-muted">
                 Tel {SITE.telIntl} · Fax {SITE.fax} · {SITE.email}
               </p>
             </div>
-            <Link href={lp(locale, "/contact#inquiry")} className="group flex items-center justify-between gap-4 rounded-2xl bg-brand p-7 text-white">
+            <Link href={lp(locale, "/contact#inquiry")} className="group flex items-center justify-between gap-4 rounded-2xl bg-ink p-7 text-white">
               <div>
                 <p className="text-lg font-bold">{ko ? "원하는 국가가 목록에 없나요?" : "Your country isn't listed?"}</p>
                 <p className="mt-1 text-[15px] text-white/75">

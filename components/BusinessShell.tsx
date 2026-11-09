@@ -96,9 +96,9 @@ export function FeatureGrid({
       {items.map((it, i) => (
         <li key={i} data-reveal style={{ "--d": `${i * 0.1}s` } as React.CSSProperties} className="card relative p-7">
           {numbered ? (
-            <span className="grid size-10 place-items-center rounded-full bg-brand text-sm font-bold text-white">{i + 1}</span>
+            <span className="grid size-10 place-items-center rounded-full bg-ink text-sm font-bold text-white">{i + 1}</span>
           ) : (
-            <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
+            <span className="grid size-10 place-items-center rounded-xl bg-ink text-accent">
               <Icon name="check" className="size-5" strokeWidth={2.4} />
             </span>
           )}

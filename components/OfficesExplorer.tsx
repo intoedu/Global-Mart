@@ -42,7 +42,7 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
         {offices.regions.map((r) => (
           <section
             key={r.id}
-            className={`rounded-2xl border p-6 transition ${active === r.id ? "border-brand bg-brand-soft/40" : "border-line"}`}
+            className={`rounded-2xl border p-6 transition ${active === r.id ? "border-ink bg-paper" : "border-line"}`}
             onMouseEnter={() => setActive(r.id)}
             onMouseLeave={() => setActive(null)}
           >
@@ -56,7 +56,7 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
                 return (
                   <li key={o.id} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 text-[15px]">
                     <span className="flex items-center gap-2 font-medium text-ink">
-                      <span className="size-1.5 rounded-full bg-brand" />
+                      <span className="size-1.5 rounded-full bg-accent" />
                       {o[locale]}
                     </span>
                     {email && (

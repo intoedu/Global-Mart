@@ -5,17 +5,17 @@
     "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
 
   /* 브랜드: 로고의 차콜 + 블루 링에서 추출 */
-  --color-ink: #0f1830;
-  --color-ink-2: #1b2645;
-  --color-ink-3: #2a3658;
+  --color-ink: #0d0e12;
+  --color-ink-2: #18191f;
+  --color-ink-3: #2d2f37;
   --color-brand: #3d5aa8;
   --color-brand-2: #5674c4;
-  --color-brand-soft: #e9eef9;
+  --color-brand-soft: #eaeef7;
   --color-sky: #8fb2ff;
   --color-accent: #e8a33d;
-  --color-paper: #f6f7fb;
-  --color-line: #e3e7f0;
-  --color-muted: #5d6680;
+  --color-paper: #f4f4f1;
+  --color-line: #e4e4e0;
+  --color-muted: #62656f;
 
   --shadow-card: 0 1px 2px rgb(15 24 48 / 0.04), 0 8px 24px -12px rgb(15 24 48 / 0.12);
   --shadow-lift: 0 2px 4px rgb(15 24 48 / 0.05), 0 22px 44px -18px rgb(15 24 48 / 0.28);
@@ -62,23 +62,23 @@
   @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 @utility eyebrow {
-  @apply inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.18em] text-brand;
+  @apply inline-flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.2em] text-ink-3;
   &::before {
     content: "";
-    @apply inline-block h-px w-6 bg-current;
+    @apply inline-block h-0.5 w-7 bg-accent;
   }
 }
 @utility btn {
   @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[15px] font-semibold transition disabled:cursor-not-allowed disabled:opacity-50;
 }
 @utility btn-primary {
-  @apply btn bg-brand text-white shadow-[0_8px_20px_-8px_rgb(61_90_168/0.7)] hover:bg-ink-2;
+  @apply btn bg-ink text-white shadow-[0_10px_24px_-10px_rgb(13_14_18/0.6)] hover:bg-brand;
 }
 @utility btn-light {
   @apply btn bg-white text-ink hover:bg-brand-soft;
 }
 @utility btn-ghost {
-  @apply btn border border-line bg-white text-ink hover:border-brand hover:text-brand;
+  @apply btn border border-ink/15 bg-white text-ink hover:border-ink hover:bg-ink hover:text-white;
 }
 @utility btn-outline-light {
   @apply btn border border-white/30 text-white hover:bg-white/10;
@@ -178,7 +178,7 @@ html.js [data-reveal].is-in {
 
 /* 컨테이너 줄무늬 포인트 (국제 무역 분위기) */
 .container-stripes {
-  background-image: repeating-linear-gradient(90deg, #e8a33d 0 28px, #3d5aa8 28px 56px, #0f1830 56px 84px, #8fb2ff 84px 112px, #c7562e 112px 140px);
+  background-image: repeating-linear-gradient(90deg, #e8a33d 0 36px, #0d0e12 36px 72px, #a9abb3 72px 108px, #0d0e12 108px 144px);
   height: 6px;
 }
 
@@ -195,4 +195,9 @@ html.js [data-reveal].is-in {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* 검은 구간 안의 소제목 */
+.dark-section .eyebrow {
+  color: rgb(255 255 255 / 0.7);
 }

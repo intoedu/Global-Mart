@@ -68,7 +68,7 @@ export function PageHero({
 /** 섹션 내 하위 메뉴 탭 */
 export function SubNav({ items, current }: { items: { href: string; label: string }[]; current: string }) {
   return (
-    <div className="sticky top-16 z-30 border-b border-line bg-white/95 backdrop-blur lg:top-20">
+    <div className="sticky top-16 z-30 bg-ink lg:top-20">
       <div className="container-x">
         <nav className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="Section">
           {items.map((i) => {
@@ -79,11 +79,11 @@ export function SubNav({ items, current }: { items: { href: string; label: strin
                 href={i.href}
                 aria-current={active ? "page" : undefined}
                 className={`relative shrink-0 px-4 py-4 text-[15px] font-semibold transition ${
-                  active ? "text-brand" : "text-muted hover:text-ink"
+                  active ? "text-white" : "text-white/50 hover:text-white"
                 }`}
               >
                 {i.label}
-                {active && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand" />}
+                {active && <span className="absolute inset-x-3 bottom-0 h-[3px] rounded-full bg-accent" />}
               </Link>
             );
           })}
@@ -97,8 +97,8 @@ export function SectionTitle({ eyebrow, title, lead, center }: { eyebrow?: strin
   return (
     <div data-reveal className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-      <h2 className="mt-3 whitespace-pre-line text-2xl font-extrabold tracking-tight text-ink sm:text-3xl lg:text-4xl">{title}</h2>
-      {lead && <p className="mt-4 text-[16px] leading-relaxed text-muted lg:text-lg">{lead}</p>}
+      <h2 className="mt-3 whitespace-pre-line text-2xl font-extrabold tracking-tight text-ink sm:text-3xl lg:text-[42px] lg:leading-[1.2] [.dark-section_&]:text-white">{title}</h2>
+      {lead && <p className="mt-4 text-[16px] leading-relaxed text-muted lg:text-lg [.dark-section_&]:text-white/60">{lead}</p>}
     </div>
   );
 }

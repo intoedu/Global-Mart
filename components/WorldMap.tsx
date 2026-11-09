@@ -53,9 +53,9 @@ export function WorldMap({
     [pins, hq]
   );
 
-  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : "rgb(15 24 48 / 0.13)";
-  const pinColor = dark ? "#8fb2ff" : "#3d5aa8";
-  const arcColor = dark ? "#8fb2ff" : "#3d5aa8";
+  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : "rgb(13 14 18 / 0.2)";
+  const pinColor = dark ? "#8fb2ff" : "#0d0e12";
+  const arcColor = dark ? "#8fb2ff" : "#2d3f7a";
   const isOn = (region: string) => !activeRegion || region === activeRegion || region === "hq";
   const label = hover ? officeById.get(hover.id)?.[locale] : null;
 
@@ -91,7 +91,7 @@ export function WorldMap({
           arcs
             .filter((_, i) => i % 2 === 0)
             .map((a, i) => (
-              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#e8a33d" : dark ? "#ffffff" : "#3d5aa8"} className="map-packet" opacity={0}>
+              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#e8a33d" : dark ? "#ffffff" : "#0d0e12"} className="map-packet" opacity={0}>
                 <animateMotion dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" path={a.d} keyPoints={i % 2 ? "0;1" : "1;0"} keyTimes="0;1" calcMode="linear" />
                 <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" />
               </circle>
@@ -133,8 +133,8 @@ export function WorldMap({
                   data-pop={animated ? "" : undefined}
                   style={animated ? { animationDelay: `${isHq ? 0.3 : 1.2 + labels.indexOf(p.id) * 0.12}s` } : undefined}
                 >
-                  <rect x={lx} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#fff"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "#d5dcec"} strokeWidth={0.08} />
-                  <text x={lx + 1.2} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0f1830" : dark ? "#fff" : "#0f1830"} fontFamily="inherit">
+                  <rect x={lx} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#0d0e12"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "none"} strokeWidth={0.08} />
+                  <text x={lx + 1.2} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0d0e12" : "#fff"} fontFamily="inherit">
                     {name}
                   </text>
                 </g>

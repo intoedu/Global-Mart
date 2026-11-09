@@ -37,8 +37,8 @@ export default async function GreetingPage({ params }: LangParams) {
             </h2>
             <div className="mt-10 grid grid-cols-3 gap-3">
               {GREETING.values.map((v, i) => (
-                <div key={i} className="rounded-2xl bg-paper p-4">
-                  <p className="text-[15px] font-bold text-brand">{t(v.title)}</p>
+                <div key={i} className="rounded-2xl border-t-2 border-accent bg-paper p-4">
+                  <p className="text-[15px] font-bold text-ink">{t(v.title)}</p>
                   <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{t(v.body)}</p>
                 </div>
               ))}

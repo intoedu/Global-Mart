@@ -31,11 +31,11 @@ export default async function HistoryPage({ params }: LangParams) {
 
       <section className="py-16 lg:py-24">
         <div className="container-x max-w-4xl">
-          <ol className="relative border-l-2 border-line pl-8 sm:pl-12">
+          <ol className="relative border-l-2 border-ink pl-8 sm:pl-12">
             {years.map((y) => (
               <li key={y} data-reveal className="relative pb-12 last:pb-0">
-                <span className="absolute -left-[41px] top-1.5 grid size-5 place-items-center rounded-full border-4 border-white bg-brand ring-2 ring-brand/20 sm:-left-[57px]" />
-                <p className="text-3xl font-black tracking-tight text-brand lg:text-4xl">{y}</p>
+                <span className="absolute -left-[41px] top-1.5 grid size-5 place-items-center rounded-full border-4 border-white bg-accent ring-2 ring-ink sm:-left-[57px]" />
+                <p className="text-3xl font-black tracking-tight text-ink lg:text-5xl">{y}</p>
                 <ul className="mt-4 space-y-3">
                   {byYear[y].map((h) => (
                     <li key={h.date + h.ko} className="flex flex-col gap-1 rounded-2xl border border-line p-5 sm:flex-row sm:gap-6">

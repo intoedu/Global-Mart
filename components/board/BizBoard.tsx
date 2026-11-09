@@ -111,7 +111,7 @@ export function BizBoard({ posts, locale }: { posts: BizPost[]; locale: Locale }
                 href={href({ category: c.id ?? null, page: 1 })}
                 scroll={false}
                 className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold transition ${
-                  category === c.id ? "border-brand bg-brand text-white" : "border-line text-ink-3 hover:border-brand hover:text-brand"
+                  category === c.id ? "border-ink bg-ink text-white" : "border-line text-ink-3 hover:border-ink hover:text-ink"
                 }`}
               >
                 {t(c.label)}

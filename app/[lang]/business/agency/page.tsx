@@ -23,8 +23,8 @@ export default async function AgencyPage({ params }: LangParams) {
           <SectionTitle eyebrow={ko ? "두 가지 방식" : "Two models"} title={ko ? "해외지사대행의 종류" : "How we can work together"} />
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
             {AGENCY.types.map((ty, i) => (
-              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className={`rounded-3xl p-8 lg:p-10 ${i === 0 ? "bg-ink text-white" : "border border-line bg-white"}`}>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${i === 0 ? "bg-accent text-ink" : "bg-brand-soft text-brand"}`}>
+              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className={`rounded-3xl p-8 lg:p-10 ${i === 0 ? "bg-ink text-white" : "border-2 border-ink bg-white"}`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-bold ${i === 0 ? "bg-accent text-ink" : "bg-ink text-white"}`}>
                   {t(ty.tag)}
                 </span>
                 <h3 className="mt-5 text-2xl font-extrabold tracking-tight">{t(ty.title)}</h3>
@@ -32,7 +32,7 @@ export default async function AgencyPage({ params }: LangParams) {
                 <ul className="mt-6 space-y-2.5">
                   {ty.points.map((p, j) => (
                     <li key={j} className="flex items-center gap-2.5 text-[15px] font-medium">
-                      <Icon name="check" className={`size-4 ${i === 0 ? "text-sky" : "text-brand"}`} strokeWidth={2.4} />
+                      <Icon name="check" className={`size-4 ${i === 0 ? "text-accent" : "text-ink"}`} strokeWidth={2.4} />
                       {t(p)}
                     </li>
                   ))}

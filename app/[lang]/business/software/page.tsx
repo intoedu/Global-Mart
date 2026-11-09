@@ -45,7 +45,7 @@ export default async function SoftwarePage({ params }: LangParams) {
         <section key={s.id} id={s.id} className={`py-16 lg:py-24 ${i % 2 === 0 ? "bg-paper" : ""}`}>
           <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
             <div>
-              <span className="grid size-12 place-items-center rounded-2xl bg-brand text-white">
+              <span className="grid size-12 place-items-center rounded-2xl bg-ink text-white">
                 <Icon name="code" className="size-6" />
               </span>
               <h2 className="mt-5 text-2xl font-extrabold tracking-tight lg:text-3xl">{t(s.title)}</h2>

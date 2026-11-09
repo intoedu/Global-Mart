@@ -28,7 +28,7 @@ export default async function PartnersPage({ params }: LangParams) {
           <div className="grid gap-5 md:grid-cols-2">
             {PARTNERS.orgs.map((o, i) => (
               <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="card p-8 lg:p-10">
-                <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-3 py-1 text-xs font-bold text-brand">
+                <span className="inline-flex items-center gap-2 rounded-full bg-ink px-3 py-1 text-xs font-bold text-white">
                   <Icon name={i === 0 ? "globe" : "building"} className="size-3.5" />
                   {t(o.kind)}
                 </span>
@@ -40,7 +40,7 @@ export default async function PartnersPage({ params }: LangParams) {
         </div>
       </section>
 
-      <section className="bg-paper py-16 lg:py-24">
+      <section className="dark-section bg-ink py-16 text-white lg:py-24">
         <div className="container-x">
           <SectionTitle
             eyebrow="IRDCA & Globalmart"
@@ -49,10 +49,10 @@ export default async function PartnersPage({ params }: LangParams) {
           />
           <ol className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
             {PARTNERS.steps.map((s, i) => (
-              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl bg-white p-7 shadow-card">
-                <span className="text-5xl font-black text-brand/15">0{i + 1}</span>
+              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-white/10 bg-ink-2 p-7">
+                <span className="text-5xl font-black text-accent">0{i + 1}</span>
                 <h3 className="mt-2 text-lg font-bold">{t(s.title)}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-muted">{t(s.body)}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-white/60">{t(s.body)}</p>
               </li>
             ))}
           </ol>

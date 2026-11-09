@@ -38,7 +38,7 @@ export default async function HomePage({ params }: LangParams) {
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-white via-white/75 to-white/0 lg:from-paper lg:via-white/40" aria-hidden />
 
-        <div className="container-x relative pb-24 pt-28 lg:pb-40 lg:pt-44">
+        <div className="container-x relative pb-20 pt-28 lg:pb-32 lg:pt-40">
           <div className="max-w-2xl">
             <p className="eyebrow reveal">Globalmart Inc. · Since 2004</p>
             <h1 className="reveal mt-5 whitespace-pre-line text-[40px] font-extrabold leading-[1.15] tracking-tight sm:text-5xl lg:text-[64px]">
@@ -55,7 +55,7 @@ export default async function HomePage({ params }: LangParams) {
             </div>
             <p className="reveal mt-10 text-xs text-muted">
               <span className="text-accent">●</span> {ko ? "서울 본사" : "Seoul HQ"}
-              <span className="ml-3 text-brand">●</span> {ko ? "해외 거점" : "Overseas offices"}
+              <span className="ml-3 text-ink">●</span> {ko ? "해외 거점" : "Overseas offices"}
             </p>
           </div>
         </div>
@@ -63,17 +63,17 @@ export default async function HomePage({ params }: LangParams) {
         <div className="relative">
           <TradeTicker locale={locale} />
         </div>
-        <div className="relative">
+        <div className="relative bg-ink text-white">
           <dl className="container-x grid grid-cols-2 lg:grid-cols-4">
             {HOME.stats.map((s, i) => (
               <div
                 key={i}
-                className={`py-6 lg:py-8 ${i % 2 ? "pl-6" : ""} ${i > 1 ? "border-t border-line lg:border-t-0" : ""} ${
-                  i > 0 ? "lg:border-l lg:border-line lg:pl-8" : ""
+                className={`py-6 lg:py-8 ${i % 2 ? "pl-6" : ""} ${i > 1 ? "border-t border-white/10 lg:border-t-0" : ""} ${
+                  i > 0 ? "lg:border-l lg:border-white/10 lg:pl-8" : ""
                 }`}
               >
-                <dt className="text-[13px] text-muted">{t(s.label)}</dt>
-                <dd className="mt-1 text-2xl font-extrabold tracking-tight text-ink lg:text-3xl">
+                <dt className="text-[13px] text-white/50">{t(s.label)}</dt>
+                <dd className="mt-1 text-2xl font-extrabold tracking-tight text-white lg:text-4xl">
                   {typeof s.value === "string" ? <CountUp value={s.value} /> : t(s.value)}
                 </dd>
               </div>
@@ -143,7 +143,7 @@ export default async function HomePage({ params }: LangParams) {
       </section>
 
       {/* ---------------- TRACK RECORD (연혁 기반 실적) ---------------- */}
-      <section className="py-20 lg:py-28">
+      <section className="dark-section bg-ink py-20 text-white lg:py-28">
         <div className="container-x">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <SectionTitle
@@ -151,7 +151,7 @@ export default async function HomePage({ params }: LangParams) {
               title={ko ? "현장에서 쌓아 온\n해외시장개척 실적" : "Proven on the ground,\nmarket by market"}
               lead={ko ? "2004년 설립 이후 아시아 각국에서 정부 프로젝트와 품목별 시장개척을 수행해 왔습니다." : "Since 2004 we have run government projects and product-by-product market development across Asia."}
             />
-            <Link href={lp(locale, "/company/history")} className="btn-ghost self-start lg:self-auto">
+            <Link href={lp(locale, "/company/history")} className="btn-outline-light self-start lg:self-auto">
               {ko ? "연혁 전체 보기" : "Full history"} <Icon name="arrow-right" className="size-4" />
             </Link>
           </div>
@@ -341,10 +341,10 @@ export default async function HomePage({ params }: LangParams) {
       {/* ---------------- CONTACT (PPT 6쪽) ---------------- */}
       <section className="py-20 lg:py-28">
         <div className="container-x">
-          <div data-reveal className="relative overflow-hidden rounded-[28px] bg-brand px-7 py-12 text-white sm:px-12 lg:px-16 lg:py-16">
-            <Image src={photo("cranes", 2000)} alt="" fill sizes="100vw" className="object-cover opacity-20 mix-blend-luminosity" />
-            <div className="absolute -right-24 -top-24 size-80 rounded-full bg-white/10" aria-hidden />
-            <div className="absolute -bottom-32 right-32 size-64 rounded-full bg-ink/20" aria-hidden />
+          <div data-reveal className="relative overflow-hidden rounded-[28px] bg-ink px-7 py-12 text-white sm:px-12 lg:px-16 lg:py-16">
+            <Image src={photo("cranes", 2000)} alt="" fill sizes="100vw" className="object-cover opacity-25 grayscale" />
+            <div className="absolute -right-24 -top-24 size-80 rounded-full bg-accent/20 blur-2xl" aria-hidden />
+            <div className="absolute -bottom-32 right-32 size-64 rounded-full bg-brand/30 blur-2xl" aria-hidden />
             <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
               <div>
                 <h2 className="text-3xl font-extrabold tracking-tight lg:text-4xl">
