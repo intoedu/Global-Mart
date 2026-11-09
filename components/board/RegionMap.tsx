@@ -39,14 +39,14 @@ export function RegionMap({
               aria-current={on ? "true" : undefined}
               className={`absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-bold shadow-lg transition sm:px-2.5 sm:py-1 sm:text-[12px] ${
                 on
-                  ? "z-10 scale-110 border-accent bg-accent text-ink"
+                  ? "z-10 scale-110 border-accent bg-accent text-white"
                   : "border-line bg-white text-ink hover:border-brand hover:text-brand"
               }`}
               style={{ left: `${(a.x / width) * 100}%`, top: `${(a.y / height) * 100}%` }}
             >
-              <span className={`size-1.5 rounded-full ${on ? "bg-ink" : "bg-brand"}`} />
+              <span className={`size-1.5 rounded-full ${on ? "bg-white" : "bg-brand"}`} />
               {REGION_MAP[a.id].label[locale]}
-              {n > 0 && <span className={`rounded-full px-1 text-[9px] sm:text-[10px] ${on ? "bg-ink/15" : "bg-brand-soft text-brand"}`}>{n}</span>}
+              {n > 0 && <span className={`rounded-full px-1 text-[9px] sm:text-[10px] ${on ? "bg-white/25" : "bg-brand-soft text-brand"}`}>{n}</span>}
             </Link>
           );
         })}

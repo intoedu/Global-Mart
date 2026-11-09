@@ -24,7 +24,7 @@ export default async function AgencyPage({ params }: LangParams) {
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
             {AGENCY.types.map((ty, i) => (
               <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className={`rounded-3xl p-8 lg:p-10 ${i === 0 ? "bg-ink text-white" : "border-2 border-ink bg-white"}`}>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${i === 0 ? "bg-accent text-ink" : "bg-ink text-white"}`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-bold ${i === 0 ? "bg-accent text-white" : "bg-ink text-white"}`}>
                   {t(ty.tag)}
                 </span>
                 <h3 className="mt-5 text-2xl font-extrabold tracking-tight">{t(ty.title)}</h3>

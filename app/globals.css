@@ -10,9 +10,9 @@
   --color-ink-3: #2d2f37;
   --color-brand: #3d5aa8;
   --color-brand-2: #5674c4;
-  --color-brand-soft: #eaeef7;
-  --color-sky: #8fb2ff;
-  --color-accent: #e8a33d;
+  --color-brand-soft: #e8f4ff;
+  --color-sky: #7cc4ff;
+  --color-accent: #1e9bff;
   --color-paper: #f4f4f1;
   --color-line: #e4e4e0;
   --color-muted: #62656f;
@@ -182,7 +182,7 @@ html.js [data-reveal].is-in {
 
 /* 컨테이너 줄무늬 포인트 (국제 무역 분위기) */
 .container-stripes {
-  background-image: repeating-linear-gradient(90deg, #e8a33d 0 36px, #0d0e12 36px 72px, #a9abb3 72px 108px, #0d0e12 108px 144px);
+  background-image: repeating-linear-gradient(90deg, #1e9bff 0 36px, #0d0e12 36px 72px, #b9d9f5 72px 108px, #0d0e12 108px 144px);
   height: 6px;
 }
 

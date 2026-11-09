@@ -42,19 +42,16 @@ export default async function HomePage({ params }: LangParams) {
         <div className="hero-map absolute right-[-18%] top-[34%] w-[215%] opacity-50 sm:right-[-25%] sm:top-1/2 sm:w-[130%] sm:-translate-y-1/2 sm:opacity-70 lg:right-[-2%] lg:w-[80%] lg:opacity-100" aria-hidden>
           <WorldMap locale={locale} labels={HERO_LABELS} animated strong dark={false} />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-paper/90 via-paper/70 to-paper/30 sm:from-paper sm:via-paper/70 sm:to-paper/0 lg:via-paper/60 lg:to-transparent" aria-hidden />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-paper)_0%,rgb(244_244_241/0.85)_45%,transparent_75%)] lg:bg-[linear-gradient(90deg,var(--color-paper)_0%,var(--color-paper)_30%,rgb(244_244_241/0.6)_45%,transparent_58%)]" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-paper to-transparent" aria-hidden />
 
         <div className="container-x relative flex items-center pb-12 pt-[88px] lg:min-h-[calc(100svh-52px)] lg:pb-16 lg:pt-28">
           <div className="w-full max-w-[640px]">
             <p className="eyebrow reveal !tracking-[0.08em] !normal-case !text-[14px] sm:!text-[15px]">{t(HOME.heroTag)}</p>
-            <h1 className="reveal mt-5 text-[40px] font-black leading-[1.1] tracking-[-0.03em] sm:text-6xl lg:mt-6 lg:text-[76px]">
+            <h1 className="reveal mt-5 text-[40px] font-extrabold leading-[1.12] tracking-[-0.025em] sm:text-6xl lg:mt-6 lg:text-[68px]">
               {heroLines[0]}
               <br />
-              <span className="relative inline-block">
-                <span className="relative z-10">{heroFirst}</span>
-                <span className="absolute inset-x-0 bottom-[0.08em] z-0 h-[0.32em] origin-left animate-[underline_1s_0.6s_cubic-bezier(0.6,0,0.2,1)_both] bg-accent" aria-hidden />
-              </span>
+              <span className="bg-gradient-to-r from-[#0a6fd6] to-accent bg-clip-text text-transparent">{heroFirst}</span>
               {heroRest}
             </h1>
             <p className="reveal mt-5 max-w-xl text-[16px] leading-relaxed text-ink-3 sm:text-[17px] lg:mt-7 lg:text-[19px]">{t(HOME.heroLead)}</p>
@@ -66,7 +63,7 @@ export default async function HomePage({ params }: LangParams) {
                     href={lp(locale, sv.href)}
                     className="group flex h-full items-center gap-3 rounded-2xl bg-white p-3 shadow-card ring-1 ring-line transition hover:-translate-y-0.5 hover:ring-ink sm:flex-col sm:items-start sm:gap-2.5 sm:p-4"
                   >
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-accent transition group-hover:bg-accent group-hover:text-ink">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-sky transition group-hover:bg-accent group-hover:text-white">
                       <Icon name={sv.icon} className="size-5" />
                     </span>
                     <span className="min-w-0">
@@ -118,7 +115,7 @@ export default async function HomePage({ params }: LangParams) {
                   <span className="absolute left-5 top-5 rounded-full bg-white/15 px-3 py-1 text-xs font-bold tracking-widest text-white backdrop-blur">
                     {s.no}
                   </span>
-                  <span className="absolute right-5 top-5 grid size-11 place-items-center rounded-2xl bg-white/90 text-brand shadow-card transition group-hover:bg-accent group-hover:text-ink">
+                  <span className="absolute right-5 top-5 grid size-11 place-items-center rounded-2xl bg-white/90 text-brand shadow-card transition group-hover:bg-accent group-hover:text-white">
                     <Icon name={SERVICE_ICONS[i]} className="size-5" />
                   </span>
                   <h3 className="absolute inset-x-6 bottom-5 text-2xl font-extrabold tracking-tight text-white">{t(s.title)}</h3>
@@ -302,7 +299,7 @@ export default async function HomePage({ params }: LangParams) {
                   <Link href={lp(locale, `/biz/${p.id}`)} className="group flex items-center gap-4 px-5 py-4 transition hover:bg-brand-soft/50">
                     <span
                       className={`w-[68px] shrink-0 rounded-md py-1 text-center text-[11px] font-bold ${
-                        p.category === "inquiry" ? "bg-accent/15 text-[#a8661a]" : "bg-brand-soft text-brand"
+                        p.category === "inquiry" ? "bg-accent/15 text-[#0a6fd6]" : "bg-brand-soft text-brand"
                       }`}
                     >
                       {t(bizCategoryLabel(p.category))}

@@ -56,9 +56,9 @@ export function WorldMap({
     [pins, hq]
   );
 
-  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : strong ? "rgb(13 14 18 / 0.3)" : "rgb(13 14 18 / 0.2)";
-  const pinColor = dark ? "#8fb2ff" : "#0d0e12";
-  const arcColor = dark ? "#8fb2ff" : "#2d3f7a";
+  const dotColor = dark ? "rgb(255 255 255 / 0.16)" : strong ? "rgb(30 50 90 / 0.24)" : "rgb(30 50 90 / 0.18)";
+  const pinColor = dark ? "#7cc4ff" : "#0d0e12";
+  const arcColor = dark ? "#7cc4ff" : "#1e9bff";
   const isOn = (region: string) => !activeRegion || region === activeRegion || region === "hq";
   const label = hover ? officeById.get(hover.id)?.[locale] : null;
 
@@ -94,7 +94,7 @@ export function WorldMap({
           arcs
             .filter((_, i) => i % 2 === 0)
             .map((a, i) => (
-              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#e8a33d" : dark ? "#ffffff" : "#0d0e12"} className="map-packet" opacity={0}>
+              <circle key={`pk-${a.id}`} r={0.32} fill={i % 3 === 0 ? "#1e9bff" : dark ? "#ffffff" : "#0d0e12"} className="map-packet" opacity={0}>
                 <animateMotion dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" path={a.d} keyPoints={i % 2 ? "0;1" : "1;0"} keyTimes="0;1" calcMode="linear" />
                 <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" />
               </circle>
@@ -112,8 +112,8 @@ export function WorldMap({
               className="cursor-default transition-opacity duration-500"
               opacity={on ? 1 : 0.2}
             >
-              {on && <circle cx={p.x} cy={p.y} r={0.5} fill="none" stroke={isHq ? "#e8a33d" : pinColor} strokeWidth={0.1} className="animate-pulse-ring" />}
-              <circle cx={p.x} cy={p.y} r={isHq ? 0.75 : 0.5} fill={isHq ? "#e8a33d" : pinColor} stroke={dark ? "none" : "#fff"} strokeWidth={0.12} />
+              {on && <circle cx={p.x} cy={p.y} r={0.5} fill="none" stroke={isHq ? "#1e9bff" : pinColor} strokeWidth={0.1} className="animate-pulse-ring" />}
+              <circle cx={p.x} cy={p.y} r={isHq ? 0.75 : 0.5} fill={isHq ? "#1e9bff" : pinColor} stroke={dark ? "none" : "#fff"} strokeWidth={0.12} />
               <circle cx={p.x} cy={p.y} r={1.6} fill="transparent" />
             </g>
           );
@@ -136,8 +136,8 @@ export function WorldMap({
                   data-pop={animated ? "" : undefined}
                   style={animated ? { animationDelay: `${isHq ? 0.3 : 1.2 + labels.indexOf(p.id) * 0.12}s` } : undefined}
                 >
-                  <rect x={lx} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#0d0e12"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "none"} strokeWidth={0.08} />
-                  <text x={lx + 1.2} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0d0e12" : "#fff"} fontFamily="inherit">
+                  <rect x={lx} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#1e9bff" : dark ? "rgb(15 24 48 / 0.85)" : "#0d0e12"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "none"} strokeWidth={0.08} />
+                  <text x={lx + 1.2} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill="#fff" fontFamily="inherit">
                     {name}
                   </text>
                 </g>

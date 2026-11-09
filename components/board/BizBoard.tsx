@@ -210,7 +210,7 @@ export function BizBoard({ posts, locale }: { posts: BizPost[]; locale: Locale }
 
 export function CategoryBadge({ category, label }: { category: string; label: string }) {
   return (
-    <span className={`inline-block rounded-md px-2 py-0.5 text-[12px] font-bold ${category === "inquiry" ? "bg-accent/15 text-[#a8661a]" : "bg-brand-soft text-brand"}`}>
+    <span className={`inline-block rounded-md px-2 py-0.5 text-[12px] font-bold ${category === "inquiry" ? "bg-accent/15 text-[#0a6fd6]" : "bg-brand-soft text-brand"}`}>
       {label}
     </span>
   );
