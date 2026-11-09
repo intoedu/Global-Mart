@@ -101,6 +101,7 @@ export function BizBoard({ posts, locale }: { posts: BizPost[]; locale: Locale }
           ) : region === "all" ? (
             <p className="mt-2 text-[15px] text-muted">{ko ? "모든 지역의 정보를 모아 봅니다." : "Posts from every region."}</p>
           ) : null}
+          {!ko && <p className="mt-2 text-[13px] font-semibold text-[#b45f06]">Posts on this board are written in Korean.</p>}
         </div>
 
         <div className="mt-6 flex flex-col justify-between gap-3 lg:flex-row lg:items-center">

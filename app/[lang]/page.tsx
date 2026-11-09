@@ -9,6 +9,7 @@ import { REGION_MAP, bizCategoryLabel, isRegionId } from "@/lib/regions";
 import { getBizPosts } from "@/lib/biz";
 import { WorldMap } from "@/components/WorldMap";
 import { TradeTicker } from "@/components/TradeTicker";
+import { HeroStage } from "@/components/HeroStage";
 import { NetworkSection } from "@/components/NetworkSection";
 import { CountUp } from "@/components/CountUp";
 import { Icon } from "@/components/Icon";
@@ -39,39 +40,9 @@ export default async function HomePage({ params }: LangParams) {
       <section className="relative overflow-hidden bg-paper text-ink">
         {/* 배경: 세계 지도 (서울 → 해외 거점 항로) */}
         <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" aria-hidden />
-        <div className="hero-map absolute right-[-18%] top-[34%] w-[215%] opacity-50 sm:right-[-25%] sm:top-1/2 sm:w-[130%] sm:-translate-y-1/2 sm:opacity-70 lg:right-[3vw] lg:top-[calc(50%+20px)] lg:w-[min(64vw,calc((100svh_-_170px)*2),1480px)] lg:opacity-100" aria-hidden>
-          <WorldMap locale={locale} labels={HERO_LABELS} animated strong dark={false} />
-        </div>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-paper)_0%,rgb(244_244_241/0.85)_45%,transparent_75%)] lg:bg-[linear-gradient(90deg,var(--color-paper)_0%,var(--color-paper)_30%,rgb(244_244_241/0.6)_45%,transparent_58%)]" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-paper to-transparent" aria-hidden />
-        {/* 지도 범례 (데스크톱) */}
-        <div className="absolute bottom-10 right-[4vw] z-10 hidden items-center gap-5 rounded-2xl bg-white/90 px-5 py-3 text-[13px] font-semibold text-ink-3 shadow-card ring-1 ring-line backdrop-blur lg:flex">
-          <span className="flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-orange ring-4 ring-orange/20" /> {ko ? "서울 본사" : "Seoul HQ"}
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-ink" /> {ko ? `해외 거점 ${officeCount}곳` : `${officeCount} overseas bases`}
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="h-0.5 w-5 rounded-full bg-accent" /> {ko ? "무역 항로" : "Trade routes"}
-          </span>
-        </div>
 
-        <div className="container-x relative flex items-center pb-12 pt-[88px] lg:min-h-[calc(100svh-52px)] lg:pb-16 lg:pt-28">
-          <div className="w-full max-w-[640px] 2xl:max-w-[760px]">
-            <p className="eyebrow reveal !tracking-[0.08em] !normal-case !text-[14px] sm:!text-[15px]">{t(HOME.heroTag)}</p>
-            <h1 className="reveal mt-5 text-[40px] font-extrabold leading-[1.12] tracking-[-0.025em] sm:text-6xl lg:mt-6 lg:text-[68px] 2xl:text-[84px]">
-              {heroLines[0]}
-              <br />
-              <span className="relative inline-block">
-                <span className="relative z-10">{heroFirst}</span>
-                <span
-                  className="absolute inset-x-0 bottom-[0.08em] z-0 h-[0.32em] origin-left animate-[underline_1s_0.6s_cubic-bezier(0.6,0,0.2,1)_both] bg-orange"
-                  aria-hidden
-                />
-              </span>
-              {heroRest}
-            </h1>
+        <HeroStage locale={locale} tag={t(HOME.heroTag)} defaultLine={heroLines[0]} highlight={heroFirst} rest={heroRest} officeCount={officeCount}>
             <p className="reveal mt-5 max-w-xl text-[16px] leading-relaxed text-ink-3 sm:text-[17px] lg:mt-7 lg:text-[19px] 2xl:text-[21px]">{t(HOME.heroLead)}</p>
             {/* 무엇을 하는 회사인지 한눈에: 핵심 서비스 4가지 */}
             <ul className="reveal mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:mt-8">
@@ -100,9 +71,7 @@ export default async function HomePage({ params }: LangParams) {
                 <Icon name="phone" className="size-4" /> {ko ? SITE.tel : SITE.telIntl}
               </a>
             </div>
-          </div>
-
-        </div>
+        </HeroStage>
 
         <div className="relative">
           <TradeTicker locale={locale} />
@@ -163,7 +132,7 @@ export default async function HomePage({ params }: LangParams) {
             </p>
             <a href={SITE.telHref} className="flex items-center gap-2 text-lg font-bold text-sky hover:text-white">
               <Icon name="phone" className="size-5" />
-              {ko ? "상담신청" : "Call"} {SITE.tel}
+              {ko ? "상담신청" : "Call"} {ko ? SITE.tel : SITE.telIntl}
             </a>
           </div>
         </div>
@@ -193,8 +162,8 @@ export default async function HomePage({ params }: LangParams) {
                 <Image src={photo(r.photo, 900)} alt="" fill sizes="(min-width: 1024px) 25vw, 80vw" className="object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
                 <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5">
-                  <span className="text-4xl font-black tracking-tight text-white/90">{r.year}</span>
-                  <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{t(r.place)}</span>
+                  <span className="shrink-0 text-4xl font-black tracking-tight text-white/90">{r.year}</span>
+                  <span className="ml-3 truncate rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{t(r.place)}</span>
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white">
                   <p className="text-lg font-bold">{t(r.title)}</p>
@@ -308,6 +277,7 @@ export default async function HomePage({ params }: LangParams) {
               </Link>
             </div>
             <p className="mt-3 text-[15px] leading-relaxed text-muted">{t(HOME.bizCta.body)}</p>
+            {!ko && <p className="mt-2 text-[13px] font-semibold text-[#b45f06]">Posts are written in Korean.</p>}
             <ul className="mt-6 flex-1 divide-y divide-line rounded-2xl bg-white">
               {latest.length === 0 && (
                 <li className="p-6 text-center text-sm text-muted">{ko ? "등록된 글이 없습니다." : "No posts yet."}</li>
@@ -406,7 +376,7 @@ export default async function HomePage({ params }: LangParams) {
                   <Icon name="phone" className="mt-0.5 size-5 shrink-0 text-white/70" />
                   <dd>
                     <a href={SITE.telHref} className="font-bold hover:underline">
-                      {SITE.tel}
+                      {ko ? SITE.tel : SITE.telIntl}
                     </a>
                     <span className="ml-2 text-sm text-white/65">{t(SITE.hours)}</span>
                   </dd>

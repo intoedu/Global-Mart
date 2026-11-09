@@ -17,7 +17,7 @@ export function Footer({ locale }: { locale: Locale }) {
           <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/60">{t(SITE.tagline)}</p>
           <div className="mt-8 space-y-3 text-[15px]">
             <a href={SITE.telHref} className="flex items-center gap-3 text-2xl font-bold text-white hover:text-sky">
-              <Icon name="phone" className="size-5 text-sky" /> {SITE.tel}
+              <Icon name="phone" className="size-5 text-sky" /> {ko ? SITE.tel : SITE.telIntl}
             </a>
             <p className="flex items-center gap-3">
               <Icon name="clock" className="size-4 text-white/40" /> {t(SITE.hours)}

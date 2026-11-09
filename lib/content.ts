@@ -24,8 +24,8 @@ export const HOME = {
   heroServices: [
     { icon: "briefcase", href: "/business/agency", label: { ko: "해외지사대행", en: "Branch agency" }, sub: { ko: "현지 직원 배치", en: "Local staff" } },
     { icon: "chart", href: "/business/research", label: { ko: "해외시장조사", en: "Market research" }, sub: { ko: "가격·경쟁·관세", en: "Prices · tariffs" } },
-    { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어 발굴", en: "Buyer discovery" }, sub: { ko: "계약까지 동행", en: "Through to contract" } },
-    { icon: "code", href: "/business/software", label: { ko: "소프트웨어 수출", en: "Software export" }, sub: { ko: "메신저·블록체인", en: "Messenger · blockchain" } },
+    { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어 발굴", en: "Buyer discovery" }, sub: { ko: "계약까지 동행", en: "Until the deal" } },
+    { icon: "code", href: "/business/software", label: { ko: "소프트웨어 수출", en: "Software export" }, sub: { ko: "메신저·블록체인", en: "Apps · blockchain" } },
   ],
   stats: [
     { value: "2004", label: { ko: "설립", en: "Founded" } },
@@ -427,7 +427,7 @@ export const TRACK_RECORD = [
   {
     year: "2016",
     photo: "hcmc",
-    place: { ko: "베트남 호치민", en: "Ho Chi Minh City, Vietnam" },
+    place: { ko: "베트남 호치민", en: "Ho Chi Minh City" },
     title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
     items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" },
   },

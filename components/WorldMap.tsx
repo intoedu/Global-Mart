@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import mapData from "@/lib/map-data.json";
 import offices from "@/lib/offices.json";
 import type { Locale } from "@/lib/i18n";
@@ -26,8 +26,14 @@ export function WorldMap({
   labels,
   animated = false,
   strong = false,
+  focusId = null,
+  focusCard,
   className = "",
 }: {
+  /** 강조할 거점 id: 서울→해당 거점 항로를 주황색으로 그리고 나머지는 흐리게 */
+  focusId?: string | null;
+  /** 강조 거점 옆에 띄울 카드 */
+  focusCard?: ReactNode;
   /** 배경용: 점·항로를 더 진하고 굵게 */
   strong?: boolean;
   /** 항로선이 그려지고 화물 점이 오가는 애니메이션 */
@@ -61,6 +67,8 @@ export function WorldMap({
   const arcColor = dark ? "#7cc4ff" : "#1e9bff";
   const isOn = (region: string) => !activeRegion || region === activeRegion || region === "hq";
   const label = hover ? officeById.get(hover.id)?.[locale] : null;
+  const focusArc = focusId ? arcs.find((a) => a.id === focusId) : undefined;
+  const focusPin = focusId ? pins.find((p) => p.id === focusId) : undefined;
 
   return (
     <div className={`relative ${className}`}>
@@ -85,10 +93,19 @@ export function WorldMap({
               strokeWidth={strong ? 0.17 : 0.12}
               style={animated ? { animationDelay: `${0.4 + i * 0.07}s` } : undefined}
               data-draw={animated ? "" : undefined}
-              opacity={isOn(a.region) ? 0.9 : 0.12}
-              className="transition-opacity duration-500"
+              opacity={!isOn(a.region) ? 0.12 : focusId && focusId !== a.id ? 0.28 : 0.9}
+              className="transition-opacity duration-700"
             />
           ))}
+        {focusArc && (
+          <g key={`focus-${focusId}`} className="pointer-events-none">
+            <path d={focusArc.d} pathLength={1} fill="none" stroke="#f59e2b" strokeOpacity={0.25} strokeWidth={0.9} strokeLinecap="round" className="focus-arc" />
+            <path d={focusArc.d} pathLength={1} fill="none" stroke="#f59e2b" strokeWidth={0.32} strokeLinecap="round" className="focus-arc" />
+            <circle r={0.5} fill="#f59e2b">
+              <animateMotion dur="1.6s" begin="0.2s" repeatCount="indefinite" path={focusArc.d} calcMode="linear" />
+            </circle>
+          </g>
+        )}
         {animated &&
           showArcs &&
           arcs
@@ -118,9 +135,15 @@ export function WorldMap({
             </g>
           );
         })}
+        {focusPin && (
+          <g key={`fp-${focusId}`} className="pointer-events-none">
+            <circle cx={focusPin.x} cy={focusPin.y} r={1.5} fill="#f59e2b" fillOpacity={0.18} stroke="#f59e2b" strokeWidth={0.12} className="focus-pin" />
+            <circle cx={focusPin.x} cy={focusPin.y} r={0.7} fill="#f59e2b" stroke="#fff" strokeWidth={0.15} />
+          </g>
+        )}
         {labels &&
           pins
-            .filter((p) => labels.includes(p.id))
+            .filter((p) => labels.includes(p.id) && p.id !== focusId)
             .map((p) => {
               const name = officeById.get(p.id)?.[locale] ?? "";
               const isHq = p.region === "hq";
@@ -144,6 +167,15 @@ export function WorldMap({
               );
             })}
       </svg>
+      {focusPin && focusCard && (
+        <div
+          key={`fc-${focusId}`}
+          className="map-focus-card pointer-events-none absolute z-10"
+          style={{ left: `${(focusPin.x / width) * 100}%`, top: `${(focusPin.y / height) * 100}%` }}
+        >
+          {focusCard}
+        </div>
+      )}
       {hover && label && (
         <div
           className="pointer-events-none absolute -translate-x-1/2 -translate-y-full rounded-lg bg-white px-2.5 py-1 text-xs font-semibold text-ink shadow-lift"
