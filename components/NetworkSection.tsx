@@ -5,8 +5,9 @@ import { lp } from "@/lib/paths";
 import { WorldMap } from "./WorldMap";
 import { Icon } from "./Icon";
 import { CountUp } from "./CountUp";
+import { HOME } from "@/lib/content";
 
-const LABELS = ["seoul", "vietnam", "mumbai", "dalian", "russia", "uzbekistan", "egypt", "indonesia", "turkey", "usa", "mongolia"];
+const LABELS = ["seoul", "vietnam", "mumbai", "russia", "uzbekistan", "egypt", "indonesia", "turkey", "usa", "mongolia"];
 
 /** 메인 — 화면 전체 폭 글로벌 네트워크 세계 지도 */
 export function NetworkSection({ locale }: { locale: Locale }) {
@@ -22,15 +23,26 @@ export function NetworkSection({ locale }: { locale: Locale }) {
             <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
               {ko ? "서울에서 세계로, 글로벌마트 무역 네트워크" : "From Seoul to the world: our trade network"}
             </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-white/65">
-              {ko
-                ? "동남아에서 중동, 중앙아시아와 아프리카까지. 현지 거점과 주재원이 귀사의 해외지사 역할을 합니다."
-                : "From Southeast Asia to the Middle East, Central Asia and Africa, our local bases and staff act as your overseas branch."}
-            </p>
+            <p className="mt-4 text-[16px] leading-relaxed text-white/65">{HOME.regionsLead[locale]}</p>
+            <div className="mt-6">
+              <p className="text-xs font-bold uppercase tracking-widest text-white/40">{HOME.regionsTitle[locale]}</p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {HOME.regions.map((r, i) => (
+                  <li key={i} className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm font-semibold">
+                    {r[locale]}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <Link href={lp(locale, "/offices")} className="btn-light self-start lg:self-auto">
-            {ko ? "해외지사 전체 보기" : "See all offices"} <Icon name="arrow-right" className="size-4" />
-          </Link>
+          <div className="flex flex-wrap gap-2 self-start lg:self-auto">
+            <Link href={lp(locale, "/offices")} className="btn-light">
+              {ko ? "해외지사 전체 보기" : "See all offices"} <Icon name="arrow-right" className="size-4" />
+            </Link>
+            <Link href={lp(locale, "/company/partners")} className="btn-outline-light">
+              {ko ? "제휴기관 소개" : "About IRDCA"}
+            </Link>
+          </div>
         </div>
 
         <div data-reveal className="mt-12 rounded-[28px] border border-white/10 bg-ink-2/60 p-3 sm:p-6 lg:p-10">

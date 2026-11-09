@@ -7,6 +7,8 @@ import type { Locale } from "@/lib/i18n";
 
 type Pin = { id: string; region: string; x: number; y: number };
 
+const LEFT_LABELS = new Set(["mumbai", "egypt", "turkey", "usa", "indonesia"]);
+
 const officeById = new Map<string, { ko: string; en: string; email?: string }>([
   [offices.headOffice.id, offices.headOffice],
   ...offices.regions.flatMap((r) => r.offices.map((o) => [o.id, o] as [string, { ko: string; en: string; email?: string }])),
@@ -92,28 +94,6 @@ export function WorldMap({
                 <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + (i % 4) * 0.7}s`} begin={`${2 + i * 0.35}s`} repeatCount="indefinite" />
               </circle>
             ))}
-        {labels &&
-          pins
-            .filter((p) => labels.includes(p.id))
-            .map((p) => {
-              const name = officeById.get(p.id)?.[locale] ?? "";
-              const isHq = p.region === "hq";
-              const w = name.length * (locale === "ko" ? 1.45 : 0.85) + 2.4;
-              return (
-                <g
-                  key={`l-${p.id}`}
-                  className="pointer-events-none"
-                  opacity={isOn(p.region) ? 1 : 0.25}
-                  data-pop={animated ? "" : undefined}
-                  style={animated ? { animationDelay: `${isHq ? 0.3 : 1.2 + labels.indexOf(p.id) * 0.12}s` } : undefined}
-                >
-                  <rect x={p.x + 1.1} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#fff"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "#d5dcec"} strokeWidth={0.08} />
-                  <text x={p.x + 2.3} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0f1830" : dark ? "#fff" : "#0f1830"} fontFamily="inherit">
-                    {name}
-                  </text>
-                </g>
-              );
-            })}
         {pins.map((p, i) => {
           const on = isOn(p.region);
           const isHq = p.region === "hq";
@@ -133,6 +113,31 @@ export function WorldMap({
             </g>
           );
         })}
+        {labels &&
+          pins
+            .filter((p) => labels.includes(p.id))
+            .map((p) => {
+              const name = officeById.get(p.id)?.[locale] ?? "";
+              const isHq = p.region === "hq";
+              const w = name.length * (locale === "ko" ? 1.3 : 0.8) + 2.2;
+              // 이웃 거점과 겹치는 이름표는 왼쪽에 표시
+              const left = LEFT_LABELS.has(p.id);
+              const lx = left ? p.x - 1.1 - w : p.x + 1.1;
+              return (
+                <g
+                  key={`l-${p.id}`}
+                  className="pointer-events-none"
+                  opacity={isOn(p.region) ? 1 : 0.25}
+                  data-pop={animated ? "" : undefined}
+                  style={animated ? { animationDelay: `${isHq ? 0.3 : 1.2 + labels.indexOf(p.id) * 0.12}s` } : undefined}
+                >
+                  <rect x={lx} y={p.y - 3.3} width={w} height={2.6} rx={1.3} fill={isHq ? "#e8a33d" : dark ? "rgb(15 24 48 / 0.85)" : "#fff"} stroke={dark ? "rgb(143 178 255 / 0.4)" : "#d5dcec"} strokeWidth={0.08} />
+                  <text x={lx + 1.2} y={p.y - 1.55} fontSize={1.45} fontWeight={700} fill={isHq ? "#0f1830" : dark ? "#fff" : "#0f1830"} fontFamily="inherit">
+                    {name}
+                  </text>
+                </g>
+              );
+            })}
       </svg>
       {hover && label && (
         <div

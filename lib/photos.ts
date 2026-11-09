@@ -27,6 +27,9 @@ export const PHOTOS = {
   cranes: u("1578575437130-527eed3abbec"), // 항만 크레인
   success: u("1600880292203-757bb62b4baf"), // 계약 성사
   docs: u("1454165804606-c3d57bc86b40"), // 서류 작업
+  kualalumpur: u("1596422846543-75c6fc197f07"), // 쿠알라룸푸르 페트로나스 타워
+  apparel: u("1567401893414-76b7b1e5a7a5"), // 의류 매장
+  dubai: u("1512453979798-5ea266f8880c"), // 두바이 스카이라인
 } as const;
 
 export type PhotoKey = keyof typeof PHOTOS;

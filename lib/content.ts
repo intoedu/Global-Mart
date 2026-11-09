@@ -388,3 +388,51 @@ export const RESIDENT_INTRO = {
   ko: "이 공간은 국내 아이템을 해외 주재원에게 소개하는 전용 공간입니다. 다음은 글로벌마트와 연결된 국내 기업과 그 취급 제품입니다.",
   en: "This area introduces Korean products to our overseas staff. Below are the Korean companies connected with Globalmart and the products they handle.",
 } satisfies L;
+
+// ------------------------------------------------------------------
+// 메인 — 주요 수행 실적 (연혁 기반, 사실 그대로)
+// ------------------------------------------------------------------
+export const TRACK_RECORD = [
+  {
+    year: "2008",
+    photo: "kualalumpur",
+    place: { ko: "말레이시아", en: "Malaysia" },
+    title: { ko: "ITS 정부 프로젝트", en: "Government ITS project" },
+    items: { ko: "지능형 교통 시스템(ITS)", en: "Intelligent transport systems" },
+  },
+  {
+    year: "2009",
+    photo: "apparel",
+    place: { ko: "중국 대련", en: "Dalian, China" },
+    title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
+    items: { ko: "의류 · 건축자재", en: "Apparel · Building materials" },
+  },
+  {
+    year: "2010",
+    photo: "mumbai",
+    place: { ko: "인도 뭄바이", en: "Mumbai, India" },
+    title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
+    items: { ko: "건축자재 · 엔진오일", en: "Building materials · Engine oil" },
+  },
+  {
+    year: "2016",
+    photo: "hcmc",
+    place: { ko: "베트남 호치민", en: "Ho Chi Minh City, Vietnam" },
+    title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
+    items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" },
+  },
+] as const;
+
+/** 메인 — 다뤄 온 품목·분야 (연혁·의뢰서 기준) */
+export const INDUSTRIES = [
+  { icon: "sparkle", label: { ko: "화장품", en: "Cosmetics" } },
+  { icon: "medical", label: { ko: "의료기기", en: "Medical devices" } },
+  { icon: "building", label: { ko: "건축자재", en: "Building materials" } },
+  { icon: "drop", label: { ko: "엔진오일", en: "Engine oil" } },
+  { icon: "fish", label: { ko: "수산물", en: "Seafood" } },
+  { icon: "gem", label: { ko: "대리석", en: "Marble" } },
+  { icon: "shirt", label: { ko: "의류", en: "Apparel" } },
+  { icon: "traffic", label: { ko: "교통 시스템(ITS)", en: "Transport systems (ITS)" } },
+  { icon: "code", label: { ko: "소프트웨어", en: "Software" } },
+  { icon: "chain", label: { ko: "블록체인", en: "Blockchain" } },
+] as const;

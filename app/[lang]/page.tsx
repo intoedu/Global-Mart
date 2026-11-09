@@ -3,7 +3,7 @@ import Link from "next/link";
 import { photo, type PhotoKey } from "@/lib/photos";
 import { getT, type LangParams } from "@/lib/i18n";
 import { lp } from "@/lib/paths";
-import { HOME, PROCESS, SOFTWARE } from "@/lib/content";
+import { HOME, INDUSTRIES, PROCESS, SOFTWARE, TRACK_RECORD } from "@/lib/content";
 import { SITE } from "@/lib/site";
 import { REGION_MAP, bizCategoryLabel, isRegionId } from "@/lib/regions";
 import { getBizPosts } from "@/lib/biz";
@@ -83,12 +83,14 @@ export default async function HomePage({ params }: LangParams) {
       </section>
 
       {/* ---------------- SERVICES (PPT 3쪽) ---------------- */}
-      <section className="bg-paper py-20 lg:py-28">
+      <section className="relative bg-paper py-20 lg:py-28">
         <div className="container-x">
-          <SectionTitle
-            eyebrow={ko ? "What we do" : "What we do"}
-            title={ko ? "해외시장진출,\n세 가지 방법으로 함께합니다" : "Three ways we take\nyou abroad"}
-          />
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <SectionTitle eyebrow="What we do" title={ko ? "해외시장진출,\n세 가지 방법으로 함께합니다" : "Three ways we take\nyou abroad"} />
+            <p data-reveal className="max-w-md text-[15px] leading-relaxed text-muted lg:text-right">
+              {ko ? "아이템과 회사 상황에 맞는 방식을 고르세요. 어떤 방식이든 현지 전문 인력이 직접 움직입니다." : "Choose the model that fits your product and company. Either way, local specialists do the legwork."}
+            </p>
+          </div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {HOME.services.map((s, i) => (
               <Link
@@ -96,44 +98,38 @@ export default async function HomePage({ params }: LangParams) {
                 href={lp(locale, s.href)}
                 data-reveal
                 style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}
-                className="card group relative flex flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lift"
+                className="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-card ring-1 ring-line transition duration-500 hover:-translate-y-1.5 hover:shadow-lift"
               >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={photo(SERVICE_PHOTOS[i], 800)}
-                    alt=""
-                    fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
-                </div>
-                <div className="flex flex-1 flex-col p-7 lg:p-8">
-                <div className="flex items-center justify-between">
-                  <span className="-mt-14 grid size-12 place-items-center rounded-2xl bg-white text-brand shadow-card ring-4 ring-white transition group-hover:bg-brand group-hover:text-white">
-                    <Icon name={SERVICE_ICONS[i]} className="size-6" />
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image src={photo(SERVICE_PHOTOS[i], 800)} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+                  <span className="absolute left-5 top-5 rounded-full bg-white/15 px-3 py-1 text-xs font-bold tracking-widest text-white backdrop-blur">
+                    {s.no}
                   </span>
-                  <span className="text-3xl font-black text-line">{s.no}</span>
+                  <span className="absolute right-5 top-5 grid size-11 place-items-center rounded-2xl bg-white/90 text-brand shadow-card transition group-hover:bg-accent group-hover:text-ink">
+                    <Icon name={SERVICE_ICONS[i]} className="size-5" />
+                  </span>
+                  <h3 className="absolute inset-x-6 bottom-5 text-2xl font-extrabold tracking-tight text-white">{t(s.title)}</h3>
                 </div>
-                <h3 className="mt-6 text-xl font-bold text-ink">{t(s.title)}</h3>
-                <ul className="mt-4 flex-1 space-y-2.5">
-                  {s.points.map((p, j) => (
-                    <li key={j} className="flex gap-2.5 text-[15px] text-ink-3">
-                      <Icon name="check" className="mt-0.5 size-4 shrink-0 text-brand" strokeWidth={2.4} />
-                      {t(p)}
-                    </li>
-                  ))}
-                </ul>
-                <span className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
-                  {ko ? "자세히 보기" : "Learn more"}
-                  <Icon name="arrow-right" className="size-4 transition group-hover:translate-x-1" />
-                </span>
+                <div className="flex flex-1 flex-col p-6 lg:p-7">
+                  <ul className="flex-1 space-y-2.5">
+                    {s.points.map((pt, j) => (
+                      <li key={j} className="flex gap-2.5 text-[15px] text-ink-3">
+                        <Icon name="check" className="mt-0.5 size-4 shrink-0 text-brand" strokeWidth={2.4} />
+                        {t(pt)}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-6 inline-flex items-center gap-1.5 border-t border-line pt-5 text-sm font-semibold text-brand">
+                    {ko ? "자세히 보기" : "Learn more"}
+                    <Icon name="arrow-right" className="size-4 transition group-hover:translate-x-1" />
+                  </span>
                 </div>
               </Link>
             ))}
           </div>
 
-          <div className="mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl bg-ink px-7 py-6 text-white sm:flex-row sm:items-center lg:px-8">
+          <div data-reveal className="mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl bg-ink px-7 py-6 text-white sm:flex-row sm:items-center lg:px-8">
             <p className="flex items-center gap-3 text-[16px] font-medium">
               <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-ink">{ko ? "수수료" : "Fee"}</span>
               {t(HOME.fee)}
@@ -146,81 +142,113 @@ export default async function HomePage({ params }: LangParams) {
         </div>
       </section>
 
-      {/* ---------------- GLOBAL NETWORK (세계 지도) ---------------- */}
+      {/* ---------------- TRACK RECORD (연혁 기반 실적) ---------------- */}
+      <section className="py-20 lg:py-28">
+        <div className="container-x">
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <SectionTitle
+              eyebrow="Track record"
+              title={ko ? "현장에서 쌓아 온\n해외시장개척 실적" : "Proven on the ground,\nmarket by market"}
+              lead={ko ? "2004년 설립 이후 아시아 각국에서 정부 프로젝트와 품목별 시장개척을 수행해 왔습니다." : "Since 2004 we have run government projects and product-by-product market development across Asia."}
+            />
+            <Link href={lp(locale, "/company/history")} className="btn-ghost self-start lg:self-auto">
+              {ko ? "연혁 전체 보기" : "Full history"} <Icon name="arrow-right" className="size-4" />
+            </Link>
+          </div>
+          <div className="-mx-4 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">
+            {TRACK_RECORD.map((r, i) => (
+              <article
+                key={r.year}
+                data-reveal
+                style={{ "--d": `${i * 0.1}s` } as React.CSSProperties}
+                className="group relative aspect-[3/4] w-[78%] shrink-0 snap-start overflow-hidden rounded-3xl bg-ink sm:w-[45%] lg:w-auto"
+              >
+                <Image src={photo(r.photo, 900)} alt="" fill sizes="(min-width: 1024px) 25vw, 80vw" className="object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
+                <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5">
+                  <span className="text-4xl font-black tracking-tight text-white/90">{r.year}</span>
+                  <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{t(r.place)}</span>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <p className="text-lg font-bold">{t(r.title)}</p>
+                  <p className="mt-2 flex items-start gap-2 text-sm text-white/75">
+                    <Icon name="ship" className="mt-0.5 size-4 shrink-0 text-accent" />
+                    {t(r.items)}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- GLOBAL NETWORK + 개척 가능지역 (PPT 4쪽) ---------------- */}
       <NetworkSection locale={locale} />
 
-      {/* ---------------- PROCESS ---------------- */}
+      {/* ---------------- INDUSTRIES ---------------- */}
+      <section className="relative overflow-hidden bg-paper py-20 lg:py-24">
+        <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-center">
+          <SectionTitle
+            eyebrow="Industries"
+            title={ko ? "다뤄 온 품목과 분야" : "Products and sectors we handle"}
+            lead={
+              ko
+                ? "소비재부터 산업재, 정부 시스템과 소프트웨어까지. 유망한 중소기업 아이템이라면 분야를 가리지 않고 함께합니다."
+                : "From consumer goods to industrial materials, government systems and software, we welcome promising SME products in any sector."
+            }
+          />
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {INDUSTRIES.map((it, i) => (
+              <li
+                key={i}
+                data-reveal
+                style={{ "--d": `${(i % 5) * 0.06}s` } as React.CSSProperties}
+                className="group flex flex-col items-center gap-3 rounded-2xl bg-white px-3 py-6 text-center shadow-card ring-1 ring-line transition hover:-translate-y-1 hover:ring-brand"
+              >
+                <span className="grid size-12 place-items-center rounded-2xl bg-brand-soft text-brand transition group-hover:bg-brand group-hover:text-white">
+                  <Icon name={it.icon} className="size-6" />
+                </span>
+                <span className="text-[14px] font-semibold text-ink">{t(it.label)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ---------------- PROCESS (타임라인) ---------------- */}
       <section className="py-20 lg:py-28">
         <div className="container-x">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <SectionTitle
               eyebrow="Process"
               title={ko ? "조사에서 계약, 그 이후까지" : "From research to contract and beyond"}
-              lead={
-                ko
-                  ? "현지 주재원이 귀사의 해외지사가 되어 단계별로 움직입니다."
-                  : "Our local staff act as your branch office, step by step."
-              }
+              lead={ko ? "현지 주재원이 귀사의 해외지사가 되어 단계별로 움직입니다." : "Our local staff act as your branch office, step by step."}
             />
             <Link href={lp(locale, "/business/agency")} className="btn-ghost self-start lg:self-auto">
               {ko ? "사업내용 전체 보기" : "All services"} <Icon name="arrow-right" className="size-4" />
             </Link>
           </div>
-          <ol className="mt-12 grid gap-4 md:grid-cols-3">
-            {PROCESS.map((p, i) => (
-              <li key={p.key} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}>
-                <Link href={lp(locale, p.href)} className="group relative block h-full rounded-2xl border border-line p-7 transition hover:border-brand">
-                  <span className="text-sm font-bold text-brand">STEP {i + 1}</span>
-                  <h3 className="mt-2 text-xl font-bold">{t(p.title)}</h3>
-                  <p className="mt-1 text-sm text-muted">{t(p.period)}</p>
-                  {i < PROCESS.length - 1 && (
-                    <span className="absolute -right-3 top-1/2 z-10 hidden size-6 -translate-y-1/2 place-items-center rounded-full border border-line bg-white text-brand md:grid">
-                      <Icon name="chevron-right" className="size-3.5" strokeWidth={2.5} />
-                    </span>
-                  )}
+          <ol className="relative mt-14 grid gap-8 md:grid-cols-4 md:gap-5">
+            <span className="absolute left-6 top-6 hidden h-0.5 w-[calc(100%-3rem)] bg-gradient-to-r from-brand via-sky to-accent md:block" aria-hidden />
+            <span className="absolute bottom-6 left-6 top-6 w-0.5 bg-gradient-to-b from-brand via-sky to-accent md:hidden" aria-hidden />
+            {[
+              ...PROCESS.map((p) => ({ href: p.href, title: p.title, period: p.period })),
+              { href: "/business/field-research", title: { ko: "해외출장조사", en: "Field research" }, period: { ko: "필요 시 · 회계 고객 연 1회", en: "As needed" } },
+            ].map((p, i) => (
+              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative pl-16 md:pl-0">
+                <span className="absolute left-0 top-0 grid size-12 place-items-center rounded-full bg-ink text-sm font-black text-white ring-8 ring-white md:relative">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <Link href={lp(locale, p.href)} className="group mt-0 block md:mt-6">
+                  <span className="flex items-center gap-2 text-xl font-bold group-hover:text-brand">
+                    {t(p.title)}
+                    <Icon name="arrow-up-right" className="size-4 opacity-0 transition group-hover:opacity-100" />
+                  </span>
+                  <span className="mt-1 block text-sm text-muted">{t(p.period)}</span>
                 </Link>
               </li>
             ))}
           </ol>
-          <Link
-            href={lp(locale, "/business/field-research")}
-            className="mt-4 flex items-center justify-between gap-4 rounded-2xl bg-brand-soft px-7 py-5 text-ink transition hover:bg-brand hover:text-white"
-          >
-            <span className="flex items-center gap-3 font-semibold">
-              <Icon name="plane" className="size-5" />
-              {ko ? "해외출장조사 — 현지를 직접 보고 바이어를 만나는 프로그램" : "Field research trips — see the market and meet buyers in person"}
-            </span>
-            <Icon name="arrow-right" className="size-5 shrink-0" />
-          </Link>
-        </div>
-      </section>
-
-      {/* ---------------- REGIONS (PPT 4쪽) ---------------- */}
-      <section className="relative overflow-hidden bg-ink-2 py-20 text-white lg:py-28">
-        <Image src={photo("earth", 2400)} alt="" fill sizes="100vw" className="object-cover opacity-25" />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink-2/80 via-ink-2/60 to-ink-2/90" aria-hidden />
-        <div className="container-x relative grid items-center gap-12 lg:grid-cols-[1fr_1.2fr]">
-          <div>
-            <p className="eyebrow !text-sky">Coverage</p>
-            <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">{t(HOME.regionsTitle)}</h2>
-            <p className="mt-5 text-[16px] leading-relaxed text-white/70">{t(HOME.regionsLead)}</p>
-            <ul className="mt-8 flex flex-wrap gap-2">
-              {HOME.regions.map((r, i) => (
-                <li key={i} className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[15px] font-semibold">
-                  {t(r)}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href={lp(locale, "/offices")} className="btn-light">
-                {ko ? "해외지사 현황" : "Our offices"} <Icon name="arrow-right" className="size-4" />
-              </Link>
-              <Link href={lp(locale, "/company/partners")} className="btn-outline-light">
-                {ko ? "제휴기관 소개" : "About IRDCA"}
-              </Link>
-            </div>
-          </div>
-          <WorldMap locale={locale} showArcs={false} />
         </div>
       </section>
 

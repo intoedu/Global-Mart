@@ -96,6 +96,32 @@ const PATHS: Record<string, React.ReactNode> = {
     </>
   ),
   home: <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z" />,
+  sparkle: <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" />,
+  medical: (
+    <>
+      <rect x="3" y="6" width="18" height="14" rx="2" />
+      <path d="M9 6V4h6v2M12 10v6M9 13h6" />
+    </>
+  ),
+  drop: <path d="M12 3s6 6.6 6 11a6 6 0 01-12 0c0-4.4 6-11 6-11z" />,
+  fish: (
+    <>
+      <path d="M3 12c3-5 9-6 13-3l5-3v12l-5-3c-4 3-10 2-13-3z" />
+      <circle cx="8" cy="11" r="1" />
+    </>
+  ),
+  gem: <path d="M6 3h12l3 6-9 12L3 9zM3 9h18M9 3l3 6 3-6M12 9v12" />,
+  shirt: <path d="M8 3l4 2 4-2 5 4-3 4-2-1v11H8V10l-2 1-3-4z" />,
+  traffic: (
+    <>
+      <rect x="8" y="2" width="8" height="20" rx="3" />
+      <circle cx="12" cy="7" r="1.5" />
+      <circle cx="12" cy="12" r="1.5" />
+      <circle cx="12" cy="17" r="1.5" />
+    </>
+  ),
+  chain: <path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1" />,
+  ship: <path d="M3 17l2 4h14l2-4H3zM5 17V9h14v8M9 9V5h6v4M12 3v2" />,
   info: (
     <>
       <circle cx="12" cy="12" r="9" />
