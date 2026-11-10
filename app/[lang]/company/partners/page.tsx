@@ -23,36 +23,36 @@ export default async function PartnersPage({ params }: LangParams) {
       />
       <SectionNav section="/company" current="/company/partners" locale={locale} />
 
-      <section className="py-16 lg:py-24">
+      <section className="py-section-sm">
         <div className="container-x">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-grid md:grid-cols-2">
             {PARTNERS.orgs.map((o, i) => (
-              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="card p-8 lg:p-10">
+              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="card p-[clamp(32px,2.8vw,56px)]">
                 <span className="inline-flex items-center gap-2 rounded-full bg-ink px-3 py-1 text-xs font-bold text-white">
                   <Icon name={i === 0 ? "globe" : "building"} className="size-3.5" />
                   {t(o.kind)}
                 </span>
-                <h2 className="mt-5 text-2xl font-extrabold tracking-tight">{t(o.name)}</h2>
-                <p className="mt-3 text-[16px] leading-relaxed text-muted">{t(o.body)}</p>
+                <h2 className="mt-5 text-[clamp(1.5rem,1.2rem+0.5vw,2rem)] font-extrabold tracking-tight">{t(o.name)}</h2>
+                <p className="mt-3 text-body text-muted">{t(o.body)}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="dark-section bg-ink py-16 text-white lg:py-24">
+      <section className="dark-section bg-ink py-section-sm text-white">
         <div className="container-x">
           <SectionTitle
             eyebrow="IRDCA & Globalmart"
             title={ko ? "전문가 양성에서 해외지사대행까지" : "From training to branch agency"}
             center
           />
-          <ol className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
+          <ol className="mx-auto mt-stack grid max-w-[max(64rem,70vw)] gap-grid md:grid-cols-3">
             {PARTNERS.steps.map((s, i) => (
-              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-white/10 bg-ink-2 p-7">
-                <span className="text-5xl font-black text-orange">0{i + 1}</span>
-                <h3 className="mt-2 text-lg font-bold">{t(s.title)}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-white/60">{t(s.body)}</p>
+              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-white/10 bg-ink-2 p-[clamp(24px,1.95vw,40px)]">
+                <span className="text-[clamp(40px,2rem+1vw,60px)] font-black leading-none text-orange">0{i + 1}</span>
+                <h3 className="mt-2 text-h3">{t(s.title)}</h3>
+                <p className="mt-2 text-body text-white/60">{t(s.body)}</p>
               </li>
             ))}
           </ol>

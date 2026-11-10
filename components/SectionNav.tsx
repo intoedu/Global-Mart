@@ -1,6 +1,6 @@
 import { NAV } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
-import { SubNav } from "./PageHero";
+import { SubNav } from "./SubNav";
 import { lp } from "@/lib/paths";
 
 /** NAV 의 하위 메뉴를 탭으로 표시 */

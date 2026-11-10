@@ -14,14 +14,14 @@ export default async function FieldResearchPage({ params }: LangParams) {
   const ko = locale === "ko";
   return (
     <BusinessShell image="plane" locale={locale} current="/business/field-research" eyebrow="Overseas Field Research" lead={t(FIELD.lead)}>
-      <section className="py-16 lg:py-24">
+      <section className="py-section-sm">
         <div className="container-x">
           <FeatureGrid items={FIELD.points} locale={locale} numbered cols={4} />
-          <div className="mt-6 flex items-start gap-4 rounded-2xl bg-ink p-7 text-white">
+          <div className="mt-grid flex items-start gap-4 rounded-2xl bg-ink p-[clamp(24px,1.95vw,40px)] text-white">
             <Icon name="info" className="mt-0.5 size-6 shrink-0 text-orange" />
             <div>
-              <p className="font-bold">{ko ? "회계·세무 고객 특전" : "Perk for accounting clients"}</p>
-              <p className="mt-1 text-[15px] leading-relaxed text-white/70">{t(FIELD.perk)}</p>
+              <p className="text-h3">{ko ? "회계·세무 고객 특전" : "Perk for accounting clients"}</p>
+              <p className="mt-1 text-body text-white/70">{t(FIELD.perk)}</p>
             </div>
           </div>
         </div>

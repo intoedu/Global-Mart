@@ -9,14 +9,14 @@ export function Footer({ locale }: { locale: Locale }) {
   const t = (l: { ko: string; en: string }) => l[locale];
   const ko = locale === "ko";
   return (
-    <footer className="bg-ink text-white/70">
+    <footer className="bg-ink text-white/70 [&_:focus-visible]:outline-sky">
       <div className="container-stripes" aria-hidden />
-      <div className="container-x grid gap-12 py-16 lg:grid-cols-[1.2fr_2fr] lg:py-20">
+      <div className="container-x grid gap-12 pb-12 pt-section-sm lg:grid-cols-[1.2fr_2fr]">
         <div>
-          <Image src={asset("/images/logo-full-white.png")} alt={t(SITE.name)} width={480} height={96} className="h-8 w-auto" />
-          <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/60">{t(SITE.tagline)}</p>
-          <div className="mt-8 space-y-3 text-[15px]">
-            <a href={SITE.telHref} className="flex items-center gap-3 text-2xl font-bold text-white hover:text-sky">
+          <Image src={asset("/images/logo-full-white.webp")} alt={t(SITE.name)} width={400} height={80} className="h-8 w-auto 3xl:h-9" />
+          <p className="mt-5 max-w-[24em] text-[clamp(0.9375rem,0.84rem+0.1vw,1.0625rem)] leading-relaxed text-white/60">{t(SITE.tagline)}</p>
+          <div className="mt-8 space-y-3 text-[clamp(0.9375rem,0.84rem+0.1vw,1.0625rem)]">
+            <a href={SITE.telHref} className="flex items-center gap-3 whitespace-nowrap text-[clamp(22px,1vw+10px,30px)] font-bold tabular-nums text-white hover:text-sky">
               <Icon name="phone" className="size-5 text-sky" /> {ko ? SITE.tel : SITE.telIntl}
             </a>
             <p className="flex items-center gap-3">
@@ -30,11 +30,11 @@ export function Footer({ locale }: { locale: Locale }) {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           {NAV.filter((n) => n.children).map((n) => (
             <div key={n.href}>
-              <p className="text-sm font-bold text-white">{t(n.label)}</p>
-              <ul className="mt-4 space-y-2.5 text-[14px]">
+              <p className="text-small font-bold text-white">{t(n.label)}</p>
+              <ul className="mt-4 space-y-2.5 text-small">
                 {n.children!.map((c) => (
                   <li key={c.href}>
-                    <Link href={lp(locale, c.href)} className="hover:text-white">
+                    <Link href={lp(locale, c.href)} prefetch={false} className="hover:text-white">
                       {t(c.label)}
                     </Link>
                   </li>
@@ -43,11 +43,11 @@ export function Footer({ locale }: { locale: Locale }) {
             </div>
           ))}
           <div>
-            <p className="text-sm font-bold text-white">{ko ? "바로가기" : "Quick links"}</p>
-            <ul className="mt-4 space-y-2.5 text-[14px]">
+            <p className="text-small font-bold text-white">{ko ? "바로가기" : "Quick links"}</p>
+            <ul className="mt-4 space-y-2.5 text-small">
               {NAV.filter((n) => !n.children).map((n) => (
                 <li key={n.href}>
-                  <Link href={lp(locale, n.href)} className="hover:text-white">
+                  <Link href={lp(locale, n.href)} prefetch={false} className="hover:text-white">
                     {t(n.label)}
                   </Link>
                 </li>
@@ -57,26 +57,28 @@ export function Footer({ locale }: { locale: Locale }) {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="container-x flex flex-col gap-4 py-8 text-[13px] leading-relaxed text-white/45 lg:flex-row lg:items-end lg:justify-between">
+        <div className="container-x flex flex-col gap-4 py-8 text-caption leading-relaxed text-white/45 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-1">
             <p>
               {t(SITE.name)} · {ko ? "대표" : "CEO"} {t(SITE.ceo)} · {ko ? "사업자등록번호" : "Business Reg. No."} {SITE.bizNo}
             </p>
             <p>{t(SITE.address)}</p>
             <p>
-              Tel {SITE.tel} ({SITE.telIntl}) · Fax {SITE.fax} · {ko ? "개인정보보호책임자" : "Privacy Officer"} {t(SITE.privacyOfficer)}
+              <span className="whitespace-nowrap">Tel {SITE.tel}</span> <span className="whitespace-nowrap">({SITE.telIntl})</span> ·{" "}
+              <span className="whitespace-nowrap">Fax {SITE.fax}</span> <span className="whitespace-nowrap">({SITE.faxIntl})</span> ·{" "}
+              {ko ? "개인정보보호책임자" : "Privacy Officer"} {t(SITE.privacyOfficer)}
             </p>
             <p>
               {ko ? "제휴기업" : "Partner firm"} {t(SITE.partners.company)} · {ko ? "제휴기관" : "Partner institution"} {t(SITE.partners.institution)}
             </p>
           </div>
           <div className="flex flex-col gap-2 lg:items-end">
-            <Link href={lp(locale, "/privacy")} className="font-semibold text-white/80 hover:text-white">
+            <Link href={lp(locale, "/privacy")} prefetch={false} className="font-semibold text-white/80 hover:text-white">
               {ko ? "개인정보처리방침" : "Privacy Policy"}
             </Link>
             <p>
               © {new Date().getFullYear()} Globalmart Inc. All rights reserved. ·{" "}
-              <Link href={lp("ko", "/admin")} className="hover:text-white">
+              <Link href={lp("ko", "/admin")} prefetch={false} className="hover:text-white">
                 {ko ? "관리자" : "Admin"}
               </Link>
             </p>

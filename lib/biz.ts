@@ -1,7 +1,7 @@
 import raw from "@/data/biz.json";
 import type { BizData, BizPost } from "./types";
 
-/** 빌드 시점에 data/biz.json 을 읽습니다. (관리자가 저장하면 GitHub Actions 가 다시 빌드) */
+/** 빌드 시점에 data/biz.json 을 읽습니다. (관리자가 저장하면 GitHub Actions 가 다시 빌드) — next_id 등 다른 필드는 무시 */
 export function getBizPosts(): BizPost[] {
   const posts = (raw as BizData).posts ?? [];
   return [...posts].sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned) || b.created_at.localeCompare(a.created_at));

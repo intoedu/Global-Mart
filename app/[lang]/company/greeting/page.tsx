@@ -23,7 +23,7 @@ export default async function GreetingPage({ params }: LangParams) {
       />
       <SectionNav section="/company" current="/company/greeting" locale={locale} />
 
-      <section className="py-16 lg:py-24">
+      <section className="py-section-sm">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <div className="lg:sticky lg:top-40 lg:self-start">
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
@@ -32,25 +32,25 @@ export default async function GreetingPage({ params }: LangParams) {
                 <Image src={asset("/images/logo-symbol.png")} alt="" width={256} height={240} className="h-10 w-auto" />
               </div>
             </div>
-            <h2 className="mt-8 whitespace-pre-line text-3xl font-extrabold leading-snug tracking-tight lg:text-4xl">
+            <h2 className="mt-8 whitespace-pre-line text-balance text-[clamp(1.75rem,1.2rem+1.1vw,2.75rem)] font-extrabold leading-snug tracking-tight text-ink">
               {t(GREETING.headline)}
             </h2>
-            <div className="mt-10 grid grid-cols-3 gap-3">
+            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 3xl:grid-cols-3">
               {GREETING.values.map((v, i) => (
                 <div key={i} className="rounded-2xl border-t-2 border-orange bg-paper p-4">
-                  <p className="text-[15px] font-bold text-ink">{t(v.title)}</p>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{t(v.body)}</p>
+                  <p className="text-body font-bold text-ink">{t(v.title)}</p>
+                  <p className="mt-1.5 text-small text-muted">{t(v.body)}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div className="prose-gm">
+          <div className="prose-gm text-body">
             {GREETING.paragraphs.map((p, i) => (
-              <p key={i} className={i === 0 ? "!text-xl font-semibold text-ink" : ""}>
+              <p key={i} className={i === 0 ? "text-lead font-semibold text-ink" : ""}>
                 {t(p)}
               </p>
             ))}
-            <p className="!mt-12 border-t border-line pt-8 text-right text-lg font-bold text-ink">{t(GREETING.sign)}</p>
+            <p className="!mt-12 border-t border-line pt-8 text-right text-h3 text-ink">{t(GREETING.sign)}</p>
           </div>
         </div>
       </section>

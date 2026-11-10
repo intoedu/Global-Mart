@@ -23,7 +23,15 @@ export type ResidentPost = {
   created_at: string;
 };
 
-export type BizData = { posts: BizPost[] };
+/**
+ * data/biz.json 형식
+ * - next_id(선택): 다음 새 글 번호. 지운 글의 번호를 다시 쓰지 않도록 관리자 화면이 기록합니다.
+ *   예전 파일처럼 없으면 "가장 큰 번호 + 1"을 씁니다.
+ */
+export type BizData = { posts: BizPost[]; next_id?: number };
+
+/** public/data/resident.json 을 풀었을 때의 내용 (next_id 는 BizData 와 같은 뜻, 선택) */
+export type ResidentData = { posts: ResidentPost[]; next_id?: number };
 
 /** 암호화된 파일 형식 */
 export type EncryptedFile = {

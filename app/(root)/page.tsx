@@ -8,9 +8,11 @@ export default function RootRedirect() {
     <>
       <meta httpEquiv="refresh" content={`0; url=${ko}`} />
       <script dangerouslySetInnerHTML={{ __html: `location.replace("${ko}")` }} />
-      <p style={{ padding: 40, fontFamily: "sans-serif" }}>
-        <a href={ko}>글로벌마트 홈페이지로 이동</a> · <a href={en}>English</a>
-      </p>
+      <main style={{ padding: 40, fontFamily: "sans-serif" }}>
+        <p>
+          <a href={ko}>글로벌마트 홈페이지로 이동</a> · <a href={en} lang="en">English</a>
+        </p>
+      </main>
     </>
   );
 }

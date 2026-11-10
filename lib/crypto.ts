@@ -2,10 +2,24 @@ import type { EncryptedFile } from "./types";
 
 /**
  * 해외주재원 전용 글 암호화 (브라우저 WebCrypto)
- * - 공용 비밀번호 → PBKDF2(SHA-256, 25만 회) → AES-GCM 256 키
+ * - 공용 비밀번호 → PBKDF2(SHA-256, 60만 회) → AES-GCM 256 키
  * - 저장소가 공개여도 비밀번호 없이는 내용을 읽을 수 없습니다.
+ * - 반복 횟수는 파일(iterations)에 함께 저장되므로, 예전(25만 회) 파일도 그대로 열립니다.
+ *   새로 저장할 때부터 60만 회(OWASP 권장값)를 씁니다.
+ * - 파일이 공개되어 있어 짧은 비밀번호는 오프라인 대입으로 풀릴 수 있습니다. 관리자 화면은 새 비밀번호를
+ *   10자 이상, 두 종류 이상의 문자(글자·숫자·기호)로만 받습니다. (checkPassword)
  */
-const ITER = 250_000;
+const ITER = 600_000;
+
+export const MIN_PASSWORD_LENGTH = 10;
+
+/** 새 공용 비밀번호 규칙 검사 — 문제가 없으면 빈 문자열 */
+export function checkPassword(pw: string): string {
+  if (pw.length < MIN_PASSWORD_LENGTH) return `비밀번호는 ${MIN_PASSWORD_LENGTH}자 이상으로 정해 주세요.`;
+  const kinds = [/\p{L}/u, /\p{N}/u, /[^\p{L}\p{N}\s]/u].filter((r) => r.test(pw)).length;
+  if (kinds < 2) return "글자·숫자·기호 중 두 종류 이상을 섞어 주세요.";
+  return "";
+}
 
 const b64 = (buf: ArrayBuffer | Uint8Array) => {
   const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);

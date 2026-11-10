@@ -13,14 +13,14 @@ export default async function ResearchPage({ params }: LangParams) {
   const ko = locale === "ko";
   return (
     <BusinessShell image="analytics" locale={locale} current="/business/research" eyebrow="Overseas Market Research" lead={t(RESEARCH.lead)}>
-      <section className="py-16 lg:py-24">
+      <section className="py-section-sm">
         <div className="container-x">
           <div className="mb-8 flex flex-wrap gap-3">
-            <span className="rounded-full bg-ink px-4 py-2 text-sm font-bold text-white">{ko ? "기간 · 약 1개월" : "Duration · about 1 month"}</span>
-            <span className="rounded-full bg-paper px-4 py-2 text-sm font-semibold text-muted">{ko ? "고객사 판단에 따라 생략 가능" : "Optional, at your discretion"}</span>
+            <span className="rounded-full bg-ink px-4 py-2 text-small font-bold text-white">{ko ? "기간 · 약 1개월" : "Duration · about 1 month"}</span>
+            <span className="rounded-full bg-paper px-4 py-2 text-small font-semibold text-muted">{ko ? "고객사 판단에 따라 생략 가능" : "Optional, at your discretion"}</span>
           </div>
           <FeatureGrid items={RESEARCH.items} locale={locale} numbered cols={4} />
-          <p className="mt-10 rounded-2xl border-l-4 border-accent bg-paper px-6 py-5 text-[16px] font-medium text-ink">{t(RESEARCH.outro)}</p>
+          <p className="mt-stack rounded-r-2xl border-l-4 border-accent bg-paper px-[clamp(24px,1.8vw,36px)] py-[clamp(20px,1.4vw,28px)] text-body font-medium text-ink">{t(RESEARCH.outro)}</p>
         </div>
       </section>
     </BusinessShell>

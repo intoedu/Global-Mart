@@ -27,6 +27,7 @@ export const SITE = {
   telIntl: "+82-2-499-7977",
   telHref: "tel:+8224997977",
   fax: "02-2118-7007",
+  faxIntl: "+82-2-2118-7007",
   email: "gvmart@hanmail.net",
   address: {
     ko: "서울특별시 성동구 아차산로 103, 영동테크노타워 901호",

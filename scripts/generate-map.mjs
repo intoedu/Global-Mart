@@ -32,5 +32,13 @@ const anchors = pts.filter((p) => p.data?.anchor).map((p) => ({ id: p.data.ancho
 const width = Math.ceil(Math.max(...pts.map((p) => p.x)) + 1);
 const height = Math.ceil(Math.max(...pts.map((p) => p.y)) + 1);
 
-fs.writeFileSync(new URL("../lib/map-data.json", import.meta.url), JSON.stringify({ width, height, dots, pins, anchors }));
+// 점 3천여 개는 HTML 에 넣지 않고 정적 SVG 이미지 한 장으로 만듭니다 (페이지 용량·렌더링 부담 감소)
+const d = dots.map(([x, y]) => `M${x} ${y}h0`).join("");
+const svg = (color) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none"><path fill="none" stroke="${color}" stroke-linecap="round" stroke-width="0.54" d="${d}"/></svg>\n`;
+fs.mkdirSync(new URL("../public/images/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../public/images/world-dots.svg", import.meta.url), svg("#1e325a"));
+fs.writeFileSync(new URL("../public/images/world-dots-light.svg", import.meta.url), svg("#ffffff"));
+
+fs.writeFileSync(new URL("../lib/map-data.json", import.meta.url), JSON.stringify({ width, height, pins, anchors }));
 console.log(`dots=${dots.length} pins=${pins.length}/${all.length} anchors=${anchors.length} size=${width}x${height}`);

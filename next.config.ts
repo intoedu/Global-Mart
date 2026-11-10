@@ -11,7 +11,17 @@ const nextConfig: NextConfig = {
   output: "export",
   basePath: basePath || undefined,
   trailingSlash: true,
-  images: { unoptimized: true },
+  images: {
+    // 정적 배포: Next 이미지 서버 대신 lib/image-loader.ts 가 Unsplash 주소에 폭(w)을 붙여 srcset 을 만듭니다.
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
+    deviceSizes: [480, 640, 828, 1080, 1280, 1600, 1920, 2560],
+    imageSizes: [64, 128, 256, 384],
+  },
+  experimental: {
+    // [lang] 이 최상위 레이아웃이라 404 화면은 app/global-not-found.tsx 로 따로 만듭니다.
+    globalNotFound: true,
+  },
   poweredByHeader: false,
 };
 

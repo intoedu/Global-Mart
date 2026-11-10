@@ -1,6 +1,15 @@
-/** 한국 시간 기준 YYYY.MM.DD */
-export function formatDate(iso: string) {
+import type { Locale } from "./i18n";
+
+/**
+ * 게시일 표시 (한국 시간 기준)
+ * - 한국어(기본): 2026.11.03
+ * - 영어: Nov 3, 2026
+ */
+export function formatDate(iso: string, locale?: Locale) {
   const d = new Date(iso);
+  if (locale === "en") {
+    return new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Seoul", year: "numeric", month: "short", day: "numeric" }).format(d);
+  }
   const parts = new Intl.DateTimeFormat("ko-KR", {
     timeZone: "Asia/Seoul",
     year: "numeric",

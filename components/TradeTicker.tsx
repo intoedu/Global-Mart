@@ -7,8 +7,8 @@ export function TradeTicker({ locale }: { locale: Locale }) {
   const routes = offices.regions.flatMap((r) => r.offices).map((o) => (locale === "ko" ? o.ko : o.en.toUpperCase()));
   const items = [...routes, ...routes];
   return (
-    <div className="relative overflow-hidden bg-ink py-3.5" aria-hidden>
-      <div className="flex w-max animate-[ticker_60s_linear_infinite] gap-10 whitespace-nowrap text-[13px] font-semibold tracking-wider text-white/55">
+    <div className="relative overflow-hidden bg-ink py-[clamp(12px,0.6rem+0.4vw,18px)] [mask-image:linear-gradient(90deg,transparent,#000_5%_95%,transparent)]" aria-hidden>
+      <div className="flex w-max animate-[ticker_70s_linear_infinite] gap-10 whitespace-nowrap text-small font-semibold tracking-wider text-white/55 hover:[animation-play-state:paused]">
         {items.map((name, i) => (
           <span key={i} className="flex items-center gap-3">
             <span className="text-orange">{hq}</span>

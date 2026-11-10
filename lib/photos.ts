@@ -34,7 +34,29 @@ export const PHOTOS = {
 
 export type PhotoKey = keyof typeof PHOTOS;
 
-/** 크기 지정 URL */
-export function photo(key: PhotoKey, w = 1600, q = 75) {
-  return `${PHOTOS[key]}?auto=format&fit=crop&w=${w}&q=${q}`;
+/** 사진 품질 기본값 (Unsplash q 값) */
+export const PHOTO_QUALITY = 70;
+
+/**
+ * 크기 지정 URL — next/image 에 넘기면 lib/image-loader.ts 가 화면 크기에 맞는 폭(w)으로 바꿔
+ * srcset 을 만듭니다. 여기서 정한 w 는 srcset 을 쓰지 못할 때의 기본 폭입니다.
+ */
+export function photo(key: PhotoKey, w = 1600, q = PHOTO_QUALITY) {
+  return unsplashUrl(PHOTOS[key], w, q);
+}
+
+/** Unsplash 주소에 폭·품질 지정 (다른 주소는 그대로) */
+export function unsplashUrl(src: string, w: number, q = PHOTO_QUALITY) {
+  if (!src.startsWith("https://images.unsplash.com/")) return src;
+  const url = new URL(src);
+  url.searchParams.set("auto", "format");
+  url.searchParams.set("fit", "crop");
+  url.searchParams.set("w", String(Math.round(w)));
+  url.searchParams.set("q", String(q));
+  return url.toString();
+}
+
+/** <img srcset> / <source srcset> 용 문자열: photoSrcSet("port", [640, 1280]) */
+export function photoSrcSet(key: PhotoKey, widths: number[] = [480, 768, 1080, 1440, 1920], q = PHOTO_QUALITY) {
+  return widths.map((w) => `${photo(key, w, q)} ${w}w`).join(", ");
 }

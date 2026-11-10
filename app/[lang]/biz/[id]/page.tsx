@@ -6,6 +6,7 @@ import { getAdjacent, getBizPost, getBizPosts } from "@/lib/biz";
 import { lp } from "@/lib/paths";
 import { PageHero } from "@/components/PageHero";
 import { PostView } from "@/components/board/PostView";
+import { listKey } from "@/lib/board";
 
 type P = { params: Promise<{ lang: string; id: string }> };
 
@@ -31,19 +32,22 @@ export default async function BizPostPage({ params }: P) {
 
   return (
     <>
-      <PageHero locale={locale} image="mumbai" eyebrow="Global Biz Info" title={ko ? "해외 Biz정보" : "Global Biz Info"} crumbs={[{ href: "/biz", label: ko ? "해외 Biz정보" : "Global Biz Info" }, { label: regionLabel }]} />
+      <PageHero titleAs="p" locale={locale} image="mumbai" eyebrow="Global Biz Info" title={ko ? "해외 Biz정보" : "Global Biz Info"} crumbs={[{ href: "/biz", label: ko ? "해외 Biz정보" : "Global Biz Info" }, { label: regionLabel }]} />
       <PostView
         title={post.title}
         body={post.body}
         createdAt={post.created_at}
         pinned={post.is_pinned}
         ko={ko}
+        locale={locale}
+        contentLang={ko ? undefined : "ko"}
         badge={t(bizCategoryLabel(post.category))}
         meta={[
           { label: ko ? "지역" : "Region", value: regionLabel },
           { label: ko ? "주 / 국가" : "State / Country", value: post.country },
         ]}
         listHref={post.region !== "all" ? `${lp(locale, "/biz")}?region=${post.region}` : lp(locale, "/biz")}
+        listStorageKey={listKey("biz", locale)}
         adjacent={getAdjacent(post.id)}
         detailHref={(pid) => lp(locale, `/biz/${pid}`)}
       />

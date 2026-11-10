@@ -23,7 +23,7 @@
       ]
     },
     {
-      "id": "southwest", "ko": "서남아시아", "en": "South & West Asia",
+      "id": "southwest", "ko": "인도·서남아", "en": "India & South Asia",
       "offices": [
         { "id": "mumbai", "ko": "인도 (뭄바이)", "en": "India (Mumbai)", "lat": 19.08, "lng": 72.88, "email": "indiamombai@globalmart21.com" },
         { "id": "delhi", "ko": "인도 (델리)", "en": "India (Delhi)", "lat": 28.61, "lng": 77.21 },
@@ -41,7 +41,7 @@
       ]
     },
     {
-      "id": "cis", "ko": "러시아·CIS", "en": "Russia & CIS",
+      "id": "cis", "ko": "러시아·중앙아", "en": "Russia & Central Asia",
       "offices": [
         { "id": "russia", "ko": "러시아", "en": "Russia", "lat": 55.76, "lng": 37.62, "email": "russia@globalmart21.com" },
         { "id": "uzbekistan", "ko": "우즈베키스탄", "en": "Uzbekistan", "lat": 41.3, "lng": 69.24, "email": "uzbek@globalmart21.com" },
@@ -50,14 +50,14 @@
       ]
     },
     {
-      "id": "africa", "ko": "아프리카", "en": "Africa",
+      "id": "africa", "ko": "북아프리카", "en": "North Africa",
       "offices": [
         { "id": "morocco", "ko": "모로코", "en": "Morocco", "lat": 32.0, "lng": -6.5, "email": "morocco@globalmart21.com" },
         { "id": "egypt", "ko": "이집트", "en": "Egypt", "lat": 30.04, "lng": 31.24, "email": "egypt@globalmart21.com" }
       ]
     },
     {
-      "id": "etc", "ko": "미주·유럽 외", "en": "Americas, Europe & Others",
+      "id": "etc", "ko": "동유럽·미주", "en": "Eastern Europe & Americas",
       "offices": [
         { "id": "usa", "ko": "미국 (워싱턴)", "en": "USA (Washington)", "lat": 38.9, "lng": -77.04 },
         { "id": "hungary", "ko": "헝가리", "en": "Hungary", "lat": 47.5, "lng": 19.04 },
