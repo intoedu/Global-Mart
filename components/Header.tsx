@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { NAV, SITE } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
 import { BASE_PATH, asset, lp, swapLang } from "@/lib/paths";
-import { ContactLink } from "./ContactLink";
 import { Icon } from "./Icon";
 
 /** 휴대폰·태블릿 메뉴가 쓰이는 폭의 끝 (Tailwind xl = 80rem = 1280px) */
@@ -216,9 +215,9 @@ export function Header({ locale }: { locale: Locale }) {
             >
               {langLabel}
             </Link>
-            <ContactLink locale={locale} className="btn-primary btn-sm hidden sm:inline-flex">
-              {ko ? "상담 신청" : "Get in touch"}
-            </ContactLink>
+            <Link href={L("/contact")} className="btn-primary btn-sm hidden sm:inline-flex">
+              {ko ? "상담 문의" : "Contact us"}
+            </Link>
             <button
               ref={toggleRef}
               type="button"

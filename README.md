@@ -18,7 +18,7 @@
 | 사업내용 | `/ko/business/agency` 외 6개 | 해외출장조사 추가, 소프트웨어 무역 포함 |
 | 해외 Biz정보 | `/ko/biz` | 지역 11개, 종류(산업정보/인콰이어리), 검색, 게시자 숨김, '전체' 글은 모든 지역 표시 |
 | 해외주재원 전용 | `/ko/resident` | 공용 비밀번호 입력 후 열람 (글은 암호화 저장) |
-| Contact Us | `/ko/contact` | 상담 신청 → FormSubmit 으로 gvmart@hanmail.net 에 메일 전달 |
+| Contact Us | `/ko/contact` | 전화·이메일·팩스·주소, 해외 사무소 이메일 (온라인 신청서 없음) |
 | 관리자 | `/ko/admin` | GitHub 토큰으로 로그인해 게시글 작성·수정·삭제, 주재원 비밀번호 변경 |
 
 ## 게시판 데이터
@@ -46,14 +46,11 @@ GitHub › Settings › Developer settings › Personal access tokens › Fine-g
 - Repository permissions › **Contents: Read and write**
 - Expiration: 짧게(예: 30~90일)
 
-## 상담 신청서 (FormSubmit)
+## 상담 문의
 
-첫 접수 때 gvmart@hanmail.net 으로 FormSubmit 의 확인(Activate) 메일이 옵니다. 버튼을 한 번 눌러야 이후 접수가 전달됩니다. 전송이 실패하거나 15초 안에 응답이 없으면 방문자의 메일 앱으로 같은 내용을 보내도록 안내합니다(메일 앱 본문은 앞 600자까지).
+온라인 상담 신청서는 두지 않았습니다. 상담은 전화(02-499-7977)와 이메일(gvmart@hanmail.net)로 받습니다.
 
-공개 전 확인할 일:
-1. 공개된 사이트에서 시험 접수를 한 번 보내고, 회사 메일로 온 FormSubmit 확인 메일의 버튼을 누릅니다. (확인 전에는 첫 방문자의 접수가 실패로 보입니다.)
-2. 확인 후 FormSubmit 이 알려 주는 임의 주소(alias)로 `lib/site.ts` 의 `formEndpoint` 를 바꾸면 메일 주소가 코드에 드러나지 않습니다.
-3. 개인정보처리방침(`app/[lang]/privacy/page.tsx`)의 시행일(`EFFECTIVE_DATE`)과 국외 이전 내용(FormSubmit 서버 소재 국가, 보유 기간)을 회사가 확인해 채웁니다.
+공개 전 확인할 일: 개인정보처리방침(`app/[lang]/privacy/page.tsx`)의 시행일(`EFFECTIVE_DATE`)을 회사가 정해 채웁니다.
 
 ## 수정 위치
 

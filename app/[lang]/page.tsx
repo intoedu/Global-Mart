@@ -62,8 +62,8 @@ export default async function HomePage({ params }: LangParams) {
               ))}
             </ul>
             <div className="hero-ctas reveal mt-5 flex flex-wrap gap-3 lg:mt-[clamp(24px,1rem+1.4vw,52px)]">
-              <Link href={lp(locale, "/contact#inquiry")} className="btn-primary btn-lg w-full sm:w-auto">
-                {ko ? "상담 신청" : "Request a consultation"} <Icon name="arrow-right" className="size-4" />
+              <Link href={lp(locale, "/contact")} className="btn-primary btn-lg w-full sm:w-auto">
+                {ko ? "상담 문의" : "Contact us"} <Icon name="arrow-right" className="size-4" />
               </Link>
               <a href={SITE.telHref} className="btn-ghost btn-lg hidden tabular-nums sm:inline-flex">
                 <Icon name="phone" className="size-4" /> {ko ? SITE.tel : SITE.telIntl}
@@ -360,9 +360,9 @@ export default async function HomePage({ params }: LangParams) {
                     : "Tell us about your product and target countries, and we will suggest how to proceed and a likely timeline."}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href={lp(locale, "/contact#inquiry")} className="btn-light btn-lg">
-                    {ko ? "온라인 상담 신청" : "Send an inquiry"} <Icon name="arrow-right" className="size-4" />
-                  </Link>
+                  <a href={SITE.telHref} className="btn-light btn-lg tabular-nums">
+                    <Icon name="phone" className="size-4" /> {ko ? `전화 상담 ${SITE.tel}` : `Call ${SITE.telIntl}`}
+                  </a>
                   <a href={`mailto:${SITE.email}`} className="btn-outline-light btn-lg">
                     <Icon name="mail" className="size-4" /> {SITE.email}
                   </a>

@@ -66,11 +66,11 @@ export function BusinessShell({
             <div>
               <p className="text-h3">{ko ? "우리 회사 아이템도 가능할까요?" : "Could this work for your product?"}</p>
               <p className="mt-1 text-body text-white/65">
-                {ko ? `전화 ${SITE.tel} 또는 온라인으로 문의해 주세요.` : `Call ${SITE.telIntl} or send us an inquiry online.`}
+                {ko ? `전화 ${SITE.tel} 또는 이메일로 문의해 주세요.` : `Call ${SITE.telIntl} or email us.`}
               </p>
             </div>
-            <Link href={lp(locale, "/contact#inquiry")} className="btn-light btn-lg shrink-0">
-              {ko ? "상담 신청" : "Send an inquiry"} <Icon name="arrow-right" className="size-4" />
+            <Link href={lp(locale, "/contact")} className="btn-light btn-lg shrink-0">
+              {ko ? "상담 문의" : "Contact us"} <Icon name="arrow-right" className="size-4" />
             </Link>
           </div>
         </div>

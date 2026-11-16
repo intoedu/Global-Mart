@@ -24,8 +24,6 @@ type Section = { h: string; b: Item[] };
 export default async function PrivacyPage({ params }: LangParams) {
   const { locale, t } = getT((await params).lang);
   const ko = locale === "ko";
-  const items = "담당자명, 회사명, 이메일, 연락처, 관심 서비스, 희망 진출 지역, 문의 내용";
-  const itemsEn = "name, company, email, phone number, service of interest, target region and message";
   const effective = (lang: "ko" | "en") => {
     if (!EFFECTIVE_DATE) return lang === "ko" ? "본 방침은 홈페이지 공개일부터 시행합니다." : "This policy takes effect on the day the website is published.";
     const [y, m, d] = EFFECTIVE_DATE.split("-").map(Number);
@@ -38,8 +36,8 @@ export default async function PrivacyPage({ params }: LangParams) {
     {
       h: "1. 수집하는 개인정보 항목 및 수집 방법",
       b: [
-        `상담 신청: ${items}`,
-        "홈페이지의 상담 신청서를 통해 정보주체가 직접 입력하는 방식으로 수집합니다. 홈페이지는 별도의 회원가입을 받지 않습니다.",
+        "홈페이지에는 회원가입이나 상담 신청서가 없으며, 홈페이지를 통해 개인정보를 입력받지 않습니다.",
+        "전화·이메일로 상담을 요청하시는 경우, 정보주체가 직접 알려 주시는 성명, 회사명, 연락처, 이메일, 문의 내용을 상담에 이용합니다.",
         "회사는 홈페이지에서 쿠키나 방문 기록을 따로 수집하지 않습니다. 다만 아래 7번의 외부 서비스가 접속 과정에서 IP 주소, 브라우저 정보 등을 받을 수 있습니다.",
       ],
     },
@@ -50,7 +48,7 @@ export default async function PrivacyPage({ params }: LangParams) {
     {
       h: "3. 보유 및 이용 기간",
       b: [
-        "상담 신청 정보: 상담 완료 후 1년간 보관 후 파기",
+        "상담 문의 정보: 상담 완료 후 1년간 보관 후 파기",
         "관계 법령에 따라 보존할 필요가 있는 경우 해당 법령에서 정한 기간 동안 보관합니다.",
       ],
     },
@@ -58,7 +56,7 @@ export default async function PrivacyPage({ params }: LangParams) {
       h: "4. 동의를 거부할 권리",
       b: [
         "정보주체는 개인정보 수집·이용 동의를 거부할 수 있습니다.",
-        `동의하지 않으시면 온라인 상담 신청은 할 수 없지만, 전화(${SITE.tel})나 이메일(${SITE.email})로 상담을 요청하실 수 있습니다.`,
+        "상담에 필요한 정보를 알려 주지 않으셔도 되지만, 이 경우 상담이나 회신이 어려울 수 있습니다.",
       ],
     },
     {
@@ -68,12 +66,7 @@ export default async function PrivacyPage({ params }: LangParams) {
     {
       h: "6. 개인정보 처리의 위탁 및 국외 이전",
       b: [
-        "상담 신청서 전달: FormSubmit(formsubmit.co) — 입력하신 내용을 회사 이메일로 전달하는 서비스이며, 회사는 접수 내용을 이메일로 보관합니다.",
-        "국외 이전 받는 자: FormSubmit (연락처: formsubmit.co 홈페이지) · 이전 국가: 국외 (FormSubmit 서비스 서버가 있는 국가)",
-        `국외 이전 항목: ${items}`,
-        "이전 일시 및 방법: 상담 신청서를 제출하는 때에 인터넷(HTTPS 암호화 전송)으로 전송",
-        `이전 목적 및 보유 기간: 신청 내용을 회사 이메일(${SITE.email})로 전달하기 위함이며, FormSubmit 에서의 보유 기간은 해당 서비스의 정책에 따릅니다.`,
-        `국외 이전을 원하지 않으시면 상담 신청서를 쓰지 않고 전화(${SITE.tel})나 이메일(${SITE.email})로 직접 문의하실 수 있습니다.`,
+        `이메일 문의는 회사 이메일(${SITE.email}) 계정으로 받습니다.`,
         "홈페이지 호스팅: GitHub Pages(GitHub, Inc.) — 홈페이지에 접속하면 IP 주소 등 접속 정보가 GitHub 의 서버에 기록될 수 있습니다.",
         "위탁 업체 및 업무 내용이 변경될 경우 본 방침을 통해 알려 드립니다.",
       ],
@@ -122,8 +115,8 @@ export default async function PrivacyPage({ params }: LangParams) {
     {
       h: "1. Personal data we collect and how",
       b: [
-        `Consultation requests: ${itemsEn}.`,
-        "You enter this information yourself in the inquiry form on this website. The website has no member sign-up.",
+        "This website has no member sign-up and no inquiry form, and it does not ask you to enter personal data.",
+        "When you contact us by phone or email, we use the details you give us (name, company, phone number, email and your message) to answer you.",
         "We do not set our own cookies or collect visit logs on this website. The external services listed in section 7 may, however, receive your IP address and browser information when a page loads.",
       ],
     },
@@ -134,7 +127,7 @@ export default async function PrivacyPage({ params }: LangParams) {
     {
       h: "3. Retention period",
       b: [
-        "Consultation requests are kept for one year after the consultation and then deleted.",
+        "Inquiry details are kept for one year after the consultation and then deleted.",
         "Where a law requires longer retention, we keep the data for the period that law sets.",
       ],
     },
@@ -142,7 +135,7 @@ export default async function PrivacyPage({ params }: LangParams) {
       h: "4. Your right to refuse",
       b: [
         "You may refuse to consent to the collection and use of your personal data.",
-        `If you refuse, you cannot use the online inquiry form, but you can still contact us by phone (${SITE.telIntl}) or email (${SITE.email}).`,
+        "You do not have to give us these details, but without them we may not be able to answer your inquiry.",
       ],
     },
     {
@@ -152,12 +145,7 @@ export default async function PrivacyPage({ params }: LangParams) {
     {
       h: "6. Processors and transfer outside Korea",
       b: [
-        "Form delivery: FormSubmit (formsubmit.co) forwards what you enter to our email inbox. We keep received requests as email.",
-        "Recipient abroad: FormSubmit (contact: formsubmit.co website) · Country: outside Korea (where the FormSubmit service servers are located)",
-        `Items transferred: ${itemsEn}`,
-        "When and how: when you submit the inquiry form, sent over the internet (HTTPS encrypted)",
-        `Purpose and retention: to deliver your request to our email (${SITE.email}); retention at FormSubmit follows that service's own policy.`,
-        `If you do not want your data transferred abroad, please contact us directly by phone (${SITE.telIntl}) or email (${SITE.email}) instead of using the form.`,
+        `Email inquiries are received at our company email account (${SITE.email}).`,
         "Website hosting: GitHub Pages (GitHub, Inc.). When you visit the website, connection data such as your IP address may be recorded on GitHub's servers.",
         "If our processors or their tasks change, we will announce it in this policy.",
       ],

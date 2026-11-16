@@ -44,7 +44,7 @@ export default async function OfficesPage({ params }: LangParams) {
                 </a>
               </p>
             </div>
-            <Link href={lp(locale, "/contact#inquiry")} className="group flex items-center justify-between gap-4 rounded-2xl bg-ink p-[clamp(24px,1.95vw,40px)] text-white">
+            <Link href={lp(locale, "/contact")} className="group flex items-center justify-between gap-4 rounded-2xl bg-ink p-[clamp(24px,1.95vw,40px)] text-white">
               <div>
                 <p className="text-h3">{ko ? "원하는 국가가 목록에 없나요?" : "Your country isn't listed?"}</p>
                 <p className="mt-1 text-body text-white/75">

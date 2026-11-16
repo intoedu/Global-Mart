@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { getT, type LangParams } from "@/lib/i18n";
-import { lp } from "@/lib/paths";
 import { SITE } from "@/lib/site";
 import offices from "@/lib/offices.json";
 import { PageHero } from "@/components/PageHero";
-import { InquiryForm } from "@/components/InquiryForm";
 import { Icon } from "@/components/Icon";
 
 export async function generateMetadata({ params }: LangParams): Promise<Metadata> {
-  return { title: (await params).lang === "ko" ? "Contact Us · 상담 신청" : "Contact Us" };
+  return { title: (await params).lang === "ko" ? "Contact Us · 상담 문의" : "Contact Us" };
 }
 
 export default async function ContactPage({ params }: LangParams) {
@@ -25,9 +23,8 @@ export default async function ContactPage({ params }: LangParams) {
         crumbs={[{ label: "Contact Us" }]}
       />
       <section className="py-section-sm">
-        <div className="container-x grid gap-grid lg:grid-cols-[1fr_1.6fr] lg:gap-8">
-          <aside className="space-y-4">
-            <a href={SITE.telHref} className="block rounded-3xl bg-ink p-7 text-white transition hover:bg-ink-2">
+        <div className="container-x grid gap-grid md:grid-cols-2 lg:grid-cols-3">
+            <a href={SITE.telHref} className="block rounded-3xl bg-ink p-[clamp(24px,1.95vw,40px)] text-white transition hover:bg-ink-2">
               <p className="text-sm text-white/60">{ko ? "전화 상담" : "Call us"}</p>
               <p className="mt-1 flex items-center gap-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
                 <Icon name="phone" className="size-6 shrink-0 text-sky" />
@@ -35,9 +32,18 @@ export default async function ContactPage({ params }: LangParams) {
               </p>
               <p className="mt-3 text-sm text-white/60">{t(SITE.hours)}</p>
             </a>
-            <dl className="divide-y divide-line rounded-3xl border border-line px-7">
+            <a href={`mailto:${SITE.email}`} className="group block rounded-3xl border border-line bg-white p-[clamp(24px,1.95vw,40px)] transition hover:border-ink">
+              <p className="text-sm text-muted">{ko ? "이메일 문의" : "Email us"}</p>
+              <p className="mt-1 flex items-center gap-3 text-xl font-extrabold tracking-tight sm:text-2xl">
+                <Icon name="mail" className="size-6 shrink-0 text-accent" />
+                <span className="break-all decoration-accent underline-offset-4 group-hover:underline">{SITE.email}</span>
+              </p>
+              <p className="mt-3 text-sm text-muted">
+                {ko ? "아이템과 목표 국가를 적어 보내 주시면 담당자가 회신드립니다." : "Tell us about your product and target countries and we will reply."}
+              </p>
+            </a>
+            <dl className="divide-y divide-line rounded-3xl border border-line px-7 md:col-span-2 lg:col-span-1">
               {[
-                { icon: "mail", k: ko ? "이메일" : "Email", v: SITE.email, href: `mailto:${SITE.email}` },
                 { icon: "fax", k: ko ? "팩스" : "Fax", v: ko ? SITE.fax : SITE.faxIntl, nowrap: true },
                 { icon: "pin", k: ko ? "주소" : "Address", v: t(SITE.address), sub: t(SITE.directions) },
               ].map((r) => (
@@ -48,23 +54,12 @@ export default async function ContactPage({ params }: LangParams) {
                     {r.k}
                   </dt>
                   <dd className={`mt-0.5 font-medium ${"nowrap" in r && r.nowrap ? "whitespace-nowrap" : ""}`}>
-                    {r.href ? <a href={r.href} className="decoration-accent underline-offset-4 hover:text-ink hover:underline">{r.v}</a> : r.v}
+                    {r.v}
                     {r.sub && <span className="mt-0.5 block text-sm font-normal text-muted">{r.sub}</span>}
                   </dd>
                 </div>
               ))}
             </dl>
-          </aside>
-
-          <div id="inquiry" className="card p-[clamp(24px,2.5vw,48px)]">
-            <h2 className="text-h3 font-extrabold">{ko ? "온라인 상담 신청" : "Online inquiry"}</h2>
-            <p className="mt-2 text-[15px] text-muted">
-              {ko ? "남겨 주신 내용을 확인한 뒤 담당자가 연락드립니다." : "Our team will review your message and get back to you."}
-            </p>
-            <div className="mt-7">
-              <InquiryForm locale={locale} />
-            </div>
-          </div>
         </div>
       </section>
 
