@@ -71,6 +71,19 @@ export function Footer({ locale }: { locale: Locale }) {
             <p>
               {ko ? "제휴기업" : "Partner firm"} {t(SITE.partners.company)} · {ko ? "제휴기관" : "Partner institution"} {t(SITE.partners.institution)}
             </p>
+            {/* 홈페이지 관리 업체 — 누르면 한길마케팅 수정 요청 페이지(새 창) */}
+            <p>
+              {ko ? "관리" : "Managed by"}{" "}
+              <a
+                href="https://intoedu.github.io/hangil-repository/"
+                target="_blank"
+                rel="noopener"
+                className="font-semibold text-white/70 underline decoration-white/25 underline-offset-4 hover:text-white hover:decoration-white"
+              >
+                {ko ? "한길마케팅" : "Hangil Marketing"}
+                <span className="sr-only">{ko ? " (수정 요청 페이지, 새 창)" : " (edit request page, opens in a new tab)"}</span>
+              </a>
+            </p>
           </div>
           <div className="flex flex-col gap-2 lg:items-end">
             <Link href={lp(locale, "/privacy")} prefetch={false} className="font-semibold text-white/80 hover:text-white">
