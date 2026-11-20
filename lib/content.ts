@@ -25,7 +25,7 @@ export const HOME = {
     { icon: "briefcase", href: "/business/agency", label: { ko: "해외지사대행", en: "Branch agency" }, sub: { ko: "현지 직원 배치", en: "Local staff" } },
     { icon: "chart", href: "/business/research", label: { ko: "해외시장조사", en: "Market research" }, sub: { ko: "가격·경쟁·관세", en: "Prices · tariffs" } },
     { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어발굴", en: "Buyer discovery" }, sub: { ko: "인허가·무역대행까지", en: "Permits · trade agency" } },
-    { icon: "globe", href: "/business/agency", label: { ko: "해외입찰대행", en: "Overseas tender agency" }, sub: { ko: "국제지역개발협력", en: "International regional development cooperation" } },
+    { icon: "globe", href: "/biz", label: { ko: "해외입찰대행", en: "Overseas tender agency" }, sub: { ko: "국제지역개발협력", en: "Intl. development cooperation" } },
   ],
   stats: [
     { value: "2004", label: { ko: "설립", en: "Founded" } },
@@ -154,7 +154,7 @@ export const HISTORY: { date: string; ko: string; en: string }[] = [
 
 export const PARTNERS = {
   lead: {
-    ko: "(주)글로벌마트는 한국 기업의 해외 진출을 돕기 위해 2009년부터 해외시장개척 전문가 양성 과정을 운영해 왔습니다. 2018년, 이 과정은 '국제지역개발협력협회'로 발전하였고, 해외주재원 양성을 전담하고 있습니다.",
+    ko: "(주)글로벌마트는 한국 기업의 해외 진출을 돕기 위해 2009년부터 해외시장개척 전문가 양성 과정을 운영해 왔습니다. 2018년, 이 과정은 ‘국제지역개발협력협회’⁠로 발전하였고, 해외주재원 양성을 전담하고 있습니다.",
     en: "Since 2009, Globalmart Inc. has run a training course for overseas market development specialists to help Korean companies expand abroad. In 2018 the course grew into the International Region Development Cooperation Association (IRDCA), which is now dedicated to training overseas representatives.",
   } satisfies L,
   steps: [
@@ -164,7 +164,7 @@ export const PARTNERS = {
     },
     {
       title: { ko: "주재원 추천", en: "Recommendation" },
-      body: { ko: "수료자를 한국 기업의 해외주재원으로 추천합니다.", en: "Graduates are recommended to Korean companies as overseas staff." },
+      body: { ko: "수료자를 ㈜글로벌마트의 해외주재원으로 추천합니다.", en: "Graduates are recommended to Globalmart Inc. as overseas representatives." },
     },
     {
       title: { ko: "해외지사대행", en: "Branch agency" },
@@ -176,7 +176,7 @@ export const PARTNERS = {
       kind: { ko: "제휴기관", en: "Partner institution" },
       name: { ko: "국제지역개발협력협회 (IRDCA)", en: "International Region Development Cooperation Association (IRDCA)" },
       body: {
-        ko: "해외시장개척 전문가 양성 비영리기관. 협회 구성원들이 “해외주재원 양성과정”을 수료한 후, ㈜글로벌마트의 해외주재원이 되어 제3세계 전역에서 해외시장개척활동을 수행합니다.",
+        ko: "해외시장개척 전문가 양성 비영리기관. 협회 구성원들이 “해외주재원 양성과정”⁠을 수료한 후, ㈜⁠글로벌마트의 해외주재원이 되어 제3세계 전역에서 해외시장개척활동을 수행합니다.",
         en: "A non-profit that trains overseas market development specialists. After completing the “Overseas Representative Training Course,” its members become overseas representatives of Globalmart Inc. and carry out market development activities across the developing world.",
       },
     },
@@ -184,7 +184,7 @@ export const PARTNERS = {
       kind: { ko: "제휴기업", en: "Partner firm" },
       name: { ko: "삼지회계법인 성수지점", en: "Samji Accounting Corp. (Seongsu Branch)" },
       body: {
-        ko: "회계, 세무 업무제휴. 회계, 세무 거래고객의 경우, “3개월의 무상 지사대행”이 부여되며, 매해 “해외시장개척 아웃리치” 참여기회가 제공됩니다.",
+        ko: "회계, 세무 업무제휴. 회계, 세무 거래고객의 경우, “3개월의 무상 지사대행”⁠이 부여되며, 매해 “해외시장개척 아웃리치” 참여기회가 제공됩니다.",
         en: "Accounting and tax partnership. Accounting and tax clients are granted “three months of free branch agency” and are offered the chance to join the “Overseas Market Development Outreach” every year.",
       },
     },
@@ -243,7 +243,7 @@ export const AGENCY = {
         title: { ko: "계약성사시", en: "When a contract is concluded" },
         dash: true,
         items: [
-          { ko: '"해외지사대행"의 "무역대행"으로 이행', en: '"Overseas branch agency" moves on to "trade agency"' },
+          { ko: "“해외지사대행”⁠의 “무역대행”으로 이행", en: "“Overseas branch agency” moves on to “trade agency”" },
           { ko: "무역대행 수수료 : 별도 협의", en: "Trade agency fee: negotiated separately" },
         ],
       },

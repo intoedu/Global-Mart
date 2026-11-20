@@ -407,17 +407,19 @@ html.js [data-reveal].is-in {
     height: 37vw;
     overflow: hidden;
     pointer-events: none;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6% 94%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 6% 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5% 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5% 95%, transparent);
   }
+  /* 모로코(왼쪽)부터 서울 본사 이름표(오른쪽)까지 모두 띠 안에 들어오도록 */
   .hero-figure > div {
     position: absolute;
-    width: 200%;
-    right: -8%;
-    top: -23.5vw;
+    width: 186%;
+    right: -2%;
+    top: -21.8vw;
   }
   .hero-figure .map-focus-card,
-  .hero-figure .map-label[data-pin="indonesia"] {
+  .hero-figure .map-label[data-pin="indonesia"],
+  .hero-figure .map-label[data-pin="russia"] {
     display: none;
   }
 }
