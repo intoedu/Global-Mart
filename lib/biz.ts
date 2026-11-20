@@ -1,19 +1,11 @@
-import raw from "@/data/biz.json";
+import { sortPosts } from "./board";
 import type { BizData, BizPost } from "./types";
 
-/** 빌드 시점에 data/biz.json 을 읽습니다. (관리자가 저장하면 GitHub Actions 가 다시 빌드) — next_id 등 다른 필드는 무시 */
-export function getBizPosts(): BizPost[] {
-  const posts = (raw as BizData).posts ?? [];
-  return [...posts].sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned) || b.created_at.localeCompare(a.created_at));
-}
-
-export function getBizPost(id: number) {
-  return getBizPosts().find((p) => p.id === id) ?? null;
-}
-
-/** 이전·다음 글 (게시일 기준) */
-export function getAdjacent(id: number) {
-  const list = [...getBizPosts()].sort((a, b) => b.created_at.localeCompare(a.created_at));
-  const i = list.findIndex((p) => p.id === id);
-  return { newer: list[i - 1] ?? null, older: list[i + 1] ?? null };
+/**
+ * 해외 Biz정보 (회원 전용)
+ * 글은 public/data/biz.json 에 회원 비밀번호로 암호화되어 있고, 브라우저에서 비밀번호를 넣은 뒤에만 풀립니다.
+ * 빌드 시점에 글 내용을 읽지 않으므로 정적 HTML 에는 글 제목·내용이 들어가지 않습니다.
+ */
+export function bizPostsOf(data: BizData): BizPost[] {
+  return sortPosts(data.posts ?? []);
 }

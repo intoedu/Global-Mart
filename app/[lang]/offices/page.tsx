@@ -16,7 +16,7 @@ export default async function OfficesPage({ params }: LangParams) {
   const ko = locale === "ko";
   return (
     <>
-      <PageHero locale={locale} image="earth"
+      <PageHero locale={locale} noPhoto
         eyebrow="Overseas Offices"
         title={ko ? "해외지사 현황" : "Global Offices"}
         lead={
@@ -26,7 +26,7 @@ export default async function OfficesPage({ params }: LangParams) {
         }
         crumbs={[{ label: ko ? "해외지사" : "Global Offices" }]}
       />
-      <section className="py-section-sm">
+      <section className="pt-[clamp(20px,0.5rem+1.4vw,44px)] pb-section-sm">
         <div className="container-x">
           <OfficesExplorer locale={locale} />
 

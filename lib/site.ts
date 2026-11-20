@@ -41,7 +41,7 @@ export const SITE = {
     en: "Mon–Fri 09:00–18:00 KST (closed weekends & holidays)",
   } satisfies L,
   partners: {
-    company: { ko: "삼지회계법인 성수", en: "Samji Accounting Corp. (Seongsu)" } satisfies L,
+    company: { ko: "삼지회계법인 성수지점", en: "Samji Accounting Corp. (Seongsu Branch)" } satisfies L,
     institution: {
       ko: "국제지역개발협력협회 (IRDCA)",
       en: "International Region Development Cooperation Association (IRDCA)",
@@ -58,7 +58,7 @@ export const SITE = {
 
 export type NavItem = { href: string; label: L; children?: { href: string; label: L }[] };
 
-/** PPT(PC용 홈페이지) 메뉴 구성: 회사소개 · 해외지사 · 사업내용 · 해외 Biz정보 · 해외주재원 전용 · Contact Us */
+/** 메뉴 구성: 회사소개 · 해외지사 · 사업내용 · 해외 Biz정보 · 해외주재원 전용 · Contact Us (2차 수정 PPT 반영) */
 export const NAV: NavItem[] = [
   {
     href: "/company/greeting",
@@ -66,7 +66,7 @@ export const NAV: NavItem[] = [
     children: [
       { href: "/company/greeting", label: { ko: "인사말", en: "Greetings" } },
       { href: "/company/history", label: { ko: "연혁", en: "History" } },
-      { href: "/company/partners", label: { ko: "제휴사", en: "Partners" } },
+      { href: "/company/partners", label: { ko: "제휴기관", en: "Partner Institutions" } },
       { href: "/company/location", label: { ko: "주소", en: "Location" } },
     ],
   },
@@ -78,12 +78,19 @@ export const NAV: NavItem[] = [
       { href: "/business/agency", label: { ko: "해외지사대행", en: "Overseas Branch Agency" } },
       { href: "/business/research", label: { ko: "해외시장조사", en: "Market Research" } },
       { href: "/business/buyers", label: { ko: "해외바이어발굴", en: "Buyer Discovery" } },
-      { href: "/business/branch", label: { ko: "해외지사 운영대행", en: "Branch Operation" } },
-      { href: "/business/field-research", label: { ko: "해외출장조사", en: "Field Research Trips" } },
-      { href: "/business/software", label: { ko: "소프트웨어 무역", en: "Software Trading" } },
+      { href: "/business/branch", label: { ko: "해외지사운영", en: "Branch Operation" } },
     ],
   },
   { href: "/biz", label: { ko: "해외 Biz정보", en: "Global Biz Info" } },
-  { href: "/resident", label: { ko: "해외주재원 전용", en: "For Overseas Staff" } },
+  {
+    href: "/resident",
+    label: { ko: "해외주재원 전용", en: "For Overseas Staff" },
+    // 비밀번호로 잠긴 공간 — 메뉴 이름만 공개, 내용은 암호화되어 있음 (?cat= 으로 하위 카테고리 선택)
+    children: [
+      { href: "/resident?cat=items", label: { ko: "국내기업 아이템", en: "Korean Company Items" } },
+      { href: "/resident?cat=software", label: { ko: "소프트웨어 무역", en: "Software Trading" } },
+      { href: "/resident?cat=notice", label: { ko: "주재원공지", en: "Staff Notices" } },
+    ],
+  },
   { href: "/contact", label: { ko: "Contact Us", en: "Contact Us" } },
 ];

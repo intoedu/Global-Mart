@@ -18,14 +18,14 @@ export const HOME = {
     en: "Overseas branch agency for Korean companies",
   } satisfies L,
   heroLead: {
-    ko: "글로벌마트는 한국 기업의 해외지사 역할을 대신하는 회사입니다. 현지 전문 인력이 시장조사부터 바이어 발굴, 계약까지 함께하고, 성과가 나면 글로벌마트가 Agent 수수료를 받습니다.",
-    en: "Globalmart acts as the overseas branch of Korean companies. Our local specialists handle market research, buyer discovery and contracts, and we earn an agent commission when results come in.",
+    ko: "㈜글로벌마트는 한국기업 해외지사대행 업무를 전문으로 하는 회사입니다. 현지 전문인력이 시장조사, 인허가, 바이어발굴까지 함께 하며, 성공시 무역 에이전트 업무를 지속적으로 수행합니다.",
+    en: "Globalmart Inc. specializes in overseas branch agency for Korean companies. Our local specialists work with you on market research, permits and licensing, and buyer discovery, and once a deal succeeds we continue to act as your trade agent.",
   } satisfies L,
   heroServices: [
     { icon: "briefcase", href: "/business/agency", label: { ko: "해외지사대행", en: "Branch agency" }, sub: { ko: "현지 직원 배치", en: "Local staff" } },
     { icon: "chart", href: "/business/research", label: { ko: "해외시장조사", en: "Market research" }, sub: { ko: "가격·경쟁·관세", en: "Prices · tariffs" } },
     { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어발굴", en: "Buyer discovery" }, sub: { ko: "계약까지 동행", en: "Until the deal" } },
-    { icon: "code", href: "/business/software", label: { ko: "소프트웨어 무역", en: "Software trading" }, sub: { ko: "메신저·블록체인", en: "Apps · blockchain" } },
+    { icon: "globe", href: "/business/agency", label: { ko: "해외입찰대행", en: "Overseas tender agency" }, sub: { ko: "국제지역개발협력", en: "International regional development cooperation" } },
   ],
   stats: [
     { value: "2004", label: { ko: "설립", en: "Founded" } },
@@ -39,18 +39,18 @@ export const HOME = {
       title: { ko: "해외지사대행", en: "Overseas Branch Agency" },
       points: [
         { ko: "현지 직원 배치로 해외시장개척", en: "Local staff assigned to open your market" },
-        { ko: "단기 운영 가능", en: "Short-term operation available" },
+        { ko: "단기간 운영가능", en: "Short-term operation available" },
         { ko: "현지 인건비만 발생", en: "You only cover local labor costs" },
       ],
       href: "/business/agency",
     },
     {
       no: "02",
-      title: { ko: "유망 아이템 해외시장개척", en: "Promising Items, Global Markets" },
+      title: { ko: "유망 아이템 해외시장개척과\n해외 프로젝트 입찰", en: "Promising Items Abroad &\nOverseas Project Tenders" },
       points: [
-        { ko: "국가 대상 프로젝트 수행", en: "Government-level projects" },
+        { ko: "국제 지역개발 협력 프로젝트(IT, 산업개발)", en: "International regional development cooperation projects (IT, industrial development)" },
         { ko: "유망 중소기업 아이템 환영", en: "Promising SME products welcome" },
-        { ko: "해외 바이어 발굴부터 계약까지", en: "From buyer discovery to contract" },
+        { ko: "해외바이어발굴, 인허가, 무역대행까지", en: "Buyer discovery, permits and trade agency" },
       ],
       href: "/business/buyers",
     },
@@ -59,20 +59,20 @@ export const HOME = {
       title: { ko: "회계·세무 고객 특전", en: "Perk for Accounting Clients" },
       points: [
         { ko: "회계·세무 거래 고객 대상", en: "For our accounting & tax clients" },
-        { ko: "연 1회 해외시장개척 서비스", en: "One market-entry program a year" },
-        { ko: "별도 비용 없이 진행", en: "At no additional cost" },
+        { ko: "세무 혹은 회계감사 의뢰시 3개월 무상 해외지사대행", en: "3 months of free overseas branch agency when you commission tax or audit work" },
+        { ko: "연1회 해외시장개척 아웃리치", en: "A yearly overseas market outreach program" },
       ],
-      href: "/business/field-research",
+      href: "/company/partners",
     },
   ],
   fee: {
-    ko: "성과가 발생하면 Agent 수수료를 받고, 지사대행 비용은 현지 인건비 수준입니다.",
-    en: "We earn an agent commission when results are achieved, and branch agency costs about as much as local staff.",
+    ko: "성과발생시 Agent 수수료, 지사대행비용은 현지인 인건비 수준(+타지역 출장시 실비)입니다",
+    en: "Agent commission when results are achieved; branch agency costs about the same as local labor (plus actual expenses for trips to other regions).",
   } satisfies L,
   regionsTitle: { ko: "해외시장개척 가능지역", en: "Where we can take you" } satisfies L,
   regionsLead: {
-    ko: "당사는 국제지역개발협력협회(IRDCA)의 제휴사로서, 협회 구성원들과 함께 해외시장개척 업무를 수행합니다. 협회 구성원들은 제3세계 전역에 대해 업무 수행이 가능합니다.",
-    en: "As a partner of IRDCA (International Region Development Cooperation Association), we work with its members, who can operate across the developing world.",
+    ko: "당사는 국제지역개발협력협회(IRDCA, 해외주재원 훈련기관)의 제휴사로서, 제3세계 전역에 대해 해외시장개척활동을 수행합니다. 아래의 지역 외에도 제3세계 어느 지역에 대해서도 가능합니다.",
+    en: "As a partner of IRDCA (International Region Development Cooperation Association, a training institute for overseas staff), we carry out market development across the developing world. Besides the regions below, we can work in any part of the developing world.",
   } satisfies L,
   regions: [
     { ko: "인도", en: "India" },
@@ -84,35 +84,11 @@ export const HOME = {
     { ko: "중동", en: "Middle East" },
     { ko: "기타", en: "And more" },
   ] satisfies L[],
-  itemsTitle: { ko: "유망 아이템 해외시장개척", en: "Taking promising items abroad" } satisfies L,
-  items: [
-    {
-      title: { ko: "제3세계 개발 프로젝트", en: "Development projects in emerging markets" },
-      body: {
-        ko: "대기업, IT기업 등의 해외지사대행을 통해 제3세계 산업개발에 함께하고자 합니다.",
-        en: "Acting as the overseas branch of large and IT companies, we take part in industrial development across emerging economies.",
-      },
-    },
-    {
-      title: { ko: "중소기업의 해외시장개척", en: "Market entry for SMEs" },
-      body: {
-        ko: "화장품, 의료기기 등 중소기업의 유망 제품에 대해 해외 바이어를 발굴하고 해외시장을 개척합니다.",
-        en: "We find overseas buyers and open markets for promising SME products such as cosmetics and medical devices.",
-      },
-    },
-    {
-      title: { ko: "회계·세무 업무 고객 특전", en: "A perk for accounting clients" },
-      body: {
-        ko: "회계·세무 업무만 의뢰하셔도 별도 비용 없이 해외시장개척을 진행해 드립니다.",
-        en: "Clients who use our accounting and tax services receive market-entry support at no extra cost.",
-      },
-    },
-  ],
   bizCta: {
     title: { ko: "해외 Biz정보", en: "Global Biz Info" },
     body: {
-      ko: "해외 각 지역의 산업정보와 인콰이어리를 지역별로 확인하세요. 우수한 아이템은 여러 나라에서 동시에 진행됩니다.",
-      en: "Browse industry information and buyer inquiries from overseas, sorted by region. Strong items are pursued in several countries at once.",
+      ko: "글로벌마트는 '해외시장정보'와 '해외입찰정보'를 바탕으로 국내기업과 함께 해외비즈니스를 수행하고자 합니다. 우수한 아이템은 해외 여러 나라에서 동시에 진행됩니다.",
+      en: "Globalmart works with Korean companies on overseas business based on overseas market and tender information. Strong items are pursued in several countries at the same time.",
     },
   },
 };
@@ -125,33 +101,37 @@ export const GREETING = {
     ko: "믿음과 신뢰, 전문성으로\n최선을 다하는 기업",
     en: "A company that gives its best with trust, integrity and expertise",
   } satisfies L,
+  /** 의뢰 자료(2차 수정 PPT)의 인사말 원문 그대로 — 문단 구분도 원문과 같음 */
   paragraphs: [
+    { ko: "안녕하십니까?", en: "Greetings." },
     {
-      ko: "안녕하십니까. 이렇게 인사드리게 되어 기쁘게 생각합니다.",
-      en: "Hello, and thank you for visiting Globalmart.",
+      ko: "국내외 경제정세가 급변하고 있으며, 특히 중국발 저가 초과공급과잉으로 전세계의 제조업이 크게 위축되어 있습니다. 이러한 열악한 상황 속에서도 해외 수출로 나아가는 귀사의 앞길에 대로가 열리길 소망합니다.",
+      en: "The economic situation at home and abroad is changing rapidly, and in particular a glut of low-priced oversupply from China has caused manufacturing around the world to contract sharply. Even in these difficult conditions, we hope a broad road opens before your company as it moves forward into overseas exports.",
     },
     {
-      ko: "인터넷 산업의 발달로 세상은 더욱 빨라지고 가까워졌습니다. 이제 사업도 한 나라에 머무르지 않고 글로벌 시장을 목표로 해야 합니다. 글로벌마트는 이러한 기업들의 세계화를 위해 최선을 다하고자 합니다.",
-      en: "The internet has made the world faster and smaller. Business can no longer stay within one country; it has to aim for the global market. Globalmart is committed to helping companies make that move.",
+      ko: "우리 글로벌마트와 국제지역개발협력협회(해외주재원 훈련기관)는 이 일에 귀한 동역자가 되길 희망합니다.",
+      en: "We at Globalmart, together with the International Region Development Cooperation Association (IRDCA, a training institution for overseas representatives), hope to be your valued co-workers in this endeavor.",
     },
     {
-      ko: "글로벌마트는 한국 기업을 위해 해외에서 지사 업무를 대행하는 회사입니다. 이를 위해 해외시장개척 전문가 양성기관인 '국제지역개발협력협회'와 함께하고 있으며, 협회를 통해 양성된 해외시장개척 전문 인력을 해외에 파견하고 있습니다.",
-      en: "We carry out overseas branch work on behalf of Korean companies. To do this we work with the International Region Development Cooperation Association (IRDCA), which trains overseas market development specialists, and we place those specialists abroad.",
+      ko: "우리는 귀사의 해외지사 역할을 대행하는 회사로서, 제3세계를 그 주요 대상으로 삼고 있습니다.",
+      en: "As a company that takes on the role of your overseas branch, we focus mainly on the developing world.",
     },
     {
-      ko: "먼저, 글로벌 마케팅을 희망하는 한국 기업을 만나고자 합니다. 저희는 여러 나라에서 동시에 해외시장개척 활동을 수행할 수 있습니다.",
-      en: "First, we want to meet Korean companies that are looking to market globally. We can run market development activities in many countries at the same time.",
+      ko: "우수한 중소기업 아이템의 경우, 짧은 시간에 세계 각국에 유통망을 구축할 수 있습니다. 우리는 이러한 업무에 초기에는 해외지사 역할을 수행하다가, 성과발생시 무역대행의 업무로 발전하길 원합니다.",
+      en: "For outstanding products from small and medium-sized enterprises, distribution networks can be built in countries around the world in a short time. In this work we first act as your overseas branch, and once results come, we hope to grow into a trade agency role.",
     },
     {
-      ko: "더 나아가 한국 기업과의 제휴나 한국 시장 진출을 원하는 해외 기업과도 함께합니다. 특히 한국 기업의 전문 기술, 그중에서도 한국 소프트웨어 기술의 해외 진출에 힘을 쏟고 있습니다.",
-      en: "We also work with overseas companies seeking partnerships with Korean firms or entry into the Korean market. We focus in particular on taking Korean technology, especially Korean software, to the world.",
+      ko: "우리는 특히 국내 대기업의 해외 산업개발, 곧 대한민국이 중심이 된 국제지역개발협력사업을 전개하고자 합니다.",
+      en: "In particular, we aim to carry out overseas industrial development for large Korean companies, that is, international regional development cooperation projects led by Korea.",
     },
     {
-      ko: "이러한 사업을 통해 한국 기업과 해외 기업의 글로벌화에 최선을 다하겠습니다. 감사합니다.",
-      en: "Through this work, we will do our best for the globalization of both Korean and overseas companies. Thank you.",
+      ko: "이 일에 우리는 국내 우수 중소기업과 대기업의 중요한 파트너로 나아가길 소망합니다.",
+      en: "In this work, we hope to move forward as an important partner to Korea's outstanding small and medium-sized enterprises and large corporations.",
     },
+    { ko: "감사합니다.", en: "Thank you." },
   ] satisfies L[],
-  sign: { ko: "글로벌마트 임직원 일동", en: "All of us at Globalmart Inc." } satisfies L,
+  /** 서명 두 줄 (줄바꿈 \n 그대로 표시) */
+  sign: { ko: "글로벌마트\n운영위원 대표 최 환 열 올림", en: "Globalmart Inc.\nChoi Hwan-yeol, Representative of the Operating Committee" } satisfies L,
   values: [
     { title: { ko: "믿음", en: "Integrity" }, body: { ko: "맡은 일에 최선을 다합니다.", en: "We give every project our best." } },
     { title: { ko: "신뢰", en: "Trust" }, body: { ko: "고객사와 신뢰를 바탕으로 함께합니다.", en: "We work with our clients on a basis of trust." } },
@@ -168,12 +148,14 @@ export const HISTORY: { date: string; ko: string; en: string }[] = [
   { date: "2011.04", ko: "㈜글로벌마트로 상호 변경", en: "Renamed Globalmart Inc." },
   { date: "2016.08", ko: "베트남 호치민 해외시장개척 프로젝트 수행 (화장품, 수산물, 대리석, 엔진오일 등)", en: "Ho Chi Minh City, Vietnam market project (cosmetics, seafood, marble, engine oil, etc.)" },
   { date: "2018.08", ko: "글로벌마트에서 분리하여 국제지역개발협력협회(IRDCA) 설립", en: "IRDCA spun off from Globalmart as an independent association" },
+  // 의뢰 자료에 월이 없어 연도만 표시 (date 에 월을 붙이지 않음)
+  { date: "2018", ko: "터키 이스탄불, 모로코 해외시장개척활동 (화장품, 섬유, 주사기)", en: "Market development activities in Istanbul, Turkey and in Morocco (cosmetics, textiles, syringes)" },
 ];
 
 export const PARTNERS = {
   lead: {
-    ko: "(주)글로벌마트는 한국 기업의 해외 진출을 돕기 위해 2009년부터 해외시장개척 전문가 양성 과정을 운영해 왔습니다. 2018년, 이 과정은 비영리 사업으로 전환되었고 그 일환으로 '국제지역개발협력협회(IRDCA)'가 설립되었습니다.",
-    en: "Since 2009, Globalmart has run a training course for overseas market development specialists to help Korean companies expand abroad. In 2018 the course became a non-profit program, and IRDCA was established to run it.",
+    ko: "(주)글로벌마트는 한국 기업의 해외 진출을 돕기 위해 2009년부터 해외시장개척 전문가 양성 과정을 운영해 왔습니다. 2018년, 이 과정은 '국제지역개발협력협회'로 발전하였고, 해외주재원 양성을 전담하고 있습니다.",
+    en: "Since 2009, Globalmart Inc. has run a training course for overseas market development specialists to help Korean companies expand abroad. In 2018 the course grew into the International Region Development Cooperation Association (IRDCA), which is now dedicated to training overseas representatives.",
   } satisfies L,
   steps: [
     {
@@ -194,16 +176,16 @@ export const PARTNERS = {
       kind: { ko: "제휴기관", en: "Partner institution" },
       name: { ko: "국제지역개발협력협회 (IRDCA)", en: "International Region Development Cooperation Association (IRDCA)" },
       body: {
-        ko: "해외시장개척 전문가 양성 비영리 기관. 협회 구성원들이 제3세계 전역에서 글로벌마트와 함께 해외시장개척 업무를 수행합니다.",
-        en: "A non-profit that trains overseas market development specialists. Its members work with Globalmart on market development across emerging regions.",
+        ko: "해외시장개척 전문가 양성 비영리기관. 협회 구성원들이 “해외주재원 양성과정”을 수료한 후, ㈜글로벌마트의 해외주재원이 되어 제3세계 전역에서 해외시장개척활동을 수행합니다.",
+        en: "A non-profit that trains overseas market development specialists. After completing the “Overseas Representative Training Course,” its members become overseas representatives of Globalmart Inc. and carry out market development activities across the developing world.",
       },
     },
     {
       kind: { ko: "제휴기업", en: "Partner firm" },
-      name: { ko: "삼지회계법인 성수", en: "Samji Accounting Corp. (Seongsu)" },
+      name: { ko: "삼지회계법인 성수지점", en: "Samji Accounting Corp. (Seongsu Branch)" },
       body: {
-        ko: "회계·세무 업무 제휴. 회계·세무 거래 고객에게는 연 1회 해외시장개척 서비스를 별도 비용 없이 제공합니다.",
-        en: "Our accounting and tax partner. Accounting clients receive one market-entry program a year at no extra cost.",
+        ko: "회계, 세무 업무제휴. 회계, 세무 거래고객의 경우, “3개월의 무상 지사대행”이 부여되며, 매해 “해외시장개척 아웃리치” 참여기회가 제공됩니다.",
+        en: "Accounting and tax partnership. Accounting and tax clients are granted “three months of free branch agency” and are offered the chance to join the “Overseas Market Development Outreach” every year.",
       },
     },
   ],
@@ -215,48 +197,64 @@ export const PARTNERS = {
 export const PROCESS = [
   { key: "research", href: "/business/research", title: { ko: "해외시장조사", en: "Market research" }, period: { ko: "약 1개월", en: "About 1 month" } },
   { key: "buyers", href: "/business/buyers", title: { ko: "해외바이어발굴", en: "Buyer discovery" }, period: { ko: "반복 진행", en: "Ongoing cycles" } },
-  { key: "branch", href: "/business/branch", title: { ko: "해외지사 운영대행", en: "Branch operation" }, period: { ko: "3·6·12개월", en: "3, 6 or 12 months" } },
+  { key: "branch", href: "/business/branch", title: { ko: "해외지사운영", en: "Branch Operation" }, period: { ko: "6개월 단위 계약 (최초 3개월 가능)", en: "6-month terms (3 months for a first contract)" } },
 ] as const;
 
 export const AGENCY = {
   lead: {
-    ko: "글로벌마트는 국내 기업의 해외지사 업무를 대행합니다. 해외지사대행은 아이템과 계약 조건에 따라 두 가지 방식으로 진행됩니다.",
-    en: "Globalmart runs overseas branch operations on behalf of Korean companies. There are two ways to work with us, depending on your product and terms.",
+    ko: "글로벌마트는 국내기업의 해외지사업무를 대행합니다. 해외지사 대행의 업무의 내용은 고객과 당사가 공동으로 수립합니다.",
+    en: "Globalmart carries out overseas branch work on behalf of Korean companies. The scope of the branch agency work is set jointly by the client and Globalmart.",
   } satisfies L,
-  types: [
-    {
-      tag: { ko: "성과형", en: "Success-based" },
-      title: { ko: "수수료형 지사대행", en: "Commission model" },
-      body: {
-        ko: "귀사의 아이템이 탁월하다고 판단되면 별도 비용 없이 진행합니다. 일반 무역과 같은 방식으로 세계 각국을 대상으로 진행하며, 실제 거래가 발생했을 때 일정 수수료를 받습니다.",
-        en: "If we judge your product to be exceptional, we take it on with no upfront fee. We work it like general trade across many countries and earn a commission only when a sale is made.",
+  /** 해외지사대행 전략수립 및 수수료 (2차 수정 PPT 문구 그대로) — dash: "-" 목록 / 없으면 들여쓴 설명 줄 */
+  strategy: {
+    title: { ko: "해외지사대행 전략수립 및 수수료", en: "Branch agency strategy and fees" } satisfies L,
+    steps: [
+      {
+        no: "1st",
+        title: {
+          ko: "고객과 글로벌마트 본사와 해외주재원의 해외지사대행 전략 수립",
+          en: "The client, Globalmart HQ and our overseas staff set the branch agency strategy together",
+        },
+        dash: true,
+        items: [],
       },
-      points: [
-        { ko: "초기 비용 없음", en: "No upfront cost" },
-        { ko: "거래 발생 시 수수료", en: "Commission on actual sales" },
-        { ko: "여러 국가 동시 진행", en: "Multiple countries at once" },
-      ],
-    },
-    {
-      tag: { ko: "계약형", en: "Retainer" },
-      title: { ko: "월정액 지사대행", en: "Monthly retainer model" },
-      body: {
-        ko: "매월 최소한의 비용을 받고 지사대행 업무를 수행합니다. 3개월, 6개월, 1년 단위로 계약하며, 현지 인건비 수준의 비용으로 실제 해외지사를 둔 것과 같은 효과를 얻을 수 있습니다.",
-        en: "For a modest monthly fee we run your branch operations. Contracts run for 3, 6 or 12 months, giving you the effect of a real overseas branch at roughly the cost of local staff.",
+      {
+        no: "2nd",
+        title: { ko: "해외지사대행의 기간과 수수료의 책정", en: "Setting the term and fees of the branch agency" },
+        dash: true,
+        items: [
+          { ko: "월 수수료 : 50-100만원(업무의 난이도 따라)", en: "Monthly fee: KRW 0.5–1 million (depending on the difficulty of the work)" },
+          { ko: "6개월 단위 계약(최초의 경우 3개월 가능)", en: "6-month contracts (3 months possible for a first contract)" },
+          { ko: "타지역 출장 등 : 실비 별도", en: "Trips to other regions, etc.: actual costs charged separately" },
+          { ko: "인허가, 해외입찰 등 : 별도 협의", en: "Permits, overseas tenders, etc.: negotiated separately" },
+        ],
       },
-      points: [
-        { ko: "3개월 · 6개월 · 1년 단위", en: "3, 6 or 12-month terms" },
-        { ko: "현지 인건비 수준", en: "About the cost of local staff" },
-        { ko: "현지 직원 배치", en: "Local staff assigned" },
-      ],
-    },
-  ],
+      {
+        no: "3rd",
+        title: { ko: "지사대행 업무 진행", en: "Carrying out the branch agency work" },
+        dash: false,
+        items: [
+          { ko: "계약내용에 따른 지사대행 업무 진행", en: "Branch agency work is carried out according to the contract" },
+          { ko: "(예시) 시장조사, 바이어발굴, 지사업무대행 등", en: "(Examples) market research, buyer discovery, branch work on your behalf, etc." },
+        ],
+      },
+      {
+        no: "4th",
+        title: { ko: "계약성사시", en: "When a contract is concluded" },
+        dash: true,
+        items: [
+          { ko: '"해외지사대행"의 "무역대행"으로 이행', en: '"Overseas branch agency" moves on to "trade agency"' },
+          { ko: "무역대행 수수료 : 별도 협의", en: "Trade agency fee: negotiated separately" },
+        ],
+      },
+    ],
+  },
 };
 
 export const RESEARCH = {
   lead: {
-    ko: "해외시장조사는 고객사가 그동안 쌓아 온 해외시장개척 경험을 고려해 진행합니다. 따라서 고객사의 판단에 따라 생략할 수도 있습니다. 일반적으로 약 1개월 동안 다음 항목을 조사합니다.",
-    en: "Market research is tailored to your previous experience abroad, so you may choose to skip it. A typical study takes about one month and covers the following.",
+    ko: "해외시장조사는 고객사가 그동안 쌓아 온 해외시장개척 경험을 고려해 진행합니다. 일반적으로 약 1개월 동안 다음 항목을 조사합니다.",
+    en: "Market research is tailored to your previous experience abroad. A typical study takes about one month and covers the following.",
   } satisfies L,
   items: [
     { title: { ko: "현지 시장 가격 조사", en: "Local market prices" }, body: { ko: "현지 시장에서 판매되는 제품의 가격을 조사합니다.", en: "Prices of comparable products in the local market." } },
@@ -281,130 +279,38 @@ export const BUYERS = {
     { title: { ko: "가격·조건 조정", en: "Negotiation" }, body: { ko: "국내 기업과 바이어 사이의 가격과 조건을 조율합니다.", en: "Mediate price and terms between you and the buyer." } },
     { title: { ko: "출장대행 바이어 면담", en: "On-site buyer meetings" }, body: { ko: "고객사를 대신해 바이어를 직접 만납니다.", en: "Meet buyers in person on your behalf." } },
   ],
-  outro: {
-    ko: "이 과정을 반복해 해외 바이어를 발굴하고 국내 기업과 연결하며, 계약을 체결할 때까지 함께합니다.",
-    en: "We repeat this cycle to find buyers, connect them with you, and stay with you until the contract is signed.",
-  } satisfies L,
 };
 
 export const BRANCH = {
   lead: {
-    ko: "위의 해외시장개척 절차를 꾸준히 반복해 바이어를 계속 발굴합니다. 계약이 성사된 고객에 대해서는 현지 에이전트로서 지속적으로 관리합니다.",
-    en: "We keep running the market development cycle to find more buyers, and once a deal is closed we continue to manage the account as your local agent.",
+    ko: "고객사와 협의하여 해외 지사업무를 수행하고, 수행한 업무를 주기적으로 보고합니다. 지사대행 성과 발생시 무역대행으로 이행합니다.",
+    en: "We carry out overseas branch work as agreed with the client and report on it regularly. When the branch agency produces results, it moves on to trade agency.",
   } satisfies L,
+  /** 카드 위 표시: [해외지사운영] 고객사와 협의하여 지사업무 수행 */
+  chip: { ko: "해외지사운영", en: "Branch Operation" } satisfies L,
+  chipText: { ko: "고객사와 협의하여 지사업무 수행", en: "Branch work carried out in consultation with the client" } satisfies L,
   points: [
-    { title: { ko: "지속적인 바이어 발굴", en: "Continuous buyer discovery" }, body: { ko: "시장조사와 바이어 발굴을 꾸준히 반복합니다.", en: "Market research and buyer discovery keep running." } },
-    { title: { ko: "계약 고객 관리", en: "Account management" }, body: { ko: "계약이 성사된 해외 바이어를 지속적으로 관리합니다.", en: "We keep managing the overseas buyers you have signed with." } },
-    { title: { ko: "현지 에이전트 역할", en: "Local agent" }, body: { ko: "성사된 고객에 대해 현지 에이전트 역할을 계속 수행합니다.", en: "We continue to act as your agent on the ground." } },
+    { title: { ko: "해외 지사업무 수행", en: "Overseas branch work" }, body: { ko: "국내기업의 해외지사 업무를 수행합니다.", en: "We carry out overseas branch work for Korean companies." } },
+    { title: { ko: "주기적 업무 보고", en: "Regular reporting" }, body: { ko: "수행한 업무를 주기적으로 보고합니다.", en: "We report regularly on the work carried out." } },
+    { title: { ko: "지사대행의 성과발생", en: "When the branch agency produces results" }, body: { ko: "지사대행 성과 발생시 무역대행으로 이행합니다.", en: "When the branch agency produces results, it moves on to trade agency." } },
   ],
 };
 
-export const FIELD = {
-  lead: {
-    ko: "해외 현지를 직접 방문해 시장과 바이어를 확인하는 출장 조사 프로그램입니다. 글로벌마트의 현지 주재원과 함께 진행합니다.",
-    en: "A field research program for visiting your target market in person to see the market and meet buyers, carried out with our local staff.",
-  } satisfies L,
-  points: [
-    { title: { ko: "현지 시장 확인", en: "See the market" }, body: { ko: "목표 국가를 직접 방문해 현지 시장을 확인합니다.", en: "Visit the target country and see the local market for yourself." } },
-    { title: { ko: "바이어 면담", en: "Buyer meetings" }, body: { ko: "현지 바이어와 업체를 직접 만나 봅니다.", en: "Meet local buyers and companies in person." } },
-    { title: { ko: "현지 주재원 지원", en: "On-site support" }, body: { ko: "현지 주재원이 방문 일정과 현지 진행을 돕습니다.", en: "Our local staff help with your schedule on the ground." } },
-    { title: { ko: "후속 진행", en: "Follow-up" }, body: { ko: "방문 이후에도 바이어 발굴과 해외시장개척을 이어 갑니다.", en: "After the visit, we keep working on buyer discovery and market development." } },
-  ],
-  perk: {
-    ko: "회계·세무 거래 고객에게는 연 1회 해외시장개척 서비스를 별도 비용 없이 제공합니다.",
-    en: "Accounting and tax clients receive one market-entry program a year at no additional cost.",
-  } satisfies L,
-};
-
-export const SOFTWARE = {
-  lead: {
-    ko: "글로벌마트는 한국 기업 소프트웨어의 해외 진출에 힘을 쏟고 있습니다. 더 나아가 해외 현지 기업의 요청이 있으면 적합한 한국 기업을 연결해 교류를 넓힙니다.",
-    en: "Globalmart is dedicated to taking Korean software solutions abroad. When overseas companies have specific needs, we also connect them with the right Korean partners.",
-  } satisfies L,
-  lead2: {
-    ko: "이를 위해 해외에서 소프트웨어 관련 업무를 하는 기업들을 파트너로 초청하고, 위임받은 솔루션을 그들을 통해 해외 통신사, 금융기관, 정부기관, 물류회사, 대기업 등에 공동으로 제안합니다.",
-    en: "We invite software companies abroad to be our partners and, together with them, propose the solutions we represent to telecom operators, financial institutions, government agencies, logistics firms and large enterprises.",
-  } satisfies L,
-  targets: [
-    { ko: "이동통신사", en: "Mobile carriers" },
-    { ko: "금융기관", en: "Financial institutions" },
-    { ko: "정부기관", en: "Government agencies" },
-    { ko: "물류회사", en: "Logistics firms" },
-    { ko: "대기업", en: "Large enterprises" },
-  ] satisfies L[],
-  sections: [
-    {
-      id: "messenger",
-      title: { ko: "메신저 프로그램", en: "Messenger Platform" },
-      paragraphs: [
-        {
-          ko: "카카오톡, 위챗 등과 유사한 메신저 프로그램을 개발해 보유한 기업으로부터 해외 판매를 위임받았습니다. 이 메신저에는 영상, 음성, 1인 미디어, VOD, 쇼핑, OTT 기능이 함께 탑재되어 있습니다.",
-          en: "We have been commissioned to sell, outside Korea, a messenger platform similar to KakaoTalk or WeChat. It includes video, voice, creator media, VOD, shopping and OTT features.",
-        },
-        {
-          ko: "앞으로 인터넷 영토 문제가 더욱 중요해지면서 각 나라마다 자체 메신저가 필요해질 것입니다. 이 프로그램을 가장 잘 활용할 수 있는 곳은 각국의 이동통신사입니다. 통신사가 메신저에 결제 프로그램을 탑재하면 은행의 역할까지 수행할 수 있습니다.",
-          en: "As digital sovereignty becomes a bigger issue, each country will want its own messenger. Mobile carriers are best placed to use it, and with a payment module added a carrier can even provide banking services.",
-        },
-        {
-          ko: "이러한 사업이 어떻게 수익을 내고 확장되는지에 대한 선행 사례를 보유하고 있으며, 기술 이전과 함께 사업을 공동으로 수행하고자 합니다. 특히 이동통신사와 거래 관계가 있는 현지 소프트웨어 기업과의 제휴를 희망합니다.",
-          en: "We have reference cases showing how such services generate revenue and grow, and we aim to transfer the technology and run the business jointly. We especially welcome partners who already work with mobile carriers.",
-        },
-      ],
-      features: ["Video", "Voice", "Creator media", "VOD", "Shopping", "OTT", "Payment"],
-      /** features 와 같은 순서의 한국어 표기 */
-      featuresKo: ["영상", "음성", "1인 미디어", "VOD", "쇼핑", "OTT", "결제"],
-    },
-    {
-      id: "blockchain",
-      title: { ko: "블록체인 프로그램", en: "Blockchain (Mainnet)" },
-      paragraphs: [
-        {
-          ko: "블록체인은 인터넷상의 '분산 장부'로 위변조와 해킹을 막는 기술입니다. 대규모 데이터가 오가는 금융기관, 물류회사, 카드사, 정부 등은 해킹 위험에 크게 노출되어 있으며, 이를 막기 위해 장부를 분산해 기록합니다. 이 장부를 '메인넷'이라고 합니다.",
-          en: "Blockchain is a distributed ledger that protects data from tampering and hacking. Financial institutions, logistics companies, card issuers and governments handle huge volumes of data and are exposed to attacks; recording the ledger in a distributed way, the 'mainnet', protects them.",
-        },
-        {
-          ko: "금융기관은 예금 기록, 특히 외화 환전을 블록체인으로 관리하면 절차가 크게 간소화됩니다. 카드사는 포인트 관리의 부정을 막을 수 있고, 물류회사는 물류 흐름을 낱낱이 기록할 수 있으며, 정부는 투표 등에 활용해 부정을 차단할 수 있습니다.",
-          en: "Banks can simplify records and foreign exchange; card issuers can prevent fraud in loyalty points; logistics firms can record every step of the supply chain; governments can secure processes such as voting.",
-        },
-        {
-          ko: "글로벌마트는 이 메인넷 프로그램을 해당 기업에 공급하고 지속적으로 유지·관리하고자 하며, 함께할 현지 기업과의 제휴를 희망합니다.",
-          en: "We supply this mainnet solution, maintain it over time, and are looking for local partners to deliver it with us.",
-        },
-      ],
-      features: ["Finance", "FX", "Card points", "Logistics", "e-Government", "Voting"],
-      featuresKo: ["금융", "외화 환전", "카드 포인트", "물류", "전자정부", "투표"],
-    },
-    {
-      id: "various",
-      title: { ko: "다양한 소프트웨어 수출입", en: "More Software Trading" },
-      paragraphs: [
-        {
-          ko: "제휴사들은 위 프로그램 외에도 회계 프로그램, 설계 프로그램, 금융 관련 프로그램, 3D 지도 제작 프로그램 등을 보유하고 있으며, 지문인식 IC카드도 개발했습니다.",
-          en: "Our partners also offer accounting, design, financial and 3D mapping software, and have developed a fingerprint-recognition IC card.",
-        },
-        {
-          ko: "또한 해외 현지 소프트웨어 기업의 요청에 따라 한국 기업과의 제휴를 주선합니다.",
-          en: "We can also arrange partnerships with Korean companies at the request of software companies abroad.",
-        },
-      ],
-      features: ["Accounting", "CAD / Design", "Fintech", "3D mapping", "Fingerprint IC card"],
-      featuresKo: ["회계", "설계", "금융", "3D 지도", "지문인식 IC카드"],
-    },
-  ],
-};
+// (2차 수정 요청 슬라이드 18·22) 예전 사업내용 6번째 항목의 내용은 공개하지 않고 해외주재원 전용(암호화된
+// public/data/resident.json 의 software)으로 옮겼습니다. 수정은 관리자 화면 › 해외주재원 전용에서 합니다.
 
 export const BIZ_INTRO = {
-  ko: "글로벌마트는 '해외 Biz정보' 게시판에 올라온 산업정보를 바탕으로 국내 대기업, 중소기업과 함께 해외시장개척 비즈니스를 수행합니다. 우수한 아이템은 해외 여러 나라에서 동시에 진행됩니다.",
-  en: "Using the industry information posted on this board, Globalmart develops overseas markets together with Korean large companies and SMEs. Strong items are pursued in several countries at the same time.",
+  ko: "글로벌마트는 '해외시장정보'와 '해외입찰정보'를 바탕으로 국내기업과 함께 해외비즈니스를 수행하고자 합니다. 우수한 아이템은 해외 여러 나라에서 동시에 진행됩니다.",
+  en: "Globalmart aims to carry out overseas business together with Korean companies, based on 'overseas market information' and 'overseas tender information'. Strong items are pursued in several countries at the same time.",
 } satisfies L;
 
 export const RESIDENT_INTRO = {
-  ko: "국내 아이템을 해외주재원에게 소개하는 전용 공간입니다.",
-  en: "A private space that introduces Korean products to our overseas staff.",
+  ko: "국내아이템을 해외주재원에게 소개하고, 공지사항을 올리는 공간입니다.",
+  en: "A space that introduces Korean items to our overseas staff and posts notices.",
 } satisfies L;
 
 // ------------------------------------------------------------------
-// 메인 — 주요 수행 실적 (연혁 기반, 사실 그대로)
+// 메인 — 주요활동 (연혁 기반, 사실 그대로)
 // ------------------------------------------------------------------
 export const TRACK_RECORD = [
   {
@@ -415,38 +321,25 @@ export const TRACK_RECORD = [
     items: { ko: "ITS", en: "ITS" },
   },
   {
-    year: "2009",
-    photo: "apparel",
-    place: { ko: "중국 대련", en: "Dalian, China" },
-    title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
-    items: { ko: "의류 · 건축자재", en: "Apparel · Building materials" },
-  },
-  {
     year: "2010",
     photo: "mumbai",
-    place: { ko: "인도 뭄바이", en: "Mumbai, India" },
-    title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
-    items: { ko: "건축자재 · 엔진오일", en: "Building materials · Engine oil" },
+    place: { ko: "인도", en: "India" },
+    title: { ko: "해외시장개척 활동", en: "Market development" },
+    items: { ko: "건축자재, 엔진오일, 자동차부품", en: "Building materials, engine oil, auto parts" },
   },
   {
     year: "2016",
     photo: "hcmc",
-    place: { ko: "베트남 호치민", en: "Ho Chi Minh City" },
-    title: { ko: "해외시장개척 프로젝트", en: "Market development project" },
+    place: { ko: "베트남", en: "Vietnam" },
+    title: { ko: "해외시장개척 활동", en: "Market development" },
     items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" },
+  },
+  {
+    year: "2018",
+    photo: "istanbul",
+    place: { ko: "터키", en: "Turkey" },
+    title: { ko: "해외시장개척 활동", en: "Market development" },
+    items: { ko: "화장품, 섬유, 의료기기", en: "Cosmetics, textiles, medical devices" },
   },
 ] as const;
 
-/** 메인 — 다뤄 온 품목·분야 (연혁·의뢰서 기준) */
-export const INDUSTRIES = [
-  { icon: "sparkle", label: { ko: "화장품", en: "Cosmetics" } },
-  { icon: "medical", label: { ko: "의료기기", en: "Medical devices" } },
-  { icon: "building", label: { ko: "건축자재", en: "Building materials" } },
-  { icon: "drop", label: { ko: "엔진오일", en: "Engine oil" } },
-  { icon: "fish", label: { ko: "수산물", en: "Seafood" } },
-  { icon: "gem", label: { ko: "대리석", en: "Marble" } },
-  { icon: "shirt", label: { ko: "의류", en: "Apparel" } },
-  { icon: "traffic", label: { ko: "ITS", en: "ITS" } },
-  { icon: "code", label: { ko: "소프트웨어", en: "Software" } },
-  { icon: "chain", label: { ko: "블록체인", en: "Blockchain" } },
-] as const;

@@ -8,7 +8,7 @@ import { CountUp } from "./CountUp";
 import { HOME } from "@/lib/content";
 import { SectionTitle } from "./PageHero";
 
-const LABELS = ["seoul", "vietnam", "mumbai", "russia", "uzbekistan", "egypt", "indonesia", "turkey", "usa", "mongolia"];
+const LABELS = ["seoul", "vietnam", "mumbai", "dalian", "russia", "uzbekistan", "turkey", "morocco", "indonesia", "usa", "mongolia"];
 
 /** 메인 — 화면 전체 폭 글로벌 네트워크 세계 지도 */
 export function NetworkSection({ locale }: { locale: Locale }) {
@@ -22,7 +22,7 @@ export function NetworkSection({ locale }: { locale: Locale }) {
           <div className="max-w-[46rem]">
             <SectionTitle
               eyebrow="Global Network"
-              title={ko ? "서울에서 세계로,\n글로벌마트 무역 네트워크" : "From Seoul to the world:\nour trade network"}
+              title={ko ? "국내에서 세계로,\n글로벌마트 무역 네트워크" : "From Korea to the world:\nour trade network"}
               lead={HOME.regionsLead[locale]}
             />
             <div className="mt-6">

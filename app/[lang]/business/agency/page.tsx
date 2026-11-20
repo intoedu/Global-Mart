@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { photo } from "@/lib/photos";
 import { getT, type LangParams } from "@/lib/i18n";
 import { lp } from "@/lib/paths";
 import { AGENCY, PROCESS } from "@/lib/content";
@@ -16,43 +14,58 @@ export async function generateMetadata({ params }: LangParams): Promise<Metadata
 export default async function AgencyPage({ params }: LangParams) {
   const { locale, t } = getT((await params).lang);
   const ko = locale === "ko";
+  const { strategy } = AGENCY;
   return (
     <BusinessShell image="meeting" locale={locale} current="/business/agency" eyebrow="Overseas Branch Agency" lead={t(AGENCY.lead)}>
+      {/* 해외지사대행 전략수립 및 수수료 — 1st ~ 4th 단계 */}
       <section className="py-section-sm">
         <div className="container-x">
-          <SectionTitle
-            eyebrow={ko ? "두 가지 방식" : "Two models"}
-            eyebrowClassName={ko ? "eyebrow-ko" : undefined}
-            title={ko ? "해외지사대행의 종류" : "How we can work together"}
-          />
-          <div className="mt-stack grid gap-grid lg:grid-cols-2">
-            {AGENCY.types.map((ty, i) => (
-              <article key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className={`rounded-3xl p-[clamp(32px,2.8vw,56px)] ${i === 0 ? "bg-ink text-white" : "border-2 border-ink bg-white"}`}>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${i === 0 ? "bg-orange text-ink" : "bg-ink text-white"}`}>
-                  {t(ty.tag)}
-                </span>
-                <h3 className="mt-5 text-[clamp(1.5rem,1.2rem+0.5vw,2rem)] font-extrabold tracking-tight">{t(ty.title)}</h3>
-                <p className={`mt-3 text-body ${i === 0 ? "text-white/70" : "text-muted"}`}>{t(ty.body)}</p>
-                <ul className="mt-6 space-y-2.5">
-                  {ty.points.map((p, j) => (
-                    <li key={j} className="flex items-center gap-2.5 text-body font-medium">
-                      <Icon name="check" className={`size-4 shrink-0 ${i === 0 ? "text-orange" : "text-accent"}`} strokeWidth={2.4} />
-                      {t(p)}
-                    </li>
+          <SectionTitle eyebrow="Strategy & Fees" title={t(strategy.title)} />
+          <ol className="mt-stack grid gap-grid md:grid-cols-2 xl:grid-cols-4">
+            {strategy.steps.map((s, i) => (
+              <li
+                key={s.no}
+                data-reveal
+                style={{ "--d": `${i * 0.1}s` } as React.CSSProperties}
+                className="card relative flex flex-col p-[clamp(24px,1.8vw,36px)]"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full bg-ink px-3.5 py-1 text-small font-bold tabular-nums text-white">{s.no}</span>
+                  <span className="h-px flex-1 bg-line" aria-hidden />
+                </div>
+                <h3 className="mt-4 text-h3 text-ink">{t(s.title)}</h3>
+                {s.items.length > 0 &&
+                  (s.dash ? (
+                    <ul className="mt-3 space-y-2 text-body text-ink-3">
+                      {s.items.map((it, j) => (
+                        <li key={j} className="flex gap-2">
+                          <span className="shrink-0 font-bold text-accent" aria-hidden>
+                            -
+                          </span>
+                          <span>{t(it)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="mt-3 space-y-1.5 pl-3 text-body text-ink-3">
+                      {s.items.map((it, j) => (
+                        <p key={j}>{t(it)}</p>
+                      ))}
+                    </div>
                   ))}
-                </ul>
-              </article>
+                {i < strategy.steps.length - 1 && (
+                  <span className="absolute -right-[calc(var(--spacing-grid)/2+0.75rem)] top-1/2 z-10 hidden size-6 -translate-y-1/2 place-items-center rounded-full bg-ink text-white xl:grid">
+                    <Icon name="chevron-right" className="size-3.5" strokeWidth={2.5} />
+                  </span>
+                )}
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      <div className="container-x">
-        <div className="relative aspect-[21/8] overflow-hidden rounded-3xl">
-          <Image src={photo("docs", 1800)} alt="" fill sizes="100vw" className="object-cover" />
-        </div>
-      </div>
-      <section className="mt-section-sm bg-paper py-section-sm">
+      {/* 업무 진행 절차 */}
+      <section className="bg-paper py-section-sm">
         <div className="container-x">
           <SectionTitle eyebrow="Process" title={ko ? "업무 진행 절차" : "Our process"} lead={ko ? "업무는 다음 절차에 따라 진행됩니다." : "Engagements follow these steps."} />
           <ol className="mt-stack grid gap-grid md:grid-cols-3">

@@ -12,18 +12,26 @@ type Crumb = { href?: string; label: string };
 /** 1×1 투명 GIF — 휴대폰(사진을 숨기는 폭)에서는 사진을 내려받지 않도록 <img> 기본값으로 사용 */
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
-/** 서브페이지 상단 타이틀 영역 — 의뢰 요청사항: "'제목'을 페이지 상단에 위치" */
+/**
+ * 서브페이지 상단 타이틀 영역 — 의뢰 요청사항: "'제목'을 페이지 상단에 위치"
+ * 2차 수정 요청: 사진 높이를 대폭 줄여 첫 화면에서 본문이 보이도록 (낮은 띠 형태)
+ * - 1440×900 기준 사진 띠 약 240px, 휴대폰에서는 사진 없이 작은 여백
+ * - noPhoto: 사진 없이 제목만 (예: 해외지사 — 지도가 바로 보이도록)
+ */
 export function PageHero({
   eyebrow,
   title,
   lead,
   crumbs,
   image,
+  noPhoto = false,
   locale = "ko",
   titleAs = "h1",
   children,
 }: {
   image?: PhotoKey;
+  /** true 면 image 가 있어도 사진을 그리지 않음 */
+  noPhoto?: boolean;
   locale?: Locale;
   eyebrow?: string;
   title: string;
@@ -34,14 +42,15 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   const Title = titleAs;
+  const pic = noPhoto ? undefined : image;
   // 사진은 md(768px) 이상에서만 보이므로 <picture> 로 그 폭에서만 내려받게 함 (미리 불러오기 없음)
-  // 패널이 세로로 길어 object-cover 로 잘리므로 패널 폭보다 넉넉한 크기를 요청
-  const sizes = "(min-width: 1280px) 50vw, 640px";
-  const srcSet = image ? getImageProps({ src: photo(image, 1600), alt: "", fill: true, sizes }).props.srcSet : undefined;
+  // 띠가 가로로 길고 낮아 object-cover 로 위아래가 잘리므로 패널 폭에 맞춘 크기를 요청
+  const sizes = "(min-width: 1280px) 42vw, 640px";
+  const srcSet = pic ? getImageProps({ src: photo(pic, 1600), alt: "", fill: true, sizes }).props.srcSet : undefined;
   return (
     <section className="relative overflow-hidden bg-paper pt-(--header-h) text-ink">
-      {image && (
-        <div className="absolute inset-y-0 right-0 hidden w-[44%] md:block" aria-hidden>
+      {pic && (
+        <div className="absolute inset-y-0 right-0 hidden w-[42%] md:block" aria-hidden>
           <picture>
             <source media="(min-width: 768px)" srcSet={srcSet} sizes={sizes} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -53,14 +62,14 @@ export function PageHero({
       <div className="bg-grid-light absolute inset-0 [mask-image:linear-gradient(90deg,#000_30%,transparent_56%)]" aria-hidden />
       <div
         className={
-          image
-            ? "container-x relative flex flex-col justify-center py-[clamp(40px,1.5rem+3vw,96px)] md:min-h-[clamp(300px,15rem+12vw,560px)]"
-            : "container-x relative py-[clamp(28px,1.6vw+12px,64px)]"
+          pic
+            ? "container-x relative flex flex-col justify-center py-[clamp(20px,0.5rem+1.6vw,48px)] md:min-h-[clamp(200px,8.5rem+6vw,300px)]"
+            : "container-x relative py-[clamp(20px,0.5rem+1.4vw,44px)]"
         }
       >
-        <div className={image ? "md:max-w-[calc(56%-var(--spacing-gutter))]" : undefined}>
+        <div className={pic ? "md:max-w-[calc(58%-var(--spacing-gutter))]" : undefined}>
           {crumbs && (
-            <nav aria-label={locale === "ko" ? "현재 위치" : "Breadcrumb"} className="mb-[clamp(16px,1rem+1vw,40px)] flex flex-wrap items-center gap-1.5 text-small text-muted">
+            <nav aria-label={locale === "ko" ? "현재 위치" : "Breadcrumb"} className="mb-[clamp(8px,0.25rem+0.6vw,20px)] flex flex-wrap items-center gap-1.5 text-small text-muted">
               <Link href={lp(locale, "/")} className="hover:text-ink" aria-label={locale === "ko" ? "홈" : "Home"}>
                 <Icon name="home" className="size-4" />
               </Link>
@@ -81,8 +90,14 @@ export function PageHero({
             </nav>
           )}
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-          <Title className="reveal mt-3 max-w-[16em] text-h1 text-ink">{title}</Title>
-          {lead && <p className="reveal mt-4 max-w-[34em] text-lead text-ink-3">{lead}</p>}
+          <Title className="reveal mt-2 max-w-[18em] text-[clamp(1.75rem,1.1rem+1.4vw,3.25rem)] font-extrabold leading-[1.15] tracking-[-0.03em] text-ink">
+            {title}
+          </Title>
+          {lead && (
+            <p className={`reveal mt-2.5 text-[clamp(0.9375rem,0.85rem+0.2vw,1.125rem)] leading-[1.65] text-ink-3 ${pic ? "max-w-[44em]" : "max-w-[60em]"}`}>
+              {lead}
+            </p>
+          )}
           {children}
         </div>
       </div>

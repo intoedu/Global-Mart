@@ -7,9 +7,10 @@ import { SectionNav } from "@/components/SectionNav";
 
 const EN_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-/** "2018.08" → 한국어 "2018. 08" / English "Aug 2018" */
+/** "2018.08" → 한국어 "2018. 08" / English "Aug 2018" · 월이 없는 "2018" → "2018" 그대로 */
 function historyDate(date: string, ko: boolean) {
   const [y, m] = date.split(".");
+  if (!m) return y;
   return ko ? `${y}. ${m}` : `${EN_MONTHS[Number(m) - 1] ?? m} ${y}`;
 }
 

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getT, type LangParams } from "@/lib/i18n";
 import { SITE } from "@/lib/site";
-import offices from "@/lib/offices.json";
 import { PageHero } from "@/components/PageHero";
 import { Icon } from "@/components/Icon";
 
@@ -12,8 +11,6 @@ export async function generateMetadata({ params }: LangParams): Promise<Metadata
 export default async function ContactPage({ params }: LangParams) {
   const { locale, t } = getT((await params).lang);
   const ko = locale === "ko";
-  const emails = offices.regions.flatMap((r) => r.offices).filter((o): o is typeof o & { email: string } => "email" in o && !!o.email);
-
   return (
     <>
       <PageHero locale={locale} image="success"
@@ -63,21 +60,6 @@ export default async function ContactPage({ params }: LangParams) {
         </div>
       </section>
 
-      <section className="bg-paper py-section-sm">
-        <div className="container-x">
-          <h2 className="text-xl font-extrabold tracking-tight">{ko ? "해외 사무소 이메일" : "Overseas office emails"}</h2>
-          <ul className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {emails.map((o) => (
-              <li key={o.id}>
-                <a href={`mailto:${o.email}`} className="flex flex-col rounded-xl bg-white px-4 py-3 shadow-card ring-accent/40 transition hover:text-ink hover:ring-2">
-                  <span className="text-[15px] font-semibold">{o[locale]}</span>
-                  <span className="truncate text-[13px] text-muted">{o.email}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
     </>
   );
 }

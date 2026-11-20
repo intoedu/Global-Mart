@@ -56,8 +56,8 @@ export const REGIONS: Region[] = [
     id: "middleeast",
     label: { ko: "중동", en: "Middle East" },
     countries: {
-      ko: "사우디아라비아, 이란, 이라크, 이스라엘, 팔레스타인, 요르단, 레바논, 시리아, 튀르키예",
-      en: "Saudi Arabia, Iran, Iraq, Israel, Palestine, Jordan, Lebanon, Syria, Türkiye",
+      ko: "사우디아라비아, 이란, 이라크, 이스라엘, 팔레스타인, 요르단, 레바논, 시리아, 터키",
+      en: "Saudi Arabia, Iran, Iraq, Israel, Palestine, Jordan, Lebanon, Syria, Turkey",
     },
   },
   {
@@ -97,10 +97,10 @@ export function isRegionId(v: unknown): v is RegionId {
   return typeof v === "string" && v in REGION_MAP;
 }
 
-/** 해외 Biz정보 "종류" */
+/** 해외 Biz정보 "종류" — 저장된 id 는 예전 그대로(industry·inquiry), 이름만 바뀜 */
 export const BIZ_CATEGORIES = [
-  { id: "industry", label: { ko: "산업정보", en: "Industry Info" } },
-  { id: "inquiry", label: { ko: "인콰이어리", en: "Inquiry" } },
+  { id: "inquiry", label: { ko: "해외입찰", en: "Overseas tenders" } },
+  { id: "industry", label: { ko: "해외시장", en: "Overseas markets" } },
 ] as const;
 export type BizCategory = (typeof BIZ_CATEGORIES)[number]["id"];
 

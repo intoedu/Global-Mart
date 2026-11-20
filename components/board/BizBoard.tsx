@@ -15,27 +15,22 @@ import { RegionMap } from "./RegionMap";
 
 const PAGE_SIZE = 15;
 
-type ViewProps = { posts: BizPost[]; locale: Locale; region: RegionId; category?: string; q: string; page: number; live?: boolean };
+type ViewProps = { posts: BizPost[]; locale: Locale; region: RegionId; category?: string; q: string; page: number; footer?: React.ReactNode };
 
-/** 해외 Biz정보 목록 — 지역·종류·검색·페이지는 주소(?region=…)로 유지 */
-export function BizBoard({ posts, locale }: { posts: BizPost[]; locale: Locale }) {
+/**
+ * 해외 Biz정보 목록 (회원 비밀번호로 푼 글) — 지역·종류·검색·페이지는 주소(?region=…)로 유지
+ * 글 보기는 같은 페이지의 ?post=번호 (components/board/BizApp)
+ */
+export function BizBoard({ posts, locale, footer }: { posts: BizPost[]; locale: Locale; footer?: React.ReactNode }) {
   const sp = useSearchParams();
   const region: RegionId = isRegionId(sp.get("region")) ? (sp.get("region") as RegionId) : "all";
   const category = BIZ_CATEGORIES.some((c) => c.id === sp.get("category")) ? sp.get("category")! : undefined;
   const q = sp.get("q")?.trim() || "";
   const page = Math.max(1, Number.parseInt(sp.get("page") ?? "1", 10) || 1);
-  return <BizBoardView posts={posts} locale={locale} region={region} category={category} q={q} page={page} live />;
+  return <BizBoardView posts={posts} locale={locale} region={region} category={category} q={q} page={page} footer={footer} />;
 }
 
-/**
- * 정적 HTML(자바스크립트 실행 전)에 들어가는 목록 — '전체' 첫 페이지.
- * 주소에 ?region= 등이 있으면 화면이 뜬 뒤 그 조건으로 바뀝니다. (정적 사이트라 피할 수 없음)
- */
-export function BizBoardFallback({ posts, locale }: { posts: BizPost[]; locale: Locale }) {
-  return <BizBoardView posts={posts} locale={locale} region="all" q="" page={1} />;
-}
-
-function BizBoardView({ posts, locale, region, category, q, page: rawPage, live }: ViewProps) {
+function BizBoardView({ posts, locale, region, category, q, page: rawPage, footer }: ViewProps) {
   const router = useRouter();
   const ko = locale === "ko";
   const t = (l: { ko: string; en: string }) => l[locale];
@@ -78,8 +73,8 @@ function BizBoardView({ posts, locale, region, category, q, page: rawPage, live 
   // 글 상세의 '목록' 버튼이 지금 보던 조건으로 돌아오도록 기억
   const currentHref = href({ page });
   useEffect(() => {
-    if (live) rememberList(listKey("biz", locale), currentHref);
-  }, [live, locale, currentHref]);
+    rememberList(listKey("biz", locale), currentHref);
+  }, [locale, currentHref]);
 
   // 휴대폰: 가로로 넘기는 지역 버튼 줄에서 선택한 지역이 보이도록
   useEffect(() => {
@@ -97,7 +92,7 @@ function BizBoardView({ posts, locale, region, category, q, page: rawPage, live 
   }, [posts]);
   const current = REGION_MAP[region];
   const regionLabel = (r: string) => (isRegionId(r) ? t(REGION_MAP[r].label) : r);
-  const detail = (id: number) => lp(locale, `/biz/${id}`);
+  const detail = (id: number) => lp(locale, `/biz?post=${id}`);
   const postLang = ko ? undefined : "ko";
 
   const toBoardTop = () => {
@@ -252,6 +247,7 @@ function BizBoardView({ posts, locale, region, category, q, page: rawPage, live 
           </ul>
 
           <Pagination page={page} total={filtered.length} pageSize={PAGE_SIZE} makeHref={(n) => href({ page: n })} ko={ko} />
+          {footer && <div className="mt-8 flex justify-end">{footer}</div>}
         </div>
       </div>
 

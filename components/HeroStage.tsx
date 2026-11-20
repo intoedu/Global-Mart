@@ -6,7 +6,7 @@ import { WorldMap } from "./WorldMap";
 
 /**
  * 첫 화면 무대
- * - 헤드라인 첫 단어가 해외 → 베트남 → 인도 → 중국 → 말레이시아 순으로 바뀌고
+ * - 헤드라인 첫 단어가 해외 → 베트남 → 인도 → 터키 → 말레이시아 순으로 바뀌고
  * - 같은 순간 지도에서 서울→해당 거점 항로가 주황색으로 빛나며
  * - 지도 위 고정 자리의 실적 카드 내용이 바뀝니다 (카드는 항로·이름표를 가리지 않는 아프리카 쪽 바다 위)
  * - PC: 지도는 본문 폭의 76% 로 글자와 함께 커지고 작아짐 / 휴대폰·태블릿: 제목 아래 지도 띠
@@ -14,13 +14,14 @@ import { WorldMap } from "./WorldMap";
 type Spot = { pin: string; word: { ko: string; en: string }; year: string; place: { ko: string; en: string }; items: { ko: string; en: string } };
 
 const SPOTS: Spot[] = [
-  { pin: "vietnam", word: { ko: "베트남", en: "Vietnam" }, year: "2016", place: { ko: "베트남 호치민", en: "Ho Chi Minh City" }, items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" } },
-  { pin: "mumbai", word: { ko: "인도", en: "India" }, year: "2010", place: { ko: "인도 뭄바이", en: "Mumbai, India" }, items: { ko: "건축자재 · 엔진오일", en: "Building materials · Engine oil" } },
-  { pin: "dalian", word: { ko: "중국", en: "China" }, year: "2009", place: { ko: "중국 대련", en: "Dalian, China" }, items: { ko: "의류 · 건축자재", en: "Apparel · Building materials" } },
+  { pin: "vietnam", word: { ko: "베트남", en: "Vietnam" }, year: "2016", place: { ko: "베트남", en: "Vietnam" }, items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" } },
+  { pin: "mumbai", word: { ko: "인도", en: "India" }, year: "2010", place: { ko: "인도", en: "India" }, items: { ko: "건축자재, 엔진오일, 자동차부품", en: "Building materials, engine oil, auto parts" } },
+  { pin: "turkey", word: { ko: "터키", en: "Turkey" }, year: "2018", place: { ko: "터키", en: "Turkey" }, items: { ko: "화장품, 섬유, 의료기기", en: "Cosmetics, textiles, medical devices" } },
   { pin: "malaysia", word: { ko: "말레이시아", en: "Malaysia" }, year: "2008", place: { ko: "말레이시아", en: "Malaysia" }, items: { ko: "ITS 정부 프로젝트", en: "Government ITS project" } },
 ];
 
-const LABELS = ["seoul", "vietnam", "mumbai", "russia", "uzbekistan", "egypt", "indonesia"];
+/** 지도 이름표 (도시 이름 없이 나라 이름으로 — 이름은 WorldMap 의 LABEL_NAME 참고) */
+const LABELS = ["seoul", "vietnam", "mumbai", "dalian", "russia", "uzbekistan", "turkey", "morocco", "indonesia"];
 
 export function HeroStage({
   locale,
@@ -73,9 +74,9 @@ export function HeroStage({
 
   // 카드는 항상 같은 자리에 있고 내용만 바뀜 (기본 상태: 설립·거점 요약)
   const year = spot ? spot.year : "2004";
-  const chip = spot ? (ko ? "수행 실적" : "Track record") : ko ? "설립" : "Founded";
+  const chip = spot ? (ko ? "주요활동" : "Key activity") : ko ? "설립" : "Founded";
   const place = spot ? L(spot.place) : ko ? `서울 본사 · 해외 거점 ${officeCount}곳` : `Seoul HQ · ${officeCount} overseas offices`;
-  const items = spot ? L(spot.items) : ko ? "말레이시아 · 중국 · 인도 · 베트남 시장개척" : "Market entry in Malaysia · China · India · Vietnam";
+  const items = spot ? L(spot.items) : ko ? "말레이시아 · 인도 · 베트남 · 터키 해외시장개척" : "Market development in Malaysia · India · Vietnam · Turkey";
   const card = (
     <div className="w-[clamp(204px,24cqw,320px)] rounded-2xl bg-ink p-[clamp(14px,1.7cqw,24px)] text-white shadow-float ring-1 ring-white/10">
       <div className="flex items-center justify-between gap-3">

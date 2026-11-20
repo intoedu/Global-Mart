@@ -7,7 +7,7 @@ import { BackToList } from "./BackToList";
 type Meta = { label: string; value: string };
 type Adj = { id: number; title: string } | null;
 
-/** 게시글 상세 보기 (줄바꿈 유지, http 주소 자동 링크) — 서버·클라이언트 양쪽에서 사용 */
+/** 게시글 상세 보기 (줄바꿈 유지, http 주소 자동 링크) — 회원 전용 게시판(클라이언트 화면)에서 사용 */
 export function PostView({
   title,
   body,
@@ -25,6 +25,8 @@ export function PostView({
   titleAs = "h1",
   contentLang,
   footer,
+  bodySlot,
+  afterBody,
 }: {
   title: string;
   body: string;
@@ -47,6 +49,10 @@ export function PostView({
   contentLang?: string;
   /** '목록' 버튼 옆에 더 넣을 버튼 */
   footer?: React.ReactNode;
+  /** 본문을 직접 그릴 때 (본문 이미지 등) — 없으면 body 를 줄바꿈·자동 링크로 표시 */
+  bodySlot?: React.ReactNode;
+  /** 본문 아래(이전·다음 글 위)에 넣을 내용 — 첨부 파일 목록 등 */
+  afterBody?: React.ReactNode;
 }) {
   const Title = titleAs;
   const listCls = "btn-primary";
@@ -81,8 +87,9 @@ export function PostView({
         </dl>
       </header>
       <div lang={contentLang} className="min-h-48 whitespace-pre-wrap break-words py-10 text-body leading-[1.9] text-ink-3">
-        <Linkify text={body} />
+        {bodySlot ?? <Linkify text={body} />}
       </div>
+      {afterBody}
       <nav aria-label={ko ? "이전·다음 글" : "Newer and older posts"} className="divide-y divide-line border-y border-line text-[15px]">
         {[
           { p: adjacent.newer, label: ko ? "다음 글" : "Newer" },
@@ -122,7 +129,7 @@ export function PostView({
   );
 }
 
-function Linkify({ text }: { text: string }) {
+export function Linkify({ text }: { text: string }) {
   const parts = text.split(/(https?:\/\/[^\s<>"']+)/g);
   return (
     <>

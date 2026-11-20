@@ -4,7 +4,6 @@ import { useState } from "react";
 import offices from "@/lib/offices.json";
 import type { Locale } from "@/lib/i18n";
 import { WorldMap } from "./WorldMap";
-import { Icon } from "./Icon";
 
 export function OfficesExplorer({ locale }: { locale: Locale }) {
   const [active, setActive] = useState<string | null>(null);
@@ -13,8 +12,8 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <div className="rounded-3xl bg-paper p-4 ring-1 ring-line sm:p-8 lg:p-10">
-        <div className="mb-4 flex flex-wrap gap-2">
+      <div className="rounded-3xl bg-paper p-4 ring-1 ring-line sm:p-6 lg:px-10 lg:py-6">
+        <div className="mb-3 flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => setActive(null)}
@@ -37,10 +36,13 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
             </button>
           ))}
         </div>
-        <WorldMap locale={locale} activeRegion={active} animated dark={false} />
+        {/* 지도는 2:1 비율 — 화면 높이에 맞춰 폭을 제한해 첫 화면에서 아래 지역 목록 일부가 보이게 함 */}
+        <div className="mx-auto max-w-[max(min(100%,calc((100svh_-_540px)_*_2)),min(100%,34rem))]">
+          <WorldMap locale={locale} activeRegion={active} animated dark={false} />
+        </div>
       </div>
 
-      <div className="mt-stack grid gap-grid sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-grid grid gap-grid sm:grid-cols-2 lg:grid-cols-3">
         {offices.regions.map((r) => (
           <section
             key={r.id}
@@ -53,23 +55,12 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
               <span className="rounded-full bg-paper px-2.5 py-0.5 text-caption font-semibold text-muted">{r.offices.length}</span>
             </h2>
             <ul className="mt-4 space-y-2.5">
-              {r.offices.map((o) => {
-                const email = (o as { email?: string }).email;
-                return (
-                  <li key={o.id} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 text-body">
-                    <span className="flex items-center gap-2 font-medium text-ink">
-                      <span className="size-1.5 rounded-full bg-orange" />
-                      {o[locale]}
-                    </span>
-                    {email && (
-                      <a href={`mailto:${email}`} className="flex items-center gap-1 text-small text-muted decoration-accent underline-offset-4 hover:text-ink hover:underline">
-                        <Icon name="mail" className="size-3.5" />
-                        {email}
-                      </a>
-                    )}
-                  </li>
-                );
-              })}
+              {r.offices.map((o) => (
+                <li key={o.id} className="flex items-center gap-2 text-body font-medium text-ink">
+                  <span className="size-1.5 shrink-0 rounded-full bg-orange" />
+                  {o[locale]}
+                </li>
+              ))}
             </ul>
           </section>
         ))}

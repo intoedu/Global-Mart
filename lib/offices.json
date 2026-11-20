@@ -4,56 +4,56 @@
     {
       "id": "southeast", "ko": "동남아시아", "en": "Southeast Asia",
       "offices": [
-        { "id": "vietnam", "ko": "베트남", "en": "Vietnam", "lat": 10.82, "lng": 106.63, "email": "vietnam@globalmart21.com" },
-        { "id": "philippines", "ko": "필리핀", "en": "Philippines", "lat": 14.6, "lng": 120.98, "email": "philippines@globalmart21.com" },
-        { "id": "indonesia", "ko": "인도네시아", "en": "Indonesia", "lat": -6.2, "lng": 106.85, "email": "indonesia@globalmart21.com" },
+        { "id": "vietnam", "ko": "베트남", "en": "Vietnam", "lat": 10.82, "lng": 106.63 },
+        { "id": "philippines", "ko": "필리핀", "en": "Philippines", "lat": 14.6, "lng": 120.98 },
+        { "id": "indonesia", "ko": "인도네시아", "en": "Indonesia", "lat": -6.2, "lng": 106.85 },
         { "id": "thailand", "ko": "태국", "en": "Thailand", "lat": 13.75, "lng": 100.5 },
-        { "id": "malaysia", "ko": "말레이시아", "en": "Malaysia", "lat": 3.14, "lng": 101.69, "email": "malaysia@globalmart21.com" },
-        { "id": "myanmar", "ko": "미얀마", "en": "Myanmar", "lat": 16.84, "lng": 96.17, "email": "myanmar@globalmart21.com" },
-        { "id": "cambodia", "ko": "캄보디아", "en": "Cambodia", "lat": 11.56, "lng": 104.92, "email": "cambodia@globalmart21.com" }
+        { "id": "malaysia", "ko": "말레이시아", "en": "Malaysia", "lat": 3.14, "lng": 101.69 },
+        { "id": "myanmar", "ko": "미얀마", "en": "Myanmar", "lat": 16.84, "lng": 96.17 },
+        { "id": "cambodia", "ko": "캄보디아", "en": "Cambodia", "lat": 11.56, "lng": 104.92 }
       ]
     },
     {
       "id": "northeast", "ko": "중국·동북아", "en": "China & Northeast Asia",
       "offices": [
         { "id": "dalian", "ko": "중국 (대련)", "en": "China (Dalian)", "lat": 38.91, "lng": 121.6 },
-        { "id": "harbin", "ko": "중국 (하얼빈)", "en": "China (Harbin)", "lat": 45.8, "lng": 126.53, "email": "chinahabbi@globalmart21.com" },
+        { "id": "harbin", "ko": "중국 (하얼빈)", "en": "China (Harbin)", "lat": 45.8, "lng": 126.53 },
         { "id": "guangzhou", "ko": "중국 (광저우)", "en": "China (Guangzhou)", "lat": 23.13, "lng": 113.26 },
-        { "id": "mongolia", "ko": "몽골", "en": "Mongolia", "lat": 47.92, "lng": 106.92, "email": "mongolia@globalmart21.com" }
+        { "id": "mongolia", "ko": "몽골", "en": "Mongolia", "lat": 47.92, "lng": 106.92 }
       ]
     },
     {
       "id": "southwest", "ko": "인도·서남아", "en": "India & South Asia",
       "offices": [
-        { "id": "mumbai", "ko": "인도 (뭄바이)", "en": "India (Mumbai)", "lat": 19.08, "lng": 72.88, "email": "indiamombai@globalmart21.com" },
+        { "id": "mumbai", "ko": "인도 (뭄바이)", "en": "India (Mumbai)", "lat": 19.08, "lng": 72.88 },
         { "id": "delhi", "ko": "인도 (델리)", "en": "India (Delhi)", "lat": 28.61, "lng": 77.21 },
         { "id": "kolkata", "ko": "인도 (콜카타)", "en": "India (Kolkata)", "lat": 22.57, "lng": 88.36 },
-        { "id": "pakistan", "ko": "파키스탄", "en": "Pakistan", "lat": 30.0, "lng": 70.0, "email": "pakistan@globalmart21.com" },
-        { "id": "bangladesh", "ko": "방글라데시", "en": "Bangladesh", "lat": 23.81, "lng": 90.41, "email": "bangladesh@globalmart21.com" }
+        { "id": "pakistan", "ko": "파키스탄", "en": "Pakistan", "lat": 30.0, "lng": 70.0 },
+        { "id": "bangladesh", "ko": "방글라데시", "en": "Bangladesh", "lat": 23.81, "lng": 90.41 }
       ]
     },
     {
       "id": "middleeast", "ko": "중동", "en": "Middle East",
       "offices": [
-        { "id": "saudi", "ko": "사우디아라비아", "en": "Saudi Arabia", "lat": 24.71, "lng": 46.68, "email": "saudi@globalmart21.com" },
-        { "id": "turkey", "ko": "튀르키예", "en": "Türkiye", "lat": 39.93, "lng": 32.85, "email": "turkey@globalmart21.com" },
-        { "id": "jordan", "ko": "요르단", "en": "Jordan", "lat": 31.95, "lng": 35.93, "email": "jordan@globalmart21.com" }
+        { "id": "saudi", "ko": "사우디아라비아", "en": "Saudi Arabia", "lat": 24.71, "lng": 46.68 },
+        { "id": "turkey", "ko": "터키", "en": "Turkey", "lat": 39.93, "lng": 32.85 },
+        { "id": "jordan", "ko": "요르단", "en": "Jordan", "lat": 31.95, "lng": 35.93 }
       ]
     },
     {
       "id": "cis", "ko": "러시아·중앙아", "en": "Russia & Central Asia",
       "offices": [
-        { "id": "russia", "ko": "러시아", "en": "Russia", "lat": 55.76, "lng": 37.62, "email": "russia@globalmart21.com" },
-        { "id": "uzbekistan", "ko": "우즈베키스탄", "en": "Uzbekistan", "lat": 41.3, "lng": 69.24, "email": "uzbek@globalmart21.com" },
-        { "id": "kyrgyzstan", "ko": "키르기스스탄", "en": "Kyrgyzstan", "lat": 42.87, "lng": 74.59, "email": "kirchiz@globalmart21.com" },
-        { "id": "kazakhstan", "ko": "카자흐스탄", "en": "Kazakhstan", "lat": 48.0, "lng": 68.0, "email": "kazakhstan@globalmart21.com" }
+        { "id": "russia", "ko": "러시아", "en": "Russia", "lat": 55.76, "lng": 37.62 },
+        { "id": "uzbekistan", "ko": "우즈베키스탄", "en": "Uzbekistan", "lat": 41.3, "lng": 69.24 },
+        { "id": "kyrgyzstan", "ko": "키르기스스탄", "en": "Kyrgyzstan", "lat": 42.87, "lng": 74.59 },
+        { "id": "kazakhstan", "ko": "카자흐스탄", "en": "Kazakhstan", "lat": 48.0, "lng": 68.0 }
       ]
     },
     {
       "id": "africa", "ko": "북아프리카", "en": "North Africa",
       "offices": [
-        { "id": "morocco", "ko": "모로코", "en": "Morocco", "lat": 32.0, "lng": -6.5, "email": "morocco@globalmart21.com" },
-        { "id": "egypt", "ko": "이집트", "en": "Egypt", "lat": 30.04, "lng": 31.24, "email": "egypt@globalmart21.com" }
+        { "id": "morocco", "ko": "모로코", "en": "Morocco", "lat": 32.0, "lng": -6.5 },
+        { "id": "egypt", "ko": "이집트", "en": "Egypt", "lat": 30.04, "lng": 31.24 }
       ]
     },
     {

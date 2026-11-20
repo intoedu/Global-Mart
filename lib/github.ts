@@ -6,7 +6,7 @@ import { SITE } from "./site";
  */
 
 /**
- * 게시판 데이터(data/biz.json, public/data/resident.json)가 있는 소스 브랜치.
+ * 게시판 데이터(public/data/biz.json, public/data/resident.json, public/data/files/**)가 있는 소스 브랜치.
  * GitHub Actions 빌드는 NEXT_PUBLIC_DATA_BRANCH(= 푸시된 브랜치)를 넣어 줍니다.
  * 값이 없을 때(로컬 빌드 등)는 소스 브랜치를 씁니다. main 은 배포본만 있어 데이터 파일이 없습니다.
  */
@@ -26,12 +26,12 @@ function headers(token: string) {
   return { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
 }
 
-const toB64 = (text: string) => {
-  const bytes = new TextEncoder().encode(text);
+const bytesB64 = (bytes: Uint8Array) => {
   let s = "";
   for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
   return btoa(s);
 };
+const toB64 = (text: string) => bytesB64(new TextEncoder().encode(text));
 const fromB64 = (b64: string) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, "")), (c) => c.charCodeAt(0)));
 
 /** GitHub 오류 응답의 message (없으면 빈 문자열) */
@@ -79,6 +79,42 @@ export async function writeFile(token: string, path: string, data: unknown, sha:
     throw new Error(`저장하지 못했습니다. (${res.status}${m ? `: ${m}` : ""})`);
   }
   return (await res.json()).content.sha as string;
+}
+
+/**
+ * 새 파일(첨부 파일의 암호문)을 저장소에 올립니다. 이름이 무작위라 기존 파일과 겹치지 않습니다.
+ * 같은 경로가 이미 있으면(422) 오류를 냅니다.
+ */
+export async function createBinaryFile(token: string, path: string, bytes: Uint8Array, message: string): Promise<void> {
+  const res = await fetch(`${API}/contents/${path}`, {
+    method: "PUT",
+    headers: { ...headers(token), "Content-Type": "application/json" },
+    body: JSON.stringify({ message, content: bytesB64(bytes), branch: DATA_BRANCH }),
+  });
+  if (!res.ok) {
+    const m = await apiMessage(res);
+    throw new Error(`파일을 올리지 못했습니다. (${res.status}${m ? `: ${m}` : ""})`);
+  }
+}
+
+/** 파일 지우기 (지운 글의 첨부 파일 정리용). 이미 없으면 true. 실패하면 false — 오류를 내지 않습니다. */
+export async function deleteRepoFile(token: string, path: string, message: string): Promise<boolean> {
+  try {
+    // 폴더 목록에서 sha 를 찾습니다. (파일 내용은 내려받지 않음)
+    const dir = path.slice(0, path.lastIndexOf("/"));
+    const list = await fetch(`${API}/contents/${dir}?ref=${encodeURIComponent(DATA_BRANCH)}`, { headers: headers(token), cache: "no-store" });
+    if (!list.ok) return list.status === 404;
+    const entry = ((await list.json()) as { path: string; sha: string }[]).find((x) => x.path === path);
+    if (!entry) return true;
+    const res = await fetch(`${API}/contents/${path}`, {
+      method: "DELETE",
+      headers: { ...headers(token), "Content-Type": "application/json" },
+      body: JSON.stringify({ message, sha: entry.sha, branch: DATA_BRANCH }),
+    });
+    return res.ok || res.status === 404;
+  } catch {
+    return false;
+  }
 }
 
 export const ACTIONS_URL = `https://github.com/${SITE.repo.owner}/${SITE.repo.name}/actions`;

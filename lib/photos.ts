@@ -30,6 +30,7 @@ export const PHOTOS = {
   kualalumpur: u("1596422846543-75c6fc197f07"), // 쿠알라룸푸르 페트로나스 타워
   apparel: u("1567401893414-76b7b1e5a7a5"), // 의류 매장
   dubai: u("1512453979798-5ea266f8880c"), // 두바이 스카이라인
+  istanbul: u("1524231757912-21f4fe3a7200"), // 이스탄불 갈라타 타워·시가지
 } as const;
 
 export type PhotoKey = keyof typeof PHOTOS;

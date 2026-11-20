@@ -7,7 +7,7 @@ import { SectionNav } from "@/components/SectionNav";
 import { Icon } from "@/components/Icon";
 
 export async function generateMetadata({ params }: LangParams): Promise<Metadata> {
-  return { title: (await params).lang === "ko" ? "제휴사" : "Partners" };
+  return { title: (await params).lang === "ko" ? "제휴기관" : "Partner Institutions" };
 }
 
 export default async function PartnersPage({ params }: LangParams) {
@@ -17,9 +17,9 @@ export default async function PartnersPage({ params }: LangParams) {
     <>
       <PageHero locale={locale} image="training"
         eyebrow="Partners"
-        title={ko ? "제휴사" : "Partners"}
+        title={ko ? "제휴기관" : "Partner Institutions"}
         lead={t(PARTNERS.lead)}
-        crumbs={[{ label: ko ? "회사소개" : "Company" }, { label: ko ? "제휴사" : "Partners" }]}
+        crumbs={[{ label: ko ? "회사소개" : "Company" }, { label: ko ? "제휴기관" : "Partner Institutions" }]}
       />
       <SectionNav section="/company" current="/company/partners" locale={locale} />
 

@@ -17,12 +17,20 @@ const LABEL_PLACE: Record<string, Place> = {
   usa: "left",
   indonesia: "left",
   malaysia: "left",
-  dalian: "below-left",
+  dalian: "left",
 };
 
-const officeById = new Map<string, { ko: string; en: string; email?: string }>([
+/** 지도 이름표는 도시 이름 없이 나라 이름으로 표시 (의뢰인 요청) */
+const LABEL_NAME: Record<string, { ko: string; en: string }> = {
+  dalian: { ko: "중국", en: "China" },
+  mumbai: { ko: "인도", en: "India" },
+  turkey: { ko: "터키", en: "Turkey" },
+  usa: { ko: "미국", en: "USA" },
+};
+
+const officeById = new Map<string, { ko: string; en: string }>([
   [offices.headOffice.id, offices.headOffice],
-  ...offices.regions.flatMap((r) => r.offices.map((o) => [o.id, o] as [string, { ko: string; en: string; email?: string }])),
+  ...offices.regions.flatMap((r) => r.offices.map((o) => [o.id, o] as [string, { ko: string; en: string }])),
 ]);
 
 /**
@@ -209,7 +217,7 @@ export function WorldMap({
         {pins
           .filter((p) => labelIds.includes(p.id))
           .map((p) => {
-            const name = officeById.get(p.id)?.[locale] ?? "";
+            const name = LABEL_NAME[p.id]?.[locale] ?? officeById.get(p.id)?.[locale] ?? "";
             const isHq = p.region === "hq";
             const isFocus = p.id === focusId;
             // 고정 이름표가 아닌 강조 거점은 강조될 때만 보임

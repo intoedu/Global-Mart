@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getT, type LangParams } from "@/lib/i18n";
-import { lp } from "@/lib/paths";
 import { BUYERS } from "@/lib/content";
 import { BusinessShell } from "@/components/BusinessShell";
 import { Icon } from "@/components/Icon";
@@ -16,6 +15,9 @@ export default async function BuyersPage({ params }: LangParams) {
     <BusinessShell image="handshake" locale={locale} current="/business/buyers" eyebrow="Overseas Buyer Discovery" lead={t(BUYERS.lead)}>
       <section className="py-section-sm">
         <div className="container-x">
+          <div className="mb-8 flex flex-wrap gap-3">
+            <span className="rounded-full bg-ink px-4 py-2 text-small font-bold text-white">{ko ? "해외바이어발굴(예시)" : "Buyer discovery (example)"}</span>
+          </div>
           <ol className="relative grid gap-grid lg:grid-cols-4">
             {BUYERS.steps.map((s, i) => (
               <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-line p-[clamp(24px,1.95vw,40px)]">
@@ -30,13 +32,6 @@ export default async function BuyersPage({ params }: LangParams) {
               </li>
             ))}
           </ol>
-          <div className="mt-grid flex items-start gap-4 rounded-2xl bg-ink p-[clamp(24px,1.95vw,40px)] text-white">
-            <Icon name="handshake" className="mt-0.5 size-6 shrink-0 text-orange" />
-            <div>
-              <p className="text-h3">{ko ? "계약 체결까지 동행" : "With you until the contract is signed"}</p>
-              <p className="mt-1 text-body text-white/70">{t(BUYERS.outro)}</p>
-            </div>
-          </div>
         </div>
       </section>
     </BusinessShell>

@@ -50,7 +50,7 @@ export default async function GreetingPage({ params }: LangParams) {
                 {t(p)}
               </p>
             ))}
-            <p className="!mt-12 border-t border-line pt-8 text-right text-h3 text-ink">{t(GREETING.sign)}</p>
+            <p className="!mt-12 whitespace-pre-line border-t border-line pt-8 text-right text-h3 text-ink">{t(GREETING.sign)}</p>
           </div>
         </div>
       </section>
