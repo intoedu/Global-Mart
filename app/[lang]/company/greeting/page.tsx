@@ -44,7 +44,7 @@ export default async function GreetingPage({ params }: LangParams) {
               ))}
             </div>
           </div>
-          <div className="prose-gm text-body">
+          <div className="prose-gm order-first text-body lg:order-none">
             {GREETING.paragraphs.map((p, i) => (
               <p key={i} className={i === 0 ? "text-lead font-semibold text-ink" : ""}>
                 {t(p)}

@@ -64,7 +64,7 @@ export function PageHero({
         className={
           pic
             ? "container-x relative flex flex-col justify-center py-[clamp(20px,0.5rem+1.6vw,48px)] md:min-h-[clamp(200px,8.5rem+6vw,300px)]"
-            : "container-x relative py-[clamp(20px,0.5rem+1.4vw,44px)]"
+            : "container-x relative py-[clamp(14px,0.3rem+0.9vw,32px)]"
         }
       >
         <div className={pic ? "md:max-w-[calc(58%-var(--spacing-gutter))]" : undefined}>
@@ -94,7 +94,7 @@ export function PageHero({
             {title}
           </Title>
           {lead && (
-            <p className={`reveal mt-2.5 text-[clamp(0.9375rem,0.85rem+0.2vw,1.125rem)] leading-[1.65] text-ink-3 ${pic ? "max-w-[44em]" : "max-w-[60em]"}`}>
+            <p className={`page-hero-lead reveal mt-2.5 text-[clamp(0.9375rem,0.85rem+0.2vw,1.125rem)] leading-[1.65] text-ink-3 ${pic ? "max-w-[44em]" : "max-w-[60em]"}`}>
               {lead}
             </p>
           )}

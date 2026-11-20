@@ -219,7 +219,7 @@ export default async function HomePage({ params }: LangParams) {
       </section>
 
       {/* ---------------- 해외 Biz정보 (회원 전용 — 글 제목은 공개하지 않음) ---------------- */}
-      <section className="pb-section pt-section-sm">
+      <section className="pb-[clamp(32px,1rem+2vw,64px)] pt-0">
         <div className="container-x">
           <div data-reveal className="grid gap-6 rounded-3xl bg-paper p-6 sm:p-[clamp(28px,1.4rem+1.2vw,56px)] lg:grid-cols-[1.4fr_1fr] lg:items-center">
             <div>
@@ -251,7 +251,7 @@ export default async function HomePage({ params }: LangParams) {
       </section>
 
       {/* ---------------- CONTACT (PPT 6쪽) ---------------- */}
-      <section className="py-section">
+      <section className="pb-section pt-0">
         <div className="container-x">
           <div data-reveal className="relative overflow-hidden rounded-3xl bg-ink px-[clamp(24px,4vw,72px)] py-[clamp(48px,4.5vw,96px)] text-white">
             <Image src={photo("cranes", 2000)} alt="" fill sizes="(min-width: 1280px) 84vw, 100vw" className="object-cover opacity-25 grayscale" />

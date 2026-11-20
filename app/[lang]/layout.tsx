@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const title = locale === "ko" ? "글로벌마트 | 해외지사대행 · 해외시장개척" : "Globalmart | Overseas Branch Agency & Market Entry";
   const description =
     locale === "ko"
-      ? "해외시장진출은 글로벌마트와 함께. 해외지사대행, 해외시장조사, 해외바이어 발굴, 소프트웨어 해외진출까지 현지 전문 인력이 함께합니다."
-      : "Go global with Globalmart: overseas branch agency, market research, buyer discovery and software export, delivered by local specialists.";
+      ? "해외시장진출은 글로벌마트와 함께. 해외지사대행, 해외시장조사, 해외바이어발굴, 해외지사운영까지 현지 전문인력이 함께 합니다."
+      : "Go global with Globalmart: overseas branch agency, market research, buyer discovery and branch operation, with local specialists.";
   return {
     metadataBase: new URL(SITE.url + "/"),
     title: { default: title, template: locale === "ko" ? "%s | 글로벌마트" : "%s | Globalmart" },

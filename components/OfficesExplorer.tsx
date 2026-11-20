@@ -37,7 +37,7 @@ export function OfficesExplorer({ locale }: { locale: Locale }) {
           ))}
         </div>
         {/* 지도는 2:1 비율 — 화면 높이에 맞춰 폭을 제한해 첫 화면에서 아래 지역 목록 일부가 보이게 함 */}
-        <div className="mx-auto max-w-[max(min(100%,calc((100svh_-_540px)_*_2)),min(100%,34rem))]">
+        <div className="mx-auto max-w-[max(min(100%,calc((100svh_-_560px)_*_2)),min(100%,28rem))]">
           <WorldMap locale={locale} activeRegion={active} animated dark={false} />
         </div>
       </div>

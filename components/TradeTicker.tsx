@@ -4,7 +4,10 @@ import type { Locale } from "@/lib/i18n";
 /** 서울 ⇄ 해외 거점 항로가 흐르는 띠 (국제 무역 분위기) */
 export function TradeTicker({ locale }: { locale: Locale }) {
   const hq = locale === "ko" ? "서울" : "SEOUL";
-  const routes = offices.regions.flatMap((r) => r.offices).map((o) => (locale === "ko" ? o.ko : o.en.toUpperCase()));
+  // 도시 이름 없이 나라 이름만 (예: "중국 (대련)" → "중국"), 같은 나라는 한 번만
+  const routes = [
+    ...new Set(offices.regions.flatMap((r) => r.offices).map((o) => (locale === "ko" ? o.ko : o.en.toUpperCase()).replace(/\s*\(.*\)$/, ""))),
+  ];
   const items = [...routes, ...routes];
   return (
     <div className="relative overflow-hidden bg-ink py-[clamp(12px,0.6rem+0.4vw,18px)] [mask-image:linear-gradient(90deg,transparent,#000_5%_95%,transparent)]" aria-hidden>

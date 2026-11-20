@@ -412,9 +412,9 @@ html.js [data-reveal].is-in {
   }
   .hero-figure > div {
     position: absolute;
-    width: 222%;
-    right: -7.5%;
-    top: -28.7vw;
+    width: 200%;
+    right: -8%;
+    top: -23.5vw;
   }
   .hero-figure .map-focus-card,
   .hero-figure .map-label[data-pin="indonesia"] {
@@ -431,4 +431,9 @@ html.js [data-reveal].is-in {
     right: -3%;
     top: -6vw;
   }
+}
+
+/* 게시글을 열어 볼 때는 상단 소개 문구를 숨겨 제목만 짧게 (해외 Biz정보·해외주재원 전용) */
+html[data-viewing-post] .page-hero-lead {
+  display: none;
 }

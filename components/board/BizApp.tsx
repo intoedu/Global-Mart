@@ -31,6 +31,15 @@ export function BizApp({ locale }: { locale: Locale }) {
   const postId = Number(sp.get("post") ?? 0);
   const topRef = useRef<HTMLDivElement>(null);
 
+  // 글을 열어 볼 때는 상단 소개 문구 숨김 (globals.css: html[data-viewing-post])
+  const viewing = postId > 0 && !!data;
+  useEffect(() => {
+    if (viewing) document.documentElement.dataset.viewingPost = "";
+    return () => {
+      delete document.documentElement.dataset.viewingPost;
+    };
+  }, [viewing]);
+
   // 목록 아래쪽에서 글을 열면 글 머리가 보이도록
   useEffect(() => {
     const el = topRef.current;

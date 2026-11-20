@@ -14,7 +14,7 @@ import { WorldMap } from "./WorldMap";
 type Spot = { pin: string; word: { ko: string; en: string }; year: string; place: { ko: string; en: string }; items: { ko: string; en: string } };
 
 const SPOTS: Spot[] = [
-  { pin: "vietnam", word: { ko: "베트남", en: "Vietnam" }, year: "2016", place: { ko: "베트남", en: "Vietnam" }, items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" } },
+  { pin: "vietnam", word: { ko: "베트남", en: "Vietnam" }, year: "2016", place: { ko: "베트남", en: "Vietnam" }, items: { ko: "화장품, 수산물, 대리석, 엔진오일", en: "Cosmetics, seafood, marble, engine oil" } },
   { pin: "mumbai", word: { ko: "인도", en: "India" }, year: "2010", place: { ko: "인도", en: "India" }, items: { ko: "건축자재, 엔진오일, 자동차부품", en: "Building materials, engine oil, auto parts" } },
   { pin: "turkey", word: { ko: "터키", en: "Turkey" }, year: "2018", place: { ko: "터키", en: "Turkey" }, items: { ko: "화장품, 섬유, 의료기기", en: "Cosmetics, textiles, medical devices" } },
   { pin: "malaysia", word: { ko: "말레이시아", en: "Malaysia" }, year: "2008", place: { ko: "말레이시아", en: "Malaysia" }, items: { ko: "ITS 정부 프로젝트", en: "Government ITS project" } },

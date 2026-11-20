@@ -24,7 +24,7 @@ export const HOME = {
   heroServices: [
     { icon: "briefcase", href: "/business/agency", label: { ko: "해외지사대행", en: "Branch agency" }, sub: { ko: "현지 직원 배치", en: "Local staff" } },
     { icon: "chart", href: "/business/research", label: { ko: "해외시장조사", en: "Market research" }, sub: { ko: "가격·경쟁·관세", en: "Prices · tariffs" } },
-    { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어발굴", en: "Buyer discovery" }, sub: { ko: "계약까지 동행", en: "Until the deal" } },
+    { icon: "handshake", href: "/business/buyers", label: { ko: "해외바이어발굴", en: "Buyer discovery" }, sub: { ko: "인허가·무역대행까지", en: "Permits · trade agency" } },
     { icon: "globe", href: "/business/agency", label: { ko: "해외입찰대행", en: "Overseas tender agency" }, sub: { ko: "국제지역개발협력", en: "International regional development cooperation" } },
   ],
   stats: [
@@ -144,7 +144,7 @@ export const HISTORY: { date: string; ko: string; en: string }[] = [
   { date: "2008.11", ko: "말레이시아 프로젝트 수행 (ITS 정부 프로젝트)", en: "Malaysia project (government ITS project)" },
   { date: "2009.07", ko: "해외시장개척 전문가 훈련 시작", en: "Overseas market specialist training program launched" },
   { date: "2009.12", ko: "중국 대련 해외시장개척 프로젝트 수행 (의류, 건축자재)", en: "Dalian, China market project (apparel, building materials)" },
-  { date: "2010.12", ko: "인도 뭄바이 해외시장개척 프로젝트 수행 (건축자재, 엔진오일)", en: "Mumbai, India market project (building materials, engine oil)" },
+  { date: "2010.12", ko: "인도 뭄바이 해외시장개척 프로젝트 수행 (건축자재, 엔진오일, 자동차부품)", en: "Mumbai, India market project (building materials, engine oil, auto parts)" },
   { date: "2011.04", ko: "㈜글로벌마트로 상호 변경", en: "Renamed Globalmart Inc." },
   { date: "2016.08", ko: "베트남 호치민 해외시장개척 프로젝트 수행 (화장품, 수산물, 대리석, 엔진오일 등)", en: "Ho Chi Minh City, Vietnam market project (cosmetics, seafood, marble, engine oil, etc.)" },
   { date: "2018.08", ko: "글로벌마트에서 분리하여 국제지역개발협력협회(IRDCA) 설립", en: "IRDCA spun off from Globalmart as an independent association" },
@@ -195,8 +195,8 @@ export const PARTNERS = {
 // 사업내용
 // ------------------------------------------------------------------
 export const PROCESS = [
-  { key: "research", href: "/business/research", title: { ko: "해외시장조사", en: "Market research" }, period: { ko: "약 1개월", en: "About 1 month" } },
-  { key: "buyers", href: "/business/buyers", title: { ko: "해외바이어발굴", en: "Buyer discovery" }, period: { ko: "반복 진행", en: "Ongoing cycles" } },
+  { key: "research", href: "/business/research", title: { ko: "해외시장조사", en: "Market Research" }, period: { ko: "약 1개월", en: "About 1 month" } },
+  { key: "buyers", href: "/business/buyers", title: { ko: "해외바이어발굴", en: "Buyer Discovery" }, period: { ko: "반복 진행", en: "Ongoing cycles" } },
   { key: "branch", href: "/business/branch", title: { ko: "해외지사운영", en: "Branch Operation" }, period: { ko: "6개월 단위 계약 (최초 3개월 가능)", en: "6-month terms (3 months for a first contract)" } },
 ] as const;
 
@@ -332,7 +332,7 @@ export const TRACK_RECORD = [
     photo: "hcmc",
     place: { ko: "베트남", en: "Vietnam" },
     title: { ko: "해외시장개척 활동", en: "Market development" },
-    items: { ko: "화장품 · 수산물 · 대리석 · 엔진오일", en: "Cosmetics · Seafood · Marble · Engine oil" },
+    items: { ko: "화장품, 수산물, 대리석, 엔진오일", en: "Cosmetics, seafood, marble, engine oil" },
   },
   {
     year: "2018",
