@@ -3,36 +3,51 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
-import { REGION_MAP, bizCategoryLabel, isRegionId } from "@/lib/regions";
-import { adjacentOf, listKey } from "@/lib/board";
-import { bizPostsOf } from "@/lib/biz";
+import { REGION_MAP, isRegionId } from "@/lib/regions";
+import { BOARD_CATEGORIES, LEGACY_CATEGORY, adjacentOf, categoryLabel, isCategory, isRegional, listKey, sortPosts } from "@/lib/board";
 import { lp } from "@/lib/paths";
 import type { Locale } from "@/lib/i18n";
-import type { BizData } from "@/lib/types";
+import type { BoardCategory } from "@/lib/types";
 import { Icon } from "../Icon";
-import { BizBoard } from "./BizBoard";
+import { SubNav } from "../SubNav";
+import { BizBoard, boardHref, type BoardView } from "./BizBoard";
 import { LockGate } from "./LockGate";
 import { PostView } from "./PostView";
 import { AttachmentList, SecureBody } from "./SecureContent";
 import { useVault } from "./useVault";
 
 /**
- * 해외 Biz정보 — 회원 전용
- * 글은 회원 비밀번호로 암호화된 public/data/biz.json 에 있고, 비밀번호를 넣은 뒤 브라우저에서 풀어 보여 줍니다.
- * 목록: /biz/?region=…  · 글 보기: /biz/?post=번호
+ * 주소의 카테고리: ?cat=market|tender|items|notice (없으면 전체)
+ * 예전 주소도 받습니다: ?category=industry|inquiry (예전 해외 Biz정보), ?region= 만 있으면 해외시장
+ */
+export function viewFromParams(sp: URLSearchParams | { get: (k: string) => string | null }): BoardView {
+  const cat = sp.get("cat");
+  if (isCategory(cat)) return cat;
+  const legacy = LEGACY_CATEGORY[sp.get("category") ?? ""];
+  if (legacy) return legacy;
+  if (isRegionId(sp.get("region")) && sp.get("region") !== "all") return "market";
+  return "all";
+}
+
+/**
+ * 해외Biz정보(해외주재원 전용) — 회원 전용 통합 게시판
+ * 글은 회원 비밀번호로 암호화된 public/data/biz.json 에 있고, 비밀번호를 한 번 넣으면 모든 카테고리를 이용합니다.
+ * 목록: /biz/?cat=…(&region=…)  · 글 보기: /biz/?post=번호
  */
 export function BizApp({ locale }: { locale: Locale }) {
   const ko = locale === "ko";
   const t = (l: { ko: string; en: string }) => l[locale];
   const sp = useSearchParams();
   const router = useRouter();
-  const { data, state, error, unlock, lock } = useVault<BizData>("biz", ko);
-  const posts = useMemo(() => (data ? bizPostsOf(data) : []), [data]);
+  const { data, state, error, unlock, lock } = useVault(ko);
+  const posts = useMemo(() => sortPosts(data?.posts ?? []), [data]);
   const postId = Number(sp.get("post") ?? 0);
+  const post = postId ? (posts.find((p) => p.id === postId) ?? null) : null;
+  const view: BoardView = post ? post.category : viewFromParams(sp);
   const topRef = useRef<HTMLDivElement>(null);
 
   // 글을 열어 볼 때는 상단 소개 문구 숨김 (globals.css: html[data-viewing-post])
-  const viewing = postId > 0 && !!data;
+  const viewing = !!post;
   useEffect(() => {
     if (viewing) document.documentElement.dataset.viewingPost = "";
     return () => {
@@ -46,7 +61,7 @@ export function BizApp({ locale }: { locale: Locale }) {
     if (postId && el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: "start" });
   }, [postId]);
 
-  if (!data) return <BizGate locale={locale} state={state} error={error} onSubmit={(pw) => unlock(pw)} />;
+  if (!data) return <BizGate locale={locale} view={view} state={state} error={error} onSubmit={(pw) => unlock(pw)} />;
 
   const lockButton = (
     <button
@@ -61,56 +76,87 @@ export function BizApp({ locale }: { locale: Locale }) {
     </button>
   );
 
-  const post = postId ? posts.find((p) => p.id === postId) : null;
+  const tabs = (
+    <SubNav
+      items={[
+        { href: lp(locale, "/biz"), label: ko ? "전체" : "All" },
+        ...BOARD_CATEGORIES.map((c) => ({ href: lp(locale, `/biz?cat=${c.id}`), label: t(c.label) })),
+      ]}
+      current={view === "all" ? "/biz" : `cat=${view}`}
+    />
+  );
+
+  let content: React.ReactNode;
   if (post) {
-    const regionLabel = isRegionId(post.region) ? t(REGION_MAP[post.region].label) : post.region;
-    const contentLang = ko ? undefined : "ko";
-    return (
-      <div ref={topRef} className="scroll-mt-(--header-h)">
-        <PostView
-          title={post.title}
-          body={post.body}
-          createdAt={post.created_at}
-          pinned={post.is_pinned}
-          ko={ko}
-          locale={locale}
-          titleAs="h2"
-          contentLang={contentLang}
-          badge={t(bizCategoryLabel(post.category))}
-          meta={[
-            { label: ko ? "지역" : "Region", value: regionLabel },
-            { label: ko ? "주 / 국가" : "State / Country", value: post.country },
-          ]}
-          listHref={post.region !== "all" ? `${lp(locale, "/biz")}?region=${post.region}` : lp(locale, "/biz")}
-          listStorageKey={listKey("biz", locale)}
-          adjacent={adjacentOf(posts, post.id)}
-          detailHref={(pid) => lp(locale, `/biz?post=${pid}`)}
-          bodySlot={<SecureBody body={post.body} files={post.files} keys={data.file_keys} ko={ko} />}
-          afterBody={<AttachmentList files={post.files} body={post.body} keys={data.file_keys} ko={ko} />}
-          footer={lockButton}
-        />
+    const cat: BoardCategory = post.category;
+    const regional = isRegional(cat);
+    const regionLabel = post.region && isRegionId(post.region) ? t(REGION_MAP[post.region].label) : (post.region ?? "");
+    content = (
+      <PostView
+        title={post.title}
+        body={post.body}
+        createdAt={post.created_at}
+        pinned={post.is_pinned}
+        ko={ko}
+        locale={locale}
+        titleAs="h2"
+        contentLang={ko ? undefined : "ko"}
+        badge={t(categoryLabel(cat))}
+        meta={
+          regional
+            ? [
+                { label: ko ? "지역" : "Region", value: regionLabel },
+                { label: ko ? "주 / 국가" : "State / Country", value: post.country ?? "" },
+              ]
+            : [
+                ...(cat === "items"
+                  ? [
+                      { label: ko ? "종류" : "Type", value: post.kind ?? "" },
+                      { label: ko ? "회사명" : "Company", value: post.company ?? "" },
+                    ]
+                  : []),
+                { label: ko ? "게시자" : "Author", value: post.author_name },
+              ]
+        }
+        listHref={boardHref(locale, { cat, region: regional ? post.region : undefined })}
+        listStorageKey={listKey(locale)}
+        adjacent={adjacentOf(
+          posts.filter((p) => p.category === cat),
+          post.id
+        )}
+        detailHref={(pid) => lp(locale, `/biz?post=${pid}`)}
+        bodySlot={<SecureBody body={post.body} files={post.files} keys={data.file_keys} ko={ko} />}
+        afterBody={<AttachmentList files={post.files} body={post.body} keys={data.file_keys} ko={ko} />}
+        footer={lockButton}
+      />
+    );
+  } else {
+    content = (
+      <div className="pb-section-sm pt-10 lg:pt-14">
+        {postId > 0 && (
+          <p role="status" className="container-x mb-6">
+            <span className="block rounded-xl bg-orange/15 px-4 py-3 text-sm text-orange-ink">
+              {ko ? "찾으시는 글이 없습니다. 삭제되었거나 주소가 잘못되었을 수 있습니다." : "This post could not be found. It may have been deleted."}{" "}
+              <Link href={lp(locale, "/biz")} className="font-semibold underline">
+                {ko ? "목록 보기" : "View list"}
+              </Link>
+            </span>
+          </p>
+        )}
+        <BizBoard posts={view === "all" ? posts : posts.filter((p) => p.category === view)} view={view} locale={locale} footer={lockButton} />
       </div>
     );
   }
 
   return (
-    <div ref={topRef} className="pb-section-sm pt-10 lg:pt-14">
-      {postId > 0 && (
-        <p role="status" className="container-x mb-6">
-          <span className="block rounded-xl bg-orange/15 px-4 py-3 text-sm text-orange-ink">
-            {ko ? "찾으시는 글이 없습니다. 삭제되었거나 주소가 잘못되었을 수 있습니다." : "This post could not be found. It may have been deleted."}{" "}
-            <Link href={lp(locale, "/biz")} className="font-semibold underline">
-              {ko ? "목록 보기" : "View list"}
-            </Link>
-          </span>
-        </p>
-      )}
-      <BizBoard posts={posts} locale={locale} footer={lockButton} />
+    <div ref={topRef} className="scroll-mt-(--header-h)">
+      {tabs}
+      {content}
     </div>
   );
 }
 
-function BizGate({ locale, state, error, onSubmit }: { locale: Locale; state: string; error: string; onSubmit: (pw: string) => void }) {
+function BizGate({ locale, view, state, error, onSubmit }: { locale: Locale; view: BoardView; state: string; error: string; onSubmit: (pw: string) => void }) {
   const ko = locale === "ko";
   return (
     <LockGate
@@ -119,12 +165,12 @@ function BizGate({ locale, state, error, onSubmit }: { locale: Locale; state: st
       error={error}
       onSubmit={onSubmit}
       inputId="biz-pw"
-      badge={ko ? "회원 전용" : "Members only"}
-      title={ko ? "해외 Biz정보는 회원 전용입니다" : "Global Biz Info is for members only"}
+      badge={view === "all" ? (ko ? "해외Biz정보(해외주재원 전용)" : "Global Biz Info (Overseas Staff Only)") : categoryLabel(view)[locale]}
+      title={ko ? "회원 전용" : "Members only"}
       text={
         ko
-          ? "해외입찰·해외시장 정보는 로그인한 회원만 볼 수 있습니다. 글로벌마트에서 안내받은 회원 비밀번호를 입력해 주세요."
-          : "Overseas tender and market information is available to members only. Please enter the member password provided by Globalmart."
+          ? "해외시장·해외입찰·국내우수 Item·공지는 회원만 볼 수 있습니다. 글로벌마트에서 안내받은 회원 비밀번호를 한 번 입력하면 모든 카테고리를 이용할 수 있습니다."
+          : "Overseas markets, overseas tenders, Korean featured items and notices are for members only. Enter the member password provided by Globalmart once to use every category."
       }
     />
   );
@@ -132,5 +178,5 @@ function BizGate({ locale, state, error, onSubmit }: { locale: Locale; state: st
 
 /** 정적 HTML(자바스크립트 실행 전)에 들어가는 화면 — 비밀번호 입력 화면 (글 내용 없음) */
 export function BizFallback({ locale }: { locale: Locale }) {
-  return <BizGate locale={locale} state="init" error="" onSubmit={() => {}} />;
+  return <BizGate locale={locale} view="all" state="init" error="" onSubmit={() => {}} />;
 }

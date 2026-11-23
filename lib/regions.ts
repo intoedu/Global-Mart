@@ -1,7 +1,7 @@
 import type { L } from "./i18n";
 
 /**
- * 해외 Biz정보 게시판 지역 구분 (PPT 9~12쪽 기준, 메뉴 순서 동일)
+ * 해외Biz정보 › 해외시장·해외입찰(나라별 게시판) 지역 구분 (PPT 9~12쪽 기준, 메뉴 순서 동일)
  * - "all"(전체)로 등록한 글은 모든 지역 게시판에 함께 노출됩니다.
  * - countries: 각 게시판 머리말에 표시되는 나라 목록 (인도는 공란)
  */
@@ -95,15 +95,4 @@ export const REGION_MAP = Object.fromEntries(REGIONS.map((r) => [r.id, r])) as R
 
 export function isRegionId(v: unknown): v is RegionId {
   return typeof v === "string" && v in REGION_MAP;
-}
-
-/** 해외 Biz정보 "종류" — 저장된 id 는 예전 그대로(industry·inquiry), 이름만 바뀜 */
-export const BIZ_CATEGORIES = [
-  { id: "inquiry", label: { ko: "해외입찰", en: "Overseas tenders" } },
-  { id: "industry", label: { ko: "해외시장", en: "Overseas markets" } },
-] as const;
-export type BizCategory = (typeof BIZ_CATEGORIES)[number]["id"];
-
-export function bizCategoryLabel(id: string): L {
-  return BIZ_CATEGORIES.find((c) => c.id === id)?.label ?? { ko: id, en: id };
 }

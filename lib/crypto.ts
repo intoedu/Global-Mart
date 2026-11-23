@@ -1,7 +1,7 @@
-import type { EncryptedFile, KeyRing } from "./types";
+import type { AdminFile, AdminSecret, EncryptedFile, KeyRing } from "./types";
 
 /**
- * 회원 전용 게시판 암호화 (브라우저 WebCrypto) — 해외 Biz정보(회원 비밀번호)·해외주재원 전용(공용 비밀번호)
+ * 회원 전용 게시판 암호화 (브라우저 WebCrypto) — 해외Biz정보(해외주재원 전용), 회원 비밀번호 하나
  * - 게시판 데이터: 비밀번호 → PBKDF2(SHA-256, 60만 회) → AES-GCM 256 키로 JSON 전체를 암호화
  * - 반복 횟수는 파일(iterations)에 함께 저장되므로, 예전(25만 회) 파일도 그대로 열립니다.
  * - 첨부 파일·본문 이미지: 게시판마다 무작위 "파일 키"(AES-GCM 256)로 암호화해 따로 저장합니다.
@@ -103,4 +103,35 @@ export async function decryptBytes(blob: ArrayBuffer | Uint8Array, rawKeyB64: st
   } catch {
     return null;
   }
+}
+
+// ---------------------------------------------------------------- 관리자 아이디·비밀번호 → GitHub 토큰
+
+/** 아이디는 앞뒤 공백을 빼고 소문자로 비교합니다. */
+export const normalizeAdminId = (id: string) => id.trim().toLowerCase();
+
+/** 새 관리자 아이디 규칙 검사 — 문제가 없으면 빈 문자열 */
+export function checkAdminId(id: string): string {
+  const v = normalizeAdminId(id);
+  if (v.length < 3 || v.length > 40) return "아이디는 3~40자로 정해 주세요.";
+  if (!/^[a-z0-9._-]+$/.test(v)) return "아이디는 영문·숫자와 . _ - 만 쓸 수 있습니다.";
+  return "";
+}
+
+/** 아이디·비밀번호를 합친 암호화 열쇠 문자열 (둘 중 하나라도 틀리면 풀리지 않음) */
+const adminSecret = (id: string, pw: string) => `gm-admin\u0000${normalizeAdminId(id)}\u0000${pw}`;
+
+/**
+ * GitHub 토큰을 관리자 아이디·비밀번호로 암호화 (PBKDF2-SHA256 60만 회 → AES-GCM 256)
+ * 결과는 저장소의 public/data/admin.json 에 저장됩니다. 아이디·비밀번호 자체는 어디에도 저장하지 않습니다.
+ */
+export async function encryptAdminToken(token: string, id: string, pw: string): Promise<AdminFile> {
+  const secret: AdminSecret = { token, set_at: new Date().toISOString() };
+  return { ...(await encryptJson(secret, adminSecret(id, pw))), kind: "admin-token" };
+}
+
+/** 아이디·비밀번호가 틀리면 null */
+export async function decryptAdminToken(file: EncryptedFile, id: string, pw: string): Promise<string | null> {
+  const d = await decryptJson<AdminSecret>(file, adminSecret(id, pw));
+  return d && typeof d.token === "string" && d.token ? d.token : null;
 }

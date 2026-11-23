@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getT, type LangParams } from "@/lib/i18n";
 import { lp } from "@/lib/paths";
 import { PARTNERS } from "@/lib/content";
-import { PageHero, SectionTitle } from "@/components/PageHero";
+import { PageHero } from "@/components/PageHero";
 import { SectionNav } from "@/components/SectionNav";
 import { Icon } from "@/components/Icon";
 
@@ -40,24 +40,6 @@ export default async function PartnersPage({ params }: LangParams) {
         </div>
       </section>
 
-      <section className="dark-section bg-ink py-section-sm text-white">
-        <div className="container-x">
-          <SectionTitle
-            eyebrow="IRDCA & Globalmart"
-            title={ko ? "전문가 양성에서 해외지사대행까지" : "From training to branch agency"}
-            center
-          />
-          <ol className="mx-auto mt-stack grid max-w-[max(64rem,70vw)] gap-grid md:grid-cols-3">
-            {PARTNERS.steps.map((s, i) => (
-              <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative rounded-2xl border border-white/10 bg-ink-2 p-[clamp(24px,1.95vw,40px)]">
-                <span className="text-[clamp(40px,2rem+1vw,60px)] font-black leading-none text-orange">0{i + 1}</span>
-                <h3 className="mt-2 text-h3">{t(s.title)}</h3>
-                <p className="mt-2 text-body text-white/60">{t(s.body)}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
     </>
   );
 }

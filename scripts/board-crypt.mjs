@@ -1,25 +1,29 @@
 #!/usr/bin/env node
 /**
- * 회원 전용 게시판 데이터 암호화 도구 (Node 22 이상, 외부 패키지 없음)
+ * 회원 전용 게시판(해외Biz정보(해외주재원 전용)) 데이터 암호화 도구 (Node 22 이상, 외부 패키지 없음)
  * 브라우저(lib/crypto.ts)와 같은 형식을 씁니다: PBKDF2-SHA256(60만 회) → AES-GCM 256,
  * 첨부 파일은 게시판 데이터 안의 파일 키(file_keys)로 암호화한 [IV 12바이트][암호문] 형식.
+ * 데이터 파일은 public/data/biz.json 하나(카테고리 market·tender·items·notice, 회원 비밀번호 하나)이고,
+ * 첨부 파일은 public/data/files/biz/ 에 있습니다.
  *
  * 비밀번호는 명령줄에 직접 쓰지 말고 파일(--password-file)로 넘겨 주세요. 비밀번호 파일은 저장소에 넣지 마세요.
  *
  *   # 풀어서 보기 (또는 --out 으로 저장 — 평문 파일은 저장소 밖에 두세요)
- *   node scripts/board-crypt.mjs decrypt public/data/biz.json --password-file ~/biz-pw.txt [--out /tmp/biz.plain.json]
+ *   node scripts/board-crypt.mjs decrypt public/data/biz.json --password-file ~/member-pw.txt [--out /tmp/biz.plain.json]
  *
  *   # 평문 JSON → 암호화 파일 (파일 키가 없으면 하나 만듭니다)
- *   node scripts/board-crypt.mjs encrypt /tmp/biz.plain.json --password-file ~/biz-pw.txt --out public/data/biz.json
+ *   node scripts/board-crypt.mjs encrypt /tmp/biz.plain.json --password-file ~/member-pw.txt --out public/data/biz.json
  *
  *   # 같은 비밀번호로 다시 암호화(새 salt·iv, 현재 반복 횟수) 또는 비밀번호 바꾸기(새 파일 키 추가)
- *   node scripts/board-crypt.mjs reencrypt public/data/resident.json --password-file old.txt [--new-password-file new.txt]
+ *   node scripts/board-crypt.mjs reencrypt public/data/biz.json --password-file old.txt [--new-password-file new.txt]
  *
- *   # 평문 JSON 에 첨부 파일 추가: 암호문을 public/data/files/<board>/ 에 쓰고 첨부 정보(JSON)를 출력
- *   node scripts/board-crypt.mjs add-file /tmp/biz.plain.json --board biz --file photo.png [--inline]
+ *   # 평문 JSON 에 첨부 파일 추가: 암호문을 public/data/files/biz/ 에 쓰고 첨부 정보(JSON)를 출력
+ *   node scripts/board-crypt.mjs add-file /tmp/biz.plain.json --file photo.png [--inline]
  *
- *   # 확인: 풀리는지, 글마다 첨부 파일이 모두 풀리는지
- *   node scripts/board-crypt.mjs verify public/data/biz.json --password-file ~/biz-pw.txt
+ *   # 확인: 풀리는지, 카테고리별 글 수, 글마다 첨부 파일이 모두 풀리는지
+ *   node scripts/board-crypt.mjs verify public/data/biz.json --password-file ~/member-pw.txt
+ *
+ * 관리자 토큰 파일(public/data/admin.json)은 관리자 화면의 '처음 설정'이 만듭니다(아이디·비밀번호로 암호화).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -90,18 +94,30 @@ export async function addFile(data, board, filePath, { inline = false, publicDir
   return { data: d, attachment: { id, kid: d.current_key, name: fname, type, size: bytes.length, path: rel, ...(inline ? { inline: true } : {}) } };
 }
 
-/** 암호화 파일과 첨부 파일이 모두 풀리는지 확인 → 요약 문자열 목록 */
+export const CATEGORIES = ["market", "tender", "items", "notice"];
+
+/** 암호화 파일과 첨부 파일이 모두 풀리는지 확인 → 요약 문자열 목록 (형식이 맞지 않으면 오류) */
 export async function verify(encFile, password, publicDir = path.join(ROOT, "public")) {
   const data = await decryptJson(encFile, password);
-  const lines = [`posts: ${data.posts?.length ?? 0}, file keys: ${Object.keys(data.file_keys ?? {}).length}, software: ${data.software ? "yes" : "no"}`];
-  for (const p of data.posts ?? []) {
+  const posts = data.posts ?? [];
+  const byCat = Object.fromEntries(CATEGORIES.map((c) => [c, posts.filter((p) => p.category === c).length]));
+  const lines = [`format v${data.v ?? 1}, posts: ${posts.length} (${CATEGORIES.map((c) => `${c} ${byCat[c]}`).join(", ")}), next_id: ${data.next_id ?? "-"}, file keys: ${Object.keys(data.file_keys ?? {}).length}`];
+  const ids = new Set();
+  for (const p of posts) {
+    if (!CATEGORIES.includes(p.category)) throw new Error(`#${p.id}: unknown category ${p.category}`);
+    if (ids.has(p.id)) throw new Error(`duplicate id #${p.id}`);
+    ids.add(p.id);
+    if ((p.category === "market" || p.category === "tender") && !p.region) throw new Error(`#${p.id}: region missing`);
     for (const f of p.files ?? []) {
+      const key = data.file_keys?.[f.kid];
+      if (!key) throw new Error(`#${p.id}: file key ${f.kid} missing`);
       const blob = fs.readFileSync(path.join(publicDir, f.path));
-      const plain = await decryptBytes(blob, data.file_keys[f.kid]);
+      const plain = await decryptBytes(blob, key);
       if (plain.length !== f.size) throw new Error(`size mismatch: ${f.path}`);
       lines.push(`  #${p.id} ${f.inline ? "image" : "file "} ${f.name} (${f.size} B) OK`);
     }
   }
+  if (data.current_key && !data.file_keys?.[data.current_key]) throw new Error("current_key missing from file_keys");
   return lines;
 }
 
@@ -158,8 +174,8 @@ async function main() {
       break;
     }
     case "add-file": {
-      if (!o.board || !o.file) throw new Error("--board 와 --file 이 필요합니다.");
-      const { data, attachment } = await addFile(readJson(input), o.board, o.file, { inline: !!o.inline });
+      if (!o.file) throw new Error("--file 이 필요합니다.");
+      const { data, attachment } = await addFile(readJson(input), o.board ?? "biz", o.file, { inline: !!o.inline });
       writeJson(input, data);
       console.log(JSON.stringify(attachment, null, 2));
       break;

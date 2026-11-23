@@ -1,12 +1,37 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ACTIONS_URL, ConflictError, DATA_BRANCH, checkToken, createBinaryFile, deleteRepoFile, readFile, writeFile } from "@/lib/github";
-import { MIN_PASSWORD_LENGTH, checkPassword, decryptJson, encryptBytes, encryptJson, ensureFileKey, randomId, withNewFileKey } from "@/lib/crypto";
-import { BIZ_CATEGORIES, REGIONS, REGION_MAP, bizCategoryLabel, isRegionId } from "@/lib/regions";
-import { BOARD_FILES, MAX_FILE_BYTES, MAX_FILE_LABEL, RESIDENT_BOARDS, formatBytes, imageToken, inlineIds, normalizeResident, residentBoardOf } from "@/lib/board";
+import { ACTIONS_URL, ConflictError, DATA_BRANCH, checkToken, createBinaryFile, deleteRepoFile, fetchAdminFiles, readFile, readFileOrNull, writeFile } from "@/lib/github";
+import {
+  MIN_PASSWORD_LENGTH,
+  checkAdminId,
+  checkPassword,
+  decryptAdminToken,
+  decryptJson,
+  encryptAdminToken,
+  encryptBytes,
+  encryptJson,
+  ensureFileKey,
+  randomId,
+  withNewFileKey,
+} from "@/lib/crypto";
+import { REGIONS, REGION_MAP, isRegionId } from "@/lib/regions";
+import {
+  ADMIN_FILE,
+  BOARD_CATEGORIES,
+  BOARD_FILE,
+  MAX_FILE_BYTES,
+  MAX_FILE_LABEL,
+  categoryLabel,
+  formatBytes,
+  imageToken,
+  inlineIds,
+  isCategory,
+  isRegional,
+  normalizeBoard,
+} from "@/lib/board";
 import { formatDate } from "@/lib/format";
-import type { Attachment, BizData, BizPost, EncryptedFile, KeyRing, LList, ResidentBoard, ResidentData, ResidentPost, SoftwareContent, SoftwareSection } from "@/lib/types";
+import type { Attachment, BoardCategory, BoardData, BoardPost, EncryptedFile } from "@/lib/types";
 import { Icon } from "../Icon";
 
 const TOKEN_KEY = "gm_admin_token";
@@ -14,10 +39,9 @@ const CONFLICT_MSG = "다른 곳에서 먼저 수정되어 최신 내용을 다�
 /** 본문에 넣을 수 있는 이미지 형식 */
 const IMAGE_ACCEPT = "image/png,image/jpeg,image/gif,image/webp";
 const IMAGE_TYPES = new Set(IMAGE_ACCEPT.split(","));
+const NET_ERROR = "GitHub에 연결하지 못했습니다. 인터넷 연결을 확인해 주세요.";
 
 type Notice = { kind: "ok" | "error" | "warn"; text: string } | null;
-type Kind = "biz" | "resident";
-type VaultData = KeyRing & { posts: { id: number; files?: Attachment[] }[]; next_id?: number };
 
 /**
  * 새 글 번호: 지운 글의 번호를 다시 쓰지 않도록 파일의 next_id 와 "가장 큰 번호 + 1" 중 큰 값.
@@ -53,15 +77,17 @@ type Notify = { ok: (what: string) => void; error: (t: string) => void; warn: (t
 
 /**
  * 관리자 화면 (정적 사이트용)
- * - GitHub 토큰으로 저장소의 public/data/biz.json(회원 비밀번호), public/data/resident.json(공용 비밀번호)을 직접 고칩니다.
- *   두 파일 모두 암호화되어 있어, 현재 비밀번호를 넣어야 글을 고칠 수 있습니다.
- * - 본문 이미지·첨부 파일은 같은 게시판 키로 암호화해 public/data/files/<게시판>/ 에 올립니다.
+ * - 로그인: 관리자 아이디·비밀번호 → 저장소의 public/data/admin.json(아이디·비밀번호로 암호화한 GitHub 토큰)을 풀어 사용.
+ *   처음 한 번은 사이트 소유자가 '처음 설정'에서 GitHub 토큰과 아이디·비밀번호를 정합니다. 토큰 직접 입력도 됩니다.
+ * - GitHub 토큰으로 저장소의 public/data/biz.json(회원 비밀번호로 암호화)을 직접 고칩니다.
+ *   현재 회원 비밀번호를 넣어야 글을 고칠 수 있습니다.
+ * - 본문 이미지·첨부 파일은 게시판 파일 키로 암호화해 public/data/files/biz/ 에 올립니다.
  * - 저장하면 GitHub Actions 가 사이트를 다시 만들어 1~2분 뒤 반영됩니다.
  */
 export function AdminApp() {
   const [token, setToken] = useState("");
   const [ready, setReady] = useState(false);
-  const [tab, setTab] = useState<"biz" | "resident" | "help">("biz");
+  const [tab, setTab] = useState<"board" | "account" | "help">("board");
   const [notice, setNotice] = useState<Notice>(null);
   const noticeRef = useRef<HTMLParagraphElement>(null);
 
@@ -90,11 +116,11 @@ export function AdminApp() {
 
   if (!ready)
     return (
-      <TokenGate
-        onReady={(t, warning) => {
+      <AdminGate
+        onReady={(t, message) => {
           setToken(t);
           setReady(true);
-          setNotice(warning ? { kind: "warn", text: warning } : null);
+          setNotice(message ?? null);
         }}
       />
     );
@@ -105,8 +131,8 @@ export function AdminApp() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-1.5">
             {[
-              { v: "biz", l: "해외 Biz정보 (회원 전용)" },
-              { v: "resident", l: "해외주재원 전용" },
+              { v: "board", l: "해외Biz정보(해외주재원 전용)" },
+              { v: "account", l: "아이디·비밀번호 변경" },
               { v: "help", l: "사용 안내" },
             ].map((o) => (
               <button
@@ -143,8 +169,8 @@ export function AdminApp() {
         )}
 
         <div className="mt-6">
-          {tab === "biz" && <BizAdmin token={token} notify={notify} />}
-          {tab === "resident" && <ResidentAdmin token={token} notify={notify} />}
+          {tab === "board" && <BoardAdmin token={token} notify={notify} />}
+          {tab === "account" && <AccountAdmin token={token} notify={notify} />}
           {tab === "help" && <Help />}
         </div>
       </div>
@@ -152,61 +178,271 @@ export function AdminApp() {
   );
 }
 
-// ---------------------------------------------------------------- 로그인(토큰)
+// ---------------------------------------------------------------- 로그인 (아이디·비밀번호 / 처음 설정 / 토큰 직접 입력)
 
-function TokenGate({ onReady }: { onReady: (t: string, warning?: string) => void }) {
-  const [busy, setBusy] = useState(false);
+type GateMode = "login" | "setup" | "token";
+
+/** 아이디·비밀번호로 암호화한 토큰을 저장소에 저장 (admin.json). 이미 있으면 덮어씀 — 409 이면 한 번 더 시도 */
+async function saveAdminFile(token: string, id: string, pw: string) {
+  const file = await encryptAdminToken(token, id, pw);
+  for (let attempt = 0; ; attempt++) {
+    const cur = await readFileOrNull<EncryptedFile>(token, ADMIN_FILE.repo);
+    try {
+      await writeFile(token, ADMIN_FILE.repo, file, cur?.sha, "Update admin login");
+      return;
+    } catch (e) {
+      if (!(e instanceof ConflictError) || attempt >= 1) throw e;
+    }
+  }
+}
+
+/** 새 아이디·비밀번호 검사 — 문제가 없으면 빈 문자열 */
+function checkCredentials(id: string, pw: string, pw2: string) {
+  return checkAdminId(id) || checkPassword(pw) || (pw !== pw2 ? "두 비밀번호가 서로 다릅니다." : "");
+}
+
+function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void }) {
+  const [mode, setMode] = useState<GateMode>("login");
+  const [busy, setBusy] = useState("");
   const [err, setErr] = useState("");
+
+  const run = async (label: string, fn: () => Promise<void>) => {
+    setBusy(label);
+    setErr("");
+    try {
+      await fn();
+    } catch (e) {
+      setErr(e instanceof TypeError ? NET_ERROR : (e as Error).message || NET_ERROR);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const remember = (
+    <div className="rounded-xl bg-paper p-4">
+      <label className="flex items-start gap-2.5 text-sm font-semibold text-ink-3">
+        <input type="checkbox" name="remember" className="mt-0.5 size-4 shrink-0 accent-ink" aria-describedby="remember-help" />
+        이 브라우저에 로그인 유지 (개인 PC에서만)
+      </label>
+      <p id="remember-help" className="mt-1.5 pl-6.5 text-xs leading-relaxed text-muted">
+        체크하지 않으면 이 탭에만 기억되고, 탭을 닫으면 로그아웃됩니다. 체크하면 GitHub 토큰이 브라우저에 계속 남고,
+        같은 주소(intoedu.github.io)의 다른 페이지와 저장 공간을 함께 쓰게 되므로 권장하지 않습니다. 공용 PC에서는 체크하지 마세요.
+      </p>
+    </div>
+  );
+
   return (
     <section className="py-14 lg:py-20">
       <div className="container-x max-w-xl">
-        <form
-          className="card space-y-4 p-7 sm:p-9"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const fd = new FormData(e.currentTarget);
-            const t = String(fd.get("token") ?? "").trim();
-            setBusy(true);
-            setErr("");
-            try {
-              const r = await checkToken(t);
-              if (!r.ok) return setErr(r.message);
-              tokenStore.save(t, fd.get("remember") === "on");
-              onReady(t, r.warning);
-            } catch {
-              setErr("GitHub에 연결하지 못했습니다. 인터넷 연결을 확인해 주세요.");
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
-          <h2 className="text-xl font-extrabold">관리자 로그인</h2>
-          <p className="text-sm leading-relaxed text-muted">
-            게시글은 GitHub 저장소에 저장됩니다. 저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>을 입력해 주세요. 이 저장소만 고르고 유효기간을 짧게(예: 30~90일) 정한 Fine-grained 토큰을 권장합니다. 만드는 방법은 로그인 후 &lsquo;사용 안내&rsquo; 또는 README에 있습니다.
-          </p>
-          {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
-          <div>
-            <label className="label" htmlFor="token">GitHub 토큰</label>
-            <input id="token" name="token" type="password" required className="input font-mono" placeholder="github_pat_…" autoComplete="off" />
-          </div>
-          <div className="rounded-xl bg-paper p-4">
-            <label className="flex items-start gap-2.5 text-sm font-semibold text-ink-3">
-              <input type="checkbox" name="remember" className="mt-0.5 size-4 shrink-0 accent-ink" aria-describedby="remember-help" />
-              이 브라우저에 로그인 유지 (개인 PC에서만)
-            </label>
-            <p id="remember-help" className="mt-1.5 pl-6.5 text-xs leading-relaxed text-muted">
-              체크하지 않으면 토큰은 이 탭에만 기억되고, 탭을 닫으면 로그아웃됩니다. 체크하면 토큰이 브라우저에 계속 남고,
-              같은 주소(intoedu.github.io)의 다른 페이지와 저장 공간을 함께 쓰게 되므로 권장하지 않습니다. 공용 PC에서는 체크하지 마세요.
+        <div className="mb-4 flex flex-wrap gap-1.5" role="group" aria-label="로그인 방법">
+          {[
+            { v: "login", l: "아이디 로그인" },
+            { v: "setup", l: "처음 설정 (사이트 소유자)" },
+            { v: "token", l: "토큰 직접 입력" },
+          ].map((o) => (
+            <button
+              key={o.v}
+              type="button"
+              aria-pressed={mode === o.v}
+              onClick={() => { setMode(o.v as GateMode); setErr(""); }}
+              className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${mode === o.v ? "border-ink bg-ink text-white" : "border-line bg-white text-ink-3 hover:border-ink hover:text-ink"}`}
+            >
+              {o.l}
+            </button>
+          ))}
+        </div>
+
+        {mode === "login" && (
+          <form
+            key="login"
+            className="card space-y-4 p-7 sm:p-9"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const fd = new FormData(e.currentTarget);
+              const id = String(fd.get("admin-id") ?? "");
+              const pw = String(fd.get("admin-pw") ?? "");
+              run("확인 중…", async () => {
+                const files = await fetchAdminFiles();
+                if (!files.length) throw new Error("아직 관리자 아이디가 설정되지 않았습니다. 사이트 소유자가 '처음 설정'에서 GitHub 토큰과 아이디·비밀번호를 정해 주세요. (설정 직후라면 1~2분 뒤 다시 시도해 주세요)");
+                let t: string | null = null;
+                for (const f of files) if ((t = await decryptAdminToken(f, id, pw))) break;
+                if (!t) throw new Error("아이디 또는 비밀번호가 올바르지 않습니다.");
+                const r = await checkToken(t);
+                if (!r.ok)
+                  throw new Error(
+                    `저장된 GitHub 토큰을 쓸 수 없습니다: ${r.message} 토큰의 유효기간이 지났다면 사이트 소유자가 새 토큰을 만들어 '처음 설정'에서 다시 설정해 주세요.`
+                  );
+                tokenStore.save(t, fd.get("remember") === "on");
+                onReady(t, r.warning ? { kind: "warn", text: r.warning } : null);
+              });
+            }}
+          >
+            <h2 className="text-xl font-extrabold">관리자 로그인</h2>
+            <p className="text-sm leading-relaxed text-muted">관리자 아이디와 비밀번호를 입력해 주세요.</p>
+            {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
+            <div>
+              <label className="label" htmlFor="admin-id">아이디</label>
+              <input id="admin-id" name="admin-id" required autoComplete="username" autoCapitalize="none" spellCheck={false} className="input" />
+            </div>
+            <div>
+              <label className="label" htmlFor="admin-pw">비밀번호</label>
+              <input id="admin-pw" name="admin-pw" type="password" required autoComplete="current-password" className="input" />
+            </div>
+            {remember}
+            <button disabled={!!busy} className="btn-primary w-full">{busy || "로그인"}</button>
+          </form>
+        )}
+
+        {mode === "setup" && (
+          <form
+            key="setup"
+            className="card space-y-4 p-7 sm:p-9"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const fd = new FormData(e.currentTarget);
+              const t = String(fd.get("setup-token") ?? "").trim();
+              const id = String(fd.get("setup-id") ?? "");
+              const pw = String(fd.get("setup-pw") ?? "");
+              const problem = checkCredentials(id, pw, String(fd.get("setup-pw2") ?? ""));
+              if (problem) return setErr(problem);
+              run("저장 중…", async () => {
+                const r = await checkToken(t);
+                if (!r.ok) throw new Error(r.message);
+                const existing = await readFileOrNull<EncryptedFile>(t, ADMIN_FILE.repo);
+                if (existing && !window.confirm("이미 관리자 아이디가 설정되어 있습니다. 새 토큰·아이디·비밀번호로 바꿀까요? (예전 아이디·비밀번호로는 더 이상 로그인되지 않습니다)")) return;
+                await saveAdminFile(t, id, pw);
+                tokenStore.save(t, fd.get("remember") === "on");
+                onReady(t, {
+                  kind: r.warning ? "warn" : "ok",
+                  text: `관리자 아이디·비밀번호를 저장했습니다. 1~2분 뒤부터 '아이디 로그인'으로 들어올 수 있습니다.${r.warning ? ` ${r.warning}` : ""}`,
+                });
+              });
+            }}
+          >
+            <h2 className="text-xl font-extrabold">처음 설정 (사이트 소유자)</h2>
+            <p className="text-sm leading-relaxed text-muted">
+              처음 한 번, 또는 GitHub 토큰의 유효기간이 지났을 때 사이트 소유자가 합니다. 저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>을 붙여 넣고 관리자 아이디·비밀번호를 정하면,
+              토큰을 그 아이디·비밀번호로 암호화해 저장소(<code>public/data/admin.json</code>)에 저장합니다. 그 뒤로는 아이디·비밀번호만으로 로그인합니다.
             </p>
-          </div>
-          <button disabled={busy} className="btn-primary w-full">{busy ? "확인 중…" : "로그인"}</button>
-        </form>
+            <p className="rounded-xl bg-orange/15 px-4 py-3 text-xs leading-relaxed text-orange-ink">
+              주의: 아이디·비밀번호를 아는 사람은 누구나 이 토큰으로 저장소를 고칠 수 있습니다. 암호화 파일은 공개되어 있어 짧은 비밀번호는 대입으로 풀릴 수 있으니, 길고 짐작하기 어려운 비밀번호(예: 16자 이상)를 쓰세요.
+              토큰은 <b>intoedu/Global-Mart</b> 저장소만, <b>Contents: Read and write</b> 권한만, 짧은 유효기간으로 만드세요.
+            </p>
+            {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
+            <div>
+              <label className="label" htmlFor="setup-token">GitHub 토큰 (Fine-grained)</label>
+              <input id="setup-token" name="setup-token" type="password" required className="input font-mono" placeholder="github_pat_…" autoComplete="off" />
+            </div>
+            <div>
+              <label className="label" htmlFor="setup-id">관리자 아이디</label>
+              <input id="setup-id" name="setup-id" required minLength={3} maxLength={40} autoComplete="username" autoCapitalize="none" spellCheck={false} className="input" />
+              <p className="mt-1 text-xs text-muted">영문·숫자와 . _ - (대소문자 구분 없음)</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="label" htmlFor="setup-pw">관리자 비밀번호</label>
+                <input id="setup-pw" name="setup-pw" type="password" required minLength={MIN_PASSWORD_LENGTH} className="input" placeholder={`${MIN_PASSWORD_LENGTH}자 이상`} autoComplete="new-password" />
+              </div>
+              <div>
+                <label className="label" htmlFor="setup-pw2">비밀번호 확인</label>
+                <input id="setup-pw2" name="setup-pw2" type="password" required minLength={MIN_PASSWORD_LENGTH} className="input" autoComplete="new-password" />
+              </div>
+            </div>
+            {remember}
+            <button disabled={!!busy} className="btn-primary w-full">{busy || "설정 저장하고 로그인"}</button>
+          </form>
+        )}
+
+        {mode === "token" && (
+          <form
+            key="token"
+            className="card space-y-4 p-7 sm:p-9"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const fd = new FormData(e.currentTarget);
+              const t = String(fd.get("token") ?? "").trim();
+              run("확인 중…", async () => {
+                const r = await checkToken(t);
+                if (!r.ok) throw new Error(r.message);
+                tokenStore.save(t, fd.get("remember") === "on");
+                onReady(t, r.warning ? { kind: "warn", text: r.warning } : null);
+              });
+            }}
+          >
+            <h2 className="text-xl font-extrabold">토큰 직접 입력</h2>
+            <p className="text-sm leading-relaxed text-muted">
+              저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>으로 바로 로그인합니다(아이디 설정이 없어도 됨). 이 저장소만 고르고 유효기간을 짧게(예: 30~90일) 정한 Fine-grained 토큰을 권장합니다. 만드는 방법은 로그인 후 &lsquo;사용 안내&rsquo; 또는 README에 있습니다.
+            </p>
+            {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
+            <div>
+              <label className="label" htmlFor="token">GitHub 토큰</label>
+              <input id="token" name="token" type="password" required className="input font-mono" placeholder="github_pat_…" autoComplete="off" />
+            </div>
+            {remember}
+            <button disabled={!!busy} className="btn-primary w-full">{busy || "로그인"}</button>
+          </form>
+        )}
       </div>
     </section>
   );
 }
 
-// ---------------------------------------------------------------- 암호화된 게시판 파일 (공통)
+// ---------------------------------------------------------------- 아이디·비밀번호 변경
+
+function AccountAdmin({ token, notify }: { token: string; notify: Notify }) {
+  const [busy, setBusy] = useState("");
+  return (
+    <form
+      className="card max-w-xl space-y-4 p-6"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const fd = new FormData(form);
+        const id = String(fd.get("acc-id") ?? "");
+        const pw = String(fd.get("acc-pw") ?? "");
+        const problem = checkCredentials(id, pw, String(fd.get("acc-pw2") ?? ""));
+        if (problem) return notify.error(problem);
+        setBusy("저장 중…");
+        try {
+          await saveAdminFile(token, id, pw);
+          form.reset();
+          notify.ok("새 관리자 아이디·비밀번호를");
+        } catch (err) {
+          notify.error(err instanceof ConflictError ? "다른 곳에서 동시에 바꾸고 있습니다. 잠시 후 다시 시도해 주세요." : (err as Error).message || NET_ERROR);
+        } finally {
+          setBusy("");
+        }
+      }}
+    >
+      <h3 className="text-lg font-extrabold">관리자 아이디·비밀번호 변경</h3>
+      <p className="text-sm leading-relaxed text-muted">
+        지금 로그인한 GitHub 토큰을 새 아이디·비밀번호로 다시 암호화해 저장소(<code>public/data/admin.json</code>)에 저장합니다. 저장하면 예전 아이디·비밀번호로는 로그인되지 않습니다
+        (사이트 반영 1~2분 동안은 예전 것도 될 수 있습니다). 비밀번호는 {MIN_PASSWORD_LENGTH}자 이상, 글자·숫자·기호 중 두 종류 이상 — 길수록 안전합니다(16자 이상 권장).
+      </p>
+      <p className="rounded-xl bg-paper px-4 py-3 text-xs leading-relaxed text-ink-3">
+        비밀번호가 새어 나갔다고 생각되면 아이디·비밀번호만 바꾸지 말고, GitHub에서 토큰을 지우고(Revoke) 새 토큰으로 &lsquo;처음 설정&rsquo;을 다시 해 주세요.
+        저장소 기록(git history)에 남은 예전 파일은 예전 아이디·비밀번호로 풀리기 때문입니다.
+      </p>
+      <div>
+        <label className="label" htmlFor="acc-id">새 아이디</label>
+        <input id="acc-id" name="acc-id" required minLength={3} maxLength={40} autoComplete="username" autoCapitalize="none" spellCheck={false} className="input" />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="label" htmlFor="acc-pw">새 비밀번호</label>
+          <input id="acc-pw" name="acc-pw" type="password" required minLength={MIN_PASSWORD_LENGTH} className="input" placeholder={`${MIN_PASSWORD_LENGTH}자 이상`} autoComplete="new-password" />
+        </div>
+        <div>
+          <label className="label" htmlFor="acc-pw2">새 비밀번호 확인</label>
+          <input id="acc-pw2" name="acc-pw2" type="password" required minLength={MIN_PASSWORD_LENGTH} className="input" autoComplete="new-password" />
+        </div>
+      </div>
+      <button disabled={!!busy} className="btn-primary">{busy || "아이디·비밀번호 저장"}</button>
+    </form>
+  );
+}
+
+// ---------------------------------------------------------------- 암호화된 게시판 파일
 
 /** 아직 저장소에 올리지 않은 첨부 파일 (올린 뒤 uploaded=true — 저장이 실패해 다시 눌러도 두 번 올리지 않음) */
 type Draft = { att: Attachment; file?: File; uploaded: boolean; preview?: string };
@@ -218,11 +454,11 @@ type PersistOptions = { message: string; what: string; password?: string; drafts
  * - 저장할 때: 새 첨부 파일 암호화·업로드 → 게시판 데이터 암호화·저장 → 지운 첨부 파일 정리
  * - 다른 곳에서 먼저 저장했으면(409) 최신 파일을 다시 풀고, 파일 키는 합칩니다(키는 지우지 않음).
  */
-function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: Notify, normalize: (d: T) => T = (d) => d) {
-  const path = BOARD_FILES[kind].repo;
+function useAdminVault(token: string, notify: Notify) {
+  const path = BOARD_FILE.repo;
   const [file, setFile] = useState<{ data: EncryptedFile; sha: string } | null>(null);
   const [pw, setPw] = useState("");
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<BoardData | null>(null);
   const [busy, setBusy] = useState("");
   const [loadError, setLoadError] = useState("");
 
@@ -246,17 +482,17 @@ function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: N
   const unlock = async (password: string) => {
     if (!file) return false;
     setBusy("확인 중…");
-    const d = await decryptJson<T>(file.data, password);
+    const d = await decryptJson<BoardData>(file.data, password);
     setBusy("");
     if (!d) return false;
     setPw(password);
     // 예전 파일(파일 키 없음)이면 여기서 키를 만들어 두고, 다음 저장 때 함께 저장합니다.
-    setData(ensureFileKey(normalize(d)));
+    setData(ensureFileKey(normalizeBoard(d)));
     return true;
   };
 
   /** 저장에 성공하면 true */
-  const persist = async (next: T, o: PersistOptions): Promise<boolean> => {
+  const persist = async (next: BoardData, o: PersistOptions): Promise<boolean> => {
     if (!file || !data) return false;
     const password = o.password ?? pw;
     try {
@@ -267,11 +503,11 @@ function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: N
         const key = next.file_keys?.[d.att.kid];
         if (!key) throw new Error("파일 키를 찾지 못했습니다. 페이지를 새로 고친 뒤 다시 시도해 주세요.");
         const enc = await encryptBytes(await d.file!.arrayBuffer(), key);
-        await createBinaryFile(token, `public/${d.att.path}`, enc, `Add ${kind} attachment`);
+        await createBinaryFile(token, `public/${d.att.path}`, enc, "Add board attachment");
         d.uploaded = true;
       }
       setBusy("저장 중…");
-      const enc = await encryptJson(next, password);
+      const enc = await encryptJson({ ...next, v: 2 }, password);
       const sha = await writeFile(token, path, enc, file.sha, o.message);
       setFile({ data: enc, sha });
       setData(next);
@@ -280,7 +516,7 @@ function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: N
       let failed = 0;
       for (const a of o.removed ?? []) {
         setBusy("지운 파일 정리 중…");
-        if (!(await deleteRepoFile(token, `public/${a.path}`, `Remove ${kind} attachment`))) failed++;
+        if (!(await deleteRepoFile(token, `public/${a.path}`, "Remove board attachment"))) failed++;
       }
       if (failed) notify.warn(`${o.what} 저장했습니다. 다만 지운 첨부 파일 ${failed}개를 저장소에서 지우지 못했습니다. (암호화되어 있어 내용은 보이지 않습니다)`);
       else notify.ok(o.what);
@@ -289,9 +525,9 @@ function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: N
       if (e instanceof ConflictError) {
         // 최신 파일을 다시 읽어 현재 비밀번호로 풀고, 쓰던 양식은 그대로 둡니다.
         const f = await load();
-        const latest = f ? await decryptJson<T>(f.data, pw) : null;
+        const latest = f ? await decryptJson<BoardData>(f.data, pw) : null;
         if (latest) {
-          const merged = normalize(latest);
+          const merged = normalizeBoard(latest);
           setData({
             ...merged,
             file_keys: { ...(next.file_keys ?? {}), ...(merged.file_keys ?? {}) },
@@ -300,7 +536,7 @@ function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: N
           notify.error(CONFLICT_MSG);
         } else if (f) {
           setData(null);
-          notify.error("다른 곳에서 비밀번호가 바뀌었습니다. 새 비밀번호로 다시 열어 주세요.");
+          notify.error("다른 곳에서 회원 비밀번호가 바뀌었습니다. 새 비밀번호로 다시 열어 주세요.");
         }
       } else notify.error((e as Error).message);
       return false;
@@ -313,31 +549,44 @@ function useAdminVault<T extends VaultData>(token: string, kind: Kind, notify: N
 }
 
 /** 새 첨부 파일 준비 (크기·형식 검사) — 문제가 있으면 문자열 */
-function makeDraft(file: File, kind: Kind, kid: string, inline: boolean): Draft | string {
+function makeDraft(file: File, kid: string, inline: boolean): Draft | string {
   if (file.size > MAX_FILE_BYTES) return `"${file.name}" 파일이 너무 큽니다. 한 파일은 ${MAX_FILE_LABEL}까지 올릴 수 있습니다. (현재 ${formatBytes(file.size)})`;
   if (file.size === 0) return `"${file.name}" 파일이 비어 있습니다.`;
   if (inline && !IMAGE_TYPES.has(file.type)) return "본문에는 이미지 파일(JPG, PNG, GIF, WEBP)만 넣을 수 있습니다. 다른 파일은 '파일 첨부'를 이용해 주세요.";
   const id = randomId(8);
   return {
-    att: { id, kid, name: file.name.slice(0, 120), type: file.type || "application/octet-stream", size: file.size, path: `${BOARD_FILES[kind].files}/${id}.bin`, ...(inline ? { inline: true } : {}) },
+    att: { id, kid, name: file.name.slice(0, 120), type: file.type || "application/octet-stream", size: file.size, path: `${BOARD_FILE.files}/${id}.bin`, ...(inline ? { inline: true } : {}) },
     file,
     uploaded: false,
     preview: inline ? URL.createObjectURL(file) : undefined,
   };
 }
 
-// ---------------------------------------------------------------- 해외 Biz정보 (회원 전용)
+// ---------------------------------------------------------------- 해외Biz정보(해외주재원 전용) 글 관리
 
-function BizAdmin({ token, notify }: { token: string; notify: Notify }) {
-  const v = useAdminVault<BizData>(token, "biz", notify);
-  const [editing, setEditing] = useState<BizPost | "new" | null>(null);
+type Filter = BoardCategory | "all";
+
+/** 목록의 한 줄 설명 */
+function postSub(p: BoardPost) {
+  const parts: string[] = [categoryLabel(p.category).ko];
+  if (isRegional(p.category)) parts.push(p.region && isRegionId(p.region) ? REGION_MAP[p.region].label.ko : (p.region ?? "-"), p.country || "-");
+  else if (p.category === "items") parts.push(p.kind || "-", p.company || "-", p.author_name);
+  else parts.push(p.author_name);
+  if (p.files?.length) parts.push(`첨부 ${p.files.length}`);
+  return parts.join(" · ");
+}
+
+function BoardAdmin({ token, notify }: { token: string; notify: Notify }) {
+  const v = useAdminVault(token, notify);
+  const [filter, setFilter] = useState<Filter>("all");
+  const [editing, setEditing] = useState<BoardPost | "new" | null>(null);
 
   if (!v.file) return <LoadState error={v.loadError} onRetry={v.load} />;
   if (!v.data)
     return (
       <UnlockForm
         title="현재 회원 비밀번호 입력"
-        desc="해외 Biz정보는 회원 전용이라 글이 회원 비밀번호로 암호화되어 있습니다. 현재 회원 비밀번호를 넣어야 글을 고칠 수 있습니다."
+        desc="해외Biz정보(해외주재원 전용)는 회원 전용이라 글이 회원 비밀번호로 암호화되어 있습니다. 현재 회원 비밀번호를 넣어야 글을 고칠 수 있습니다."
         label="현재 회원 비밀번호"
         busy={!!v.busy}
         onUnlock={v.unlock}
@@ -349,229 +598,141 @@ function BizAdmin({ token, notify }: { token: string; notify: Notify }) {
 
   if (editing) {
     const isNew = editing === "new";
-    const p: BizPost = isNew
-      ? { id: 0, category: "inquiry", region: "all", country: "", title: "", body: "", author_name: "글로벌마트", is_pinned: false, created_at: new Date().toISOString() }
+    const startCat: BoardCategory = isNew ? (filter === "all" ? "market" : filter) : editing.category;
+    const p: BoardPost = isNew
+      ? { id: 0, category: startCat, region: "all", country: "", title: "", body: "", author_name: "글로벌마트", is_pinned: false, created_at: new Date().toISOString() }
       : editing;
     return (
       <PostEditor
         key={isNew ? "new" : p.id}
-        kind="biz"
-        heading={isNew ? "새 글 — 해외 Biz정보" : "글 수정 — 해외 Biz정보"}
+        heading={isNew ? "새 글 — 해외Biz정보(해외주재원 전용)" : `글 수정 — #${p.id}`}
         currentKey={data.current_key!}
         initial={p}
         busy={v.busy}
-        authorHint="해외 Biz정보 목록에서는 게시자가 표시되지 않습니다."
+        authorHint="해외시장·해외입찰 화면에서는 게시자가 표시되지 않습니다."
         onCancel={() => setEditing(null)}
-        extra={
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <label className="label" htmlFor="region">지역</label>
-              <select id="region" name="region" defaultValue={p.region} className="input">
-                {REGIONS.map((r) => (
-                  <option key={r.id} value={r.id}>{r.label.ko}{r.id === "all" ? " (모든 지역에 표시)" : ""}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="label" htmlFor="country">주 또는 국가</label>
-              <input id="country" name="country" defaultValue={p.country} maxLength={80} className="input" placeholder="예: 베트남, 마하라슈트라주" />
-            </div>
-            <div>
-              <label className="label" htmlFor="category">종류</label>
-              <select id="category" name="category" defaultValue={p.category} className="input">
-                {BIZ_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label.ko}</option>)}
-              </select>
-            </div>
-          </div>
-        }
+        extra={<CategoryFields initial={p} />}
         onSubmit={(fd, fields, drafts, removed) => {
-          const region = String(fd.get("region"));
+          const rawCat = fd.get("category");
+          const category: BoardCategory = isCategory(rawCat) ? rawCat : startCat;
           // 새 글 번호는 저장하는 순간의 최신 목록 기준 (다른 곳에서 먼저 글을 올렸어도 겹치지 않게)
           const id = isNew ? nextIdOf(posts, data.next_id) : p.id;
-          const post: BizPost = {
-            ...p,
-            ...fields,
-            id,
-            region: isRegionId(region) ? region : "all",
-            country: String(fd.get("country") ?? "").trim(),
-            category: fd.get("category") === "industry" ? "industry" : "inquiry",
-          };
-          const next: BizData = {
+          // 카테고리를 바꿨을 때 예전 칸(지역·회사명 등)이 남지 않도록 지우고 다시 채움
+          const post: BoardPost = { ...p, ...fields, id, category };
+          delete post.region;
+          delete post.country;
+          delete post.company;
+          delete post.kind;
+          if (isRegional(category)) {
+            const region = String(fd.get("region") ?? "all");
+            post.region = isRegionId(region) ? region : "all";
+            post.country = String(fd.get("country") ?? "").trim();
+          } else if (category === "items") {
+            post.kind = String(fd.get("kind") ?? "").trim();
+            post.company = String(fd.get("company") ?? "").trim();
+          }
+          const next: BoardData = {
             ...data,
             next_id: Math.max(nextIdOf(posts, data.next_id), id + 1),
             posts: isNew ? [post, ...posts] : posts.map((x) => (x.id === id ? post : x)),
           };
-          return v.persist(next, { message: `${isNew ? "Add" : "Update"} biz post #${id}`, what: "해외 Biz정보를", drafts, removed }).then((ok) => { if (ok) setEditing(null); });
+          return v
+            .persist(next, { message: `${isNew ? "Add" : "Update"} board post #${id}`, what: "글을", drafts, removed })
+            .then((ok) => { if (ok) { setEditing(null); setFilter(category); } });
         }}
       />
     );
   }
 
+  const shown = filter === "all" ? posts : posts.filter((p) => p.category === filter);
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap gap-1.5" role="group" aria-label="카테고리">
+        {[{ id: "all" as Filter, l: "전체" }, ...BOARD_CATEGORIES.map((c) => ({ id: c.id as Filter, l: c.label.ko }))].map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            aria-pressed={filter === o.id}
+            onClick={() => setFilter(o.id)}
+            className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${filter === o.id ? "border-ink bg-ink text-white" : "border-line bg-white text-ink-3 hover:border-ink hover:text-ink"}`}
+          >
+            {o.l} <span className="font-normal opacity-70">{o.id === "all" ? posts.length : posts.filter((p) => p.category === o.id).length}</span>
+          </button>
+        ))}
+      </div>
       <PostList
-        title="해외 Biz정보 (회원 전용)"
-        count={posts.length}
+        title={filter === "all" ? "해외Biz정보(해외주재원 전용) 전체" : categoryLabel(filter).ko}
+        count={shown.length}
         onNew={() => setEditing("new")}
         busy={!!v.busy}
-        rows={[...posts]
+        rows={[...shown]
           .sort((a, b) => b.created_at.localeCompare(a.created_at))
           .map((p) => ({
             id: p.id,
             title: p.title,
             pinned: p.is_pinned,
-            sub: `${isRegionId(p.region) ? REGION_MAP[p.region].label.ko : p.region} · ${p.country || "-"} · ${bizCategoryLabel(p.category).ko}${p.files?.length ? ` · 첨부 ${p.files.length}` : ""}`,
+            sub: postSub(p),
             date: p.created_at,
             onEdit: () => setEditing(p),
             onDelete: () => {
-              v.persist({ ...data, next_id: nextIdOf(posts, data.next_id), posts: posts.filter((x) => x.id !== p.id) }, { message: `Delete biz post #${p.id}`, what: "해외 Biz정보를", removed: p.files });
+              v.persist({ ...data, next_id: nextIdOf(posts, data.next_id), posts: posts.filter((x) => x.id !== p.id) }, { message: `Delete board post #${p.id}`, what: "글 삭제를", removed: p.files });
             },
           }))}
       />
       <PasswordForm
         title="회원 비밀번호 바꾸기"
-        desc="해외 Biz정보를 보는 회원들이 함께 쓰는 비밀번호입니다. 바꾸면 기존 비밀번호로는 더 이상 열리지 않으니, 회원들에게 새 비밀번호를 알려 주세요."
+        desc="해외Biz정보(해외주재원 전용)의 모든 카테고리(해외시장·해외입찰·국내우수 Item·공지)를 여는 회원 공용 비밀번호입니다. 바꾸면 기존 비밀번호로는 더 이상 열리지 않으니, 회원들에게 새 비밀번호를 알려 주세요."
         busy={v.busy}
         onError={notify.error}
-        onChange={(np) => v.persist(withNewFileKey(data), { message: "Change biz member password", what: "새 회원 비밀번호를", password: np })}
+        onChange={(np) => v.persist(withNewFileKey(data), { message: "Change board member password", what: "새 회원 비밀번호를", password: np })}
       />
     </div>
   );
 }
 
-// ---------------------------------------------------------------- 해외주재원 전용 (암호화)
-
-type ResTab = ResidentBoard | "software";
-
-function ResidentAdmin({ token, notify }: { token: string; notify: Notify }) {
-  const v = useAdminVault<ResidentData>(token, "resident", notify, normalizeResident);
-  const [tab, setTab] = useState<ResTab>("items");
-  const [editing, setEditing] = useState<ResidentPost | "new" | null>(null);
-
-  if (!v.file) return <LoadState error={v.loadError} onRetry={v.load} />;
-  if (!v.data)
-    return (
-      <UnlockForm
-        title="현재 공용 비밀번호 입력"
-        desc="해외주재원 전용 내용(국내기업 아이템·소프트웨어 무역·주재원공지)은 공용 비밀번호로 암호화되어 있습니다. 현재 비밀번호를 넣어야 고칠 수 있습니다."
-        label="현재 공용 비밀번호"
-        busy={!!v.busy}
-        onUnlock={v.unlock}
-      />
-    );
-
-  const data = v.data;
-  const posts = data.posts ?? [];
-  const boardLabel = (b: ResidentBoard) => RESIDENT_BOARDS.find((x) => x.id === b)!.label.ko;
-
-  if (editing && tab !== "software") {
-    const isNew = editing === "new";
-    const board: ResidentBoard = isNew ? tab : residentBoardOf(editing);
-    const notice = board === "notice";
-    const p: ResidentPost = isNew
-      ? { id: 0, board, category: notice ? "" : "제품", company: "", title: "", body: "", author_name: "글로벌마트", is_pinned: false, created_at: new Date().toISOString() }
-      : editing;
-    return (
-      <PostEditor
-        key={isNew ? "new" : p.id}
-        kind="resident"
-        heading={`${isNew ? "새 글" : "글 수정"} — ${boardLabel(board)}`}
-        currentKey={data.current_key!}
-        initial={p}
-        busy={v.busy}
-        onCancel={() => setEditing(null)}
-        extra={
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <label className="label" htmlFor="board">게시판</label>
-              <select id="board" name="board" defaultValue={board} className="input">
-                {RESIDENT_BOARDS.map((b) => <option key={b.id} value={b.id}>{b.label.ko}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="label" htmlFor="category">종류 {notice && <span className="font-normal text-muted">(선택)</span>}</label>
-              <input id="category" name="category" list="res-cats" defaultValue={p.category} maxLength={40} className="input" />
-              <datalist id="res-cats">{["제품", "기술", "서비스", "기타"].map((c) => <option key={c} value={c} />)}</datalist>
-            </div>
-            <div>
-              <label className="label" htmlFor="company">회사명 {notice && <span className="font-normal text-muted">(공지는 비워 두세요)</span>}</label>
-              <input id="company" name="company" defaultValue={p.company} maxLength={100} className="input" />
-            </div>
-          </div>
-        }
-        onSubmit={(fd, fields, drafts, removed) => {
-          const id = isNew ? nextIdOf(posts, data.next_id) : p.id;
-          const post: ResidentPost = {
-            ...p,
-            ...fields,
-            id,
-            board: fd.get("board") === "notice" ? "notice" : "items",
-            category: String(fd.get("category") ?? "").trim(),
-            company: String(fd.get("company") ?? "").trim(),
-          };
-          const next: ResidentData = {
-            ...data,
-            next_id: Math.max(nextIdOf(posts, data.next_id), id + 1),
-            posts: isNew ? [post, ...posts] : posts.map((x) => (x.id === id ? post : x)),
-          };
-          return v.persist(next, { message: `${isNew ? "Add" : "Update"} resident post #${id}`, what: "해외주재원 전용 글을", drafts, removed }).then((ok) => { if (ok) setEditing(null); });
-        }}
-      />
-    );
-  }
-
+/** 글쓰기 양식의 카테고리별 칸: 해외시장·해외입찰 → 지역·주/국가, 국내우수 Item → 종류·회사명, 공지 → 없음 */
+function CategoryFields({ initial }: { initial: BoardPost }) {
+  const [cat, setCat] = useState<BoardCategory>(initial.category);
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-1.5" role="group" aria-label="해외주재원 전용 하위 메뉴">
-        {[...RESIDENT_BOARDS.map((b) => ({ id: b.id as ResTab, l: b.label.ko })), { id: "software" as ResTab, l: data.software?.title?.ko || "소프트웨어 무역" }].map((o) => (
-          <button
-            key={o.id}
-            type="button"
-            aria-pressed={tab === o.id}
-            onClick={() => { setTab(o.id); setEditing(null); }}
-            className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${tab === o.id ? "border-ink bg-ink text-white" : "border-line bg-white text-ink-3 hover:border-ink hover:text-ink"}`}
-          >
-            {o.l}
-          </button>
-        ))}
+    <div className="grid gap-4 sm:grid-cols-3">
+      <div>
+        <label className="label" htmlFor="category">카테고리</label>
+        <select id="category" name="category" value={cat} onChange={(e) => isCategory(e.target.value) && setCat(e.target.value)} className="input">
+          {BOARD_CATEGORIES.map((c) => (
+            <option key={c.id} value={c.id}>{c.label.ko}{c.regional ? " (나라별)" : ""}</option>
+          ))}
+        </select>
       </div>
-
-      {tab === "software" ? (
-        <SoftwareEditor
-          initial={data.software}
-          busy={v.busy}
-          onSave={(sw) => v.persist({ ...data, software: sw }, { message: "Update resident software page", what: "소프트웨어 내용을" })}
-        />
-      ) : (
-        <PostList
-          title={boardLabel(tab)}
-          count={posts.filter((p) => residentBoardOf(p) === tab).length}
-          onNew={() => setEditing("new")}
-          busy={!!v.busy}
-          rows={posts
-            .filter((p) => residentBoardOf(p) === tab)
-            .sort((a, b) => b.created_at.localeCompare(a.created_at))
-            .map((p) => ({
-              id: p.id,
-              title: p.title,
-              pinned: p.is_pinned,
-              sub: `${tab === "notice" ? "" : `${p.category || "-"} · ${p.company || "-"} · `}${p.author_name}${p.files?.length ? ` · 첨부 ${p.files.length}` : ""}`,
-              date: p.created_at,
-              onEdit: () => setEditing(p),
-              onDelete: () => {
-                v.persist({ ...data, next_id: nextIdOf(posts, data.next_id), posts: posts.filter((x) => x.id !== p.id) }, { message: `Delete resident post #${p.id}`, what: "해외주재원 전용 글을", removed: p.files });
-              },
-            }))}
-        />
+      {isRegional(cat) && (
+        <>
+          <div>
+            <label className="label" htmlFor="region">지역</label>
+            <select id="region" name="region" defaultValue={initial.region ?? "all"} className="input">
+              {REGIONS.map((r) => (
+                <option key={r.id} value={r.id}>{r.label.ko}{r.id === "all" ? " (모든 지역에 표시)" : ""}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="label" htmlFor="country">주 또는 국가</label>
+            <input id="country" name="country" defaultValue={initial.country ?? ""} maxLength={80} className="input" placeholder="예: 베트남, 마하라슈트라주" />
+          </div>
+        </>
       )}
-
-      <PasswordForm
-        title="공용 비밀번호 바꾸기"
-        desc="해외주재원 전용 공간(국내기업 아이템·소프트웨어 무역·주재원공지) 전체의 비밀번호입니다. 바꾸면 기존 비밀번호로는 더 이상 열리지 않으니, 주재원들에게 새 비밀번호를 알려 주세요."
-        busy={v.busy}
-        onError={notify.error}
-        onChange={(np) => v.persist(withNewFileKey(data), { message: "Change resident password", what: "새 공용 비밀번호를", password: np })}
-      />
+      {cat === "items" && (
+        <>
+          <div>
+            <label className="label" htmlFor="kind">종류</label>
+            <input id="kind" name="kind" list="item-kinds" defaultValue={initial.kind ?? ""} maxLength={40} className="input" />
+            <datalist id="item-kinds">{["제품", "기술", "서비스", "소프트웨어", "기타"].map((c) => <option key={c} value={c} />)}</datalist>
+          </div>
+          <div>
+            <label className="label" htmlFor="company">회사명</label>
+            <input id="company" name="company" defaultValue={initial.company ?? ""} maxLength={100} className="input" />
+          </div>
+        </>
+      )}
+      {cat === "notice" && <p className="self-end pb-3 text-sm text-muted sm:col-span-2">공지는 지역·회사 구분 없이 한 게시판에 올라갑니다.</p>}
     </div>
   );
 }
@@ -581,7 +742,6 @@ function ResidentAdmin({ token, notify }: { token: string; notify: Notify }) {
 type PostFieldsValue = { title: string; body: string; author_name: string; is_pinned: boolean; files: Attachment[] };
 
 function PostEditor({
-  kind,
   heading,
   currentKey,
   initial,
@@ -591,7 +751,6 @@ function PostEditor({
   onCancel,
   onSubmit,
 }: {
-  kind: Kind;
   heading: string;
   currentKey: string;
   initial: { title: string; body: string; author_name: string; is_pinned: boolean; files?: Attachment[] };
@@ -627,7 +786,7 @@ function PostEditor({
     const list = Array.from(files ?? []);
     const made: Draft[] = [];
     for (const f of list) {
-      const d = makeDraft(f, kind, currentKey, inline);
+      const d = makeDraft(f, currentKey, inline);
       if (typeof d === "string") {
         setErr(d);
         continue;
@@ -744,98 +903,6 @@ function PostEditor({
       </div>
       <FormButtons busy={busy} onCancel={onCancel} />
     </form>
-  );
-}
-
-// ---------------------------------------------------------------- 소프트웨어 무역 내용 편집
-
-const lines = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean);
-const paras = (s: string) => s.split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean);
-const emptyList = (): LList => ({ ko: [], en: [] });
-const emptySection = (): SoftwareSection => ({ id: randomId(3), title: { ko: "", en: "" }, paragraphs: emptyList(), features: emptyList() });
-
-function SoftwareEditor({ initial, busy, onSave }: { initial?: SoftwareContent; busy: string; onSave: (sw: SoftwareContent) => Promise<boolean> }) {
-  const [sections, setSections] = useState<SoftwareSection[]>(() => initial?.sections?.length ? initial.sections : [emptySection()]);
-  const sw = initial;
-  return (
-    <form
-      className="card space-y-6 p-6 lg:p-8"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const g = (k: string) => String(fd.get(k) ?? "");
-        const next: SoftwareContent = {
-          title: { ko: g("sw-title-ko").trim() || "소프트웨어 무역", en: g("sw-title-en").trim() || "Software Trading" },
-          lead: { ko: g("sw-lead-ko").trim(), en: g("sw-lead-en").trim() },
-          lead2: { ko: g("sw-lead2-ko").trim(), en: g("sw-lead2-en").trim() },
-          targets: { ko: lines(g("sw-targets-ko")), en: lines(g("sw-targets-en")) },
-          sections: sections.map((s) => ({
-            id: s.id,
-            title: { ko: g(`s-${s.id}-title-ko`).trim(), en: g(`s-${s.id}-title-en`).trim() },
-            paragraphs: { ko: paras(g(`s-${s.id}-p-ko`)), en: paras(g(`s-${s.id}-p-en`)) },
-            features: { ko: lines(g(`s-${s.id}-f-ko`)), en: lines(g(`s-${s.id}-f-en`)) },
-            ...(g(`s-${s.id}-photo`).trim() ? { photo: g(`s-${s.id}-photo`).trim() } : {}),
-          })),
-        };
-        onSave(next);
-      }}
-    >
-      <div>
-        <h2 className="text-xl font-extrabold">소프트웨어 무역 내용</h2>
-        <p className="mt-1 text-sm leading-relaxed text-muted">
-          해외주재원 전용 › 소프트웨어 무역 화면의 글입니다. 공용 비밀번호로 암호화되어 저장되며, 공개 페이지에는 나오지 않습니다.
-          영어 칸을 비워 두면 영어 화면에서도 한국어가 보입니다. 쉼표(,)로 항목을 나누고, 문단은 빈 줄로 나눕니다.
-        </p>
-      </div>
-      <TwoLang label="메뉴 이름" name="sw-title" value={sw?.title ?? { ko: "소프트웨어 무역", en: "Software Trading" }} />
-      <TwoLang label="첫 문단 (크게 표시)" name="sw-lead" value={sw?.lead} rows={3} />
-      <TwoLang label="둘째 문단" name="sw-lead2" value={sw?.lead2} rows={3} />
-      <TwoLang label="주요 제안 대상 (쉼표로 구분)" name="sw-targets" value={sw ? { ko: sw.targets.ko.join(", "), en: sw.targets.en.join(", ") } : undefined} />
-      {sections.map((s, i) => (
-        <fieldset key={s.id} className="space-y-4 rounded-xl border border-line p-4 sm:p-5">
-          <legend className="px-1 text-sm font-bold">항목 {i + 1}</legend>
-          <TwoLang label="제목" name={`s-${s.id}-title`} value={s.title} />
-          <TwoLang label="본문 (문단은 빈 줄로 구분)" name={`s-${s.id}-p`} value={{ ko: s.paragraphs.ko.join("\n\n"), en: s.paragraphs.en.join("\n\n") }} rows={7} />
-          <TwoLang label="특징 태그 (쉼표로 구분)" name={`s-${s.id}-f`} value={{ ko: s.features.ko.join(", "), en: s.features.en.join(", ") }} />
-          <div>
-            <label className="label" htmlFor={`s-${s.id}-photo`}>사진 주소 (선택, https://…)</label>
-            <input id={`s-${s.id}-photo`} name={`s-${s.id}-photo`} type="url" defaultValue={s.photo ?? ""} className="input font-mono text-sm" placeholder="https://images.unsplash.com/…" />
-          </div>
-          {sections.length > 1 && (
-            <button type="button" onClick={() => { if (window.confirm(`항목 ${i + 1}을(를) 지울까요? (저장을 눌러야 반영됩니다)`)) setSections((cur) => cur.filter((x) => x.id !== s.id)); }} className="btn-danger btn-sm">
-              이 항목 지우기
-            </button>
-          )}
-        </fieldset>
-      ))}
-      <div className="flex flex-wrap justify-between gap-2">
-        <button type="button" onClick={() => setSections((cur) => [...cur, emptySection()])} className="btn-ghost">
-          <Icon name="plus" className="size-4" /> 항목 추가
-        </button>
-        <button disabled={!!busy} className="btn-primary px-8">{busy || "저장"}</button>
-      </div>
-    </form>
-  );
-}
-
-function TwoLang({ label, name, value, rows }: { label: string; name: string; value?: { ko: string; en: string }; rows?: number }) {
-  const field = (lang: "ko" | "en") =>
-    rows ? (
-      <textarea id={`${name}-${lang}`} name={`${name}-${lang}`} rows={rows} defaultValue={value?.[lang] ?? ""} className="input resize-y leading-relaxed" />
-    ) : (
-      <input id={`${name}-${lang}`} name={`${name}-${lang}`} defaultValue={value?.[lang] ?? ""} className="input" />
-    );
-  return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <div>
-        <label className="label" htmlFor={`${name}-ko`}>{label} · 한국어</label>
-        {field("ko")}
-      </div>
-      <div>
-        <label className="label" htmlFor={`${name}-en`}>{label} · English</label>
-        {field("en")}
-      </div>
-    </div>
   );
 }
 
@@ -975,16 +1042,28 @@ function Help() {
       <h3 className="!mt-0 text-lg font-bold text-ink">글을 저장하면</h3>
       <p>저장 버튼을 누르면 GitHub 저장소의 파일이 바뀌고, 자동으로 사이트가 다시 만들어집니다. 보통 1~2분 뒤에 홈페이지에 보입니다.</p>
       <p>글 번호는 지운 글의 번호를 다시 쓰지 않습니다. 예전 글 주소가 다른 글을 가리키지 않게 하기 위해서입니다.</p>
-      <h3 className="text-lg font-bold text-ink">두 개의 비밀번호</h3>
+      <h3 className="text-lg font-bold text-ink">카테고리</h3>
       <ul className="list-disc space-y-1 pl-5">
-        <li><b>회원 비밀번호</b> — 해외 Biz정보(해외입찰·해외시장)를 보는 회원들이 함께 쓰는 비밀번호. 회원가입은 없고, 글로벌마트가 회원에게 알려 줍니다.</li>
-        <li><b>공용 비밀번호</b> — 해외주재원 전용(국내기업 아이템·소프트웨어 무역·주재원공지)을 보는 주재원들이 함께 쓰는 비밀번호.</li>
+        <li><b>해외시장 · 해외입찰</b> — 나라별 게시판. 지역(동남아·중동 등)과 주/국가를 고릅니다. &lsquo;전체&rsquo; 지역으로 올린 글은 모든 지역에 함께 보입니다. 게시자는 표시되지 않습니다.</li>
+        <li><b>국내우수 Item</b> — 단일 게시판. 종류(제품·기술·소프트웨어 등)와 회사명을 적습니다.</li>
+        <li><b>공지</b> — 단일 게시판. 본사에서 해외주재원에게 전하는 공지.</li>
       </ul>
-      <p>두 게시판의 글은 각각의 비밀번호로 암호화되어 저장됩니다. 비밀번호를 잊으면 글을 열 수 없으니 안전한 곳에 적어 두세요.</p>
+      <p>&lsquo;공지로 목록 맨 위에 고정&rsquo;을 체크하면 그 카테고리 목록의 맨 위에 보입니다.</p>
+      <h3 className="text-lg font-bold text-ink">회원 비밀번호 (하나)</h3>
+      <p>
+        해외Biz정보(해외주재원 전용)의 모든 카테고리는 회원 비밀번호 하나로 열립니다. 회원가입은 없고, 글로벌마트가 회원(해외주재원 등)에게 알려 줍니다.
+        글은 이 비밀번호로 암호화되어 저장되므로, 비밀번호를 잊으면 글을 열 수 없습니다. 안전한 곳에 적어 두세요.
+      </p>
+      <h3 className="text-lg font-bold text-ink">관리자 아이디·비밀번호</h3>
+      <p>
+        관리자 아이디·비밀번호는 회원 비밀번호와 별개입니다. 사이트 소유자가 &lsquo;처음 설정&rsquo;에서 GitHub 토큰을 넣고 정하면, 토큰이 아이디·비밀번호로 암호화되어 저장소(public/data/admin.json)에 저장됩니다.
+        아이디·비밀번호를 아는 사람은 이 토큰으로 저장소를 고칠 수 있으므로, 길고 짐작하기 어려운 비밀번호를 쓰고 다른 사람에게 알려 주지 마세요.
+        토큰의 유효기간이 지나면 아이디로 로그인되지 않으니, 새 토큰을 만들어 &lsquo;처음 설정&rsquo;을 다시 해 주세요.
+      </p>
       <h3 className="text-lg font-bold text-ink">이미지·첨부 파일</h3>
       <p>
         글쓰기 화면의 &lsquo;이미지 넣기&rsquo;(JPG·PNG·GIF·WEBP)는 본문의 커서 위치에 이미지를 넣고, &lsquo;파일 첨부&rsquo;는 글 아래에 내려받기 목록으로 붙입니다.
-        한 파일은 {MAX_FILE_LABEL}까지 올릴 수 있습니다. 파일도 글과 같은 비밀번호로 암호화되어 저장되므로 비밀번호를 아는 사람만 볼 수 있습니다.
+        한 파일은 {MAX_FILE_LABEL}까지 올릴 수 있습니다. 파일도 회원 비밀번호로 보호되는 파일 키로 암호화되어 저장되므로 비밀번호를 아는 사람만 볼 수 있습니다.
         파일은 저장 버튼을 누를 때 올라가며, 글이나 첨부를 지우면 저장소의 파일도 함께 지웁니다.
       </p>
       <h3 className="text-lg font-bold text-ink">GitHub 토큰 만들기</h3>
@@ -992,8 +1071,8 @@ function Help() {
         <li>GitHub 로그인 → 오른쪽 위 프로필 → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token</li>
         <li>Repository access: Only select repositories → <b>intoedu/Global-Mart</b></li>
         <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
-        <li>Expiration은 짧게(예: 30~90일) 정합니다. 유효기간이 지나면 새로 만들어야 합니다.</li>
-        <li>만든 토큰(github_pat_로 시작)을 이 화면에 붙여 넣습니다. 클래식 토큰(ghp_)은 권한 범위가 넓어 권장하지 않습니다.</li>
+        <li>Expiration은 짧게(예: 30~90일) 정합니다. 유효기간이 지나면 새로 만들어 &lsquo;처음 설정&rsquo;을 다시 합니다.</li>
+        <li>만든 토큰(github_pat_로 시작)을 &lsquo;처음 설정&rsquo; 또는 &lsquo;토큰 직접 입력&rsquo;에 붙여 넣습니다. 클래식 토큰(ghp_)은 권한 범위가 넓어 권장하지 않습니다.</li>
       </ol>
       <h3 className="text-lg font-bold text-ink">비밀번호 보안</h3>
       <p>

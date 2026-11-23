@@ -199,7 +199,7 @@ export default async function HomePage({ params }: LangParams) {
               { href: "/business/agency", title: { ko: "해외지사대행 계획수립", en: "Branch agency planning" }, period: { ko: "약1개월", en: "About 1 month" } },
               { href: "/business/research", title: { ko: "해외시장조사", en: "Market research" }, period: { ko: "약1개월", en: "About 1 month" } },
               { href: "/business/buyers", title: { ko: "인허가, 바이어발굴 등 해외지사대행", en: "Branch agency: permits, buyer discovery, etc." }, period: { ko: "1개월-4개월", en: "1–4 months" } },
-              { href: "/business/branch", title: { ko: "해외지사대행에서 무역대행으로 전환", en: "From branch agency to trade agency" }, period: null },
+              { href: "/business/agency", title: { ko: "해외지사대행에서 무역대행으로 전환", en: "From branch agency to trade agency" }, period: null },
             ].map((p, i) => (
               <li key={i} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="relative pl-[clamp(64px,3.5rem+0.6vw,76px)] md:pl-0">
                 <span className="absolute left-0 top-0 grid size-[clamp(44px,2.4rem+0.6vw,56px)] place-items-center rounded-full bg-ink text-sm font-black tabular-nums text-orange ring-8 ring-white md:relative">
@@ -218,34 +218,32 @@ export default async function HomePage({ params }: LangParams) {
         </div>
       </section>
 
-      {/* ---------------- 해외 Biz정보 (회원 전용 — 글 제목은 공개하지 않음) ---------------- */}
+      {/* ---------------- 해외Biz정보(해외주재원 전용) — 회원 전용, 글 제목은 공개하지 않음 ---------------- */}
       <section className="pb-[clamp(32px,1rem+2vw,64px)] pt-0">
         <div className="container-x">
-          <div data-reveal className="grid gap-6 rounded-3xl bg-paper p-6 sm:p-[clamp(28px,1.4rem+1.2vw,56px)] lg:grid-cols-[1.4fr_1fr] lg:items-center">
-            <div>
-              <p className="eyebrow">Global Biz Info</p>
-              <h2 className="mt-3 text-h2">{t(HOME.bizCta.title)}</h2>
-              <p className="mt-4 max-w-[38em] text-body text-muted">{t(HOME.bizCta.body)}</p>
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {[{ ko: "해외시장", en: "Overseas markets" }, { ko: "해외입찰", en: "Overseas tenders" }].map((c) => (
-                  <li key={c.ko} className="rounded-full bg-white px-3.5 py-1.5 text-small font-semibold text-ink-3 ring-1 ring-line">
+          <div data-reveal className="rounded-3xl bg-paper p-6 sm:p-[clamp(28px,1.4rem+1.2vw,56px)]">
+            <p className="eyebrow">Global Biz Info</p>
+            <h2 className="mt-3 text-h2">{t(HOME.bizCta.title)}</h2>
+            <Link href={lp(locale, "/biz")} className="btn-primary btn-sm mt-5">
+              <Icon name="lock" className="size-4" /> {ko ? "회원로그인" : "Member login"}
+            </Link>
+            <div className="mt-6 max-w-[46em] space-y-2 text-body text-muted">
+              {HOME.bizCta.body.map((para, i) => (
+                <p key={i}>{t(para)}</p>
+              ))}
+            </div>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {HOME.bizCta.categories.map((c) => (
+                <li key={c.cat}>
+                  <Link
+                    href={lp(locale, `/biz?cat=${c.cat}`)}
+                    className="inline-block rounded-full bg-white px-3.5 py-1.5 text-small font-semibold text-ink-3 ring-1 ring-line transition hover:text-ink hover:ring-ink"
+                  >
                     {t(c)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex flex-col items-start gap-4 rounded-2xl bg-ink p-6 text-white lg:p-8">
-              <span className="grid size-12 place-items-center rounded-2xl bg-white/10 text-sky">
-                <Icon name="lock" className="size-6" />
-              </span>
-              <p className="text-h3 font-bold">{ko ? "회원 전용 게시판" : "Members-only board"}</p>
-              <p className="text-small text-white/65">
-                {ko ? "글로벌마트에서 받은 회원 비밀번호를 입력한 후 이용할 수 있습니다." : "Enter the member password provided by Globalmart to view the posts."}
-              </p>
-              <Link href={lp(locale, "/biz")} className="btn-light btn-sm">
-                {ko ? "회원 로그인" : "Member login"} <Icon name="arrow-right" className="size-4" />
-              </Link>
-            </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

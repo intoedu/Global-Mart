@@ -58,7 +58,7 @@ export const SITE = {
 
 export type NavItem = { href: string; label: L; children?: { href: string; label: L }[] };
 
-/** 메뉴 구성: 회사소개 · 해외지사 · 사업내용 · 해외 Biz정보 · 해외주재원 전용 · Contact Us (2차 수정 PPT 반영) */
+/** 메뉴 구성: 회사소개 · 해외지사 · 사업내용 · 해외Biz정보(해외주재원 전용) · Contact Us (3차 수정 PPT 반영) */
 export const NAV: NavItem[] = [
   {
     href: "/company/greeting",
@@ -78,18 +78,19 @@ export const NAV: NavItem[] = [
       { href: "/business/agency", label: { ko: "해외지사대행", en: "Overseas Branch Agency" } },
       { href: "/business/research", label: { ko: "해외시장조사", en: "Market Research" } },
       { href: "/business/buyers", label: { ko: "해외바이어발굴", en: "Buyer Discovery" } },
-      { href: "/business/branch", label: { ko: "해외지사운영", en: "Branch Operation" } },
+      { href: "/business/tender", label: { ko: "해외입찰대행", en: "Overseas Tender Agency" } },
     ],
   },
-  { href: "/biz", label: { ko: "해외 Biz정보", en: "Global Biz Info" } },
   {
-    href: "/resident",
-    label: { ko: "해외주재원 전용", en: "For Overseas Staff" },
-    // 비밀번호로 잠긴 공간 — 메뉴 이름만 공개, 내용은 암호화되어 있음 (?cat= 으로 하위 카테고리 선택)
+    href: "/biz",
+    label: { ko: "해외Biz정보(해외주재원 전용)", en: "Global Biz Info (Staff Only)" },
+    // 회원 비밀번호로 잠긴 게시판 — 메뉴 이름만 공개, 글은 암호화 (?cat= 으로 카테고리 선택, 한 번 로그인하면 전체 이용)
     children: [
-      { href: "/resident?cat=items", label: { ko: "국내기업 아이템", en: "Korean Company Items" } },
-      { href: "/resident?cat=software", label: { ko: "소프트웨어 무역", en: "Software Trading" } },
-      { href: "/resident?cat=notice", label: { ko: "주재원공지", en: "Staff Notices" } },
+      { href: "/biz", label: { ko: "회원로그인", en: "Member login" } },
+      { href: "/biz?cat=market", label: { ko: "해외시장", en: "Overseas markets" } },
+      { href: "/biz?cat=tender", label: { ko: "해외입찰", en: "Overseas tenders" } },
+      { href: "/biz?cat=items", label: { ko: "국내우수 Item", en: "Korean Featured Items" } },
+      { href: "/biz?cat=notice", label: { ko: "공지", en: "Notices" } },
     ],
   },
   { href: "/contact", label: { ko: "Contact Us", en: "Contact Us" } },
