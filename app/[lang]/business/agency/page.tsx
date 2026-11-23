@@ -18,10 +18,10 @@ export default async function AgencyPage({ params }: LangParams) {
     <BusinessShell image="meeting" locale={locale} current="/business/agency" eyebrow="Overseas Branch Agency" lead={t(AGENCY.lead)}>
       {/* 해외지사대행 전략수립 및 수수료 — 1st ~ 4th 단계 */}
       {/* 한 화면에 들어오도록 간격·글자 크기를 촘촘하게 (의뢰인 요청) */}
-      <section className="pb-[clamp(20px,0.8rem+0.6vw,32px)] pt-[clamp(20px,0.8rem+0.8vw,36px)]">
+      <section className="pb-[clamp(14px,0.5rem+0.5vw,28px)] pt-[clamp(18px,0.7rem+0.7vw,34px)]">
         <div className="container-x">
           <h2 className="text-[clamp(1.25rem,0.95rem+0.8vw,1.875rem)] font-extrabold tracking-tight text-ink">{t(strategy.title)}</h2>
-          <ol className="mt-[clamp(12px,0.5rem+0.5vw,20px)] grid gap-[clamp(10px,0.4rem+0.5vw,20px)] md:grid-cols-2 xl:grid-cols-[1fr_1.55fr_1fr_1fr] xl:items-start">
+          <ol className="mt-[clamp(12px,0.5rem+0.5vw,20px)] grid gap-[clamp(10px,0.4rem+0.5vw,20px)] md:grid-cols-2 xl:grid-cols-[1fr_1.7fr_1fr_1fr] xl:items-stretch">
             {strategy.steps.map((s, i) => (
               <li
                 key={s.no}

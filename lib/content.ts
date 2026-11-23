@@ -85,7 +85,7 @@ export const HOME = {
     { ko: "기타", en: "And more" },
   ] satisfies L[],
   bizCta: {
-    title: { ko: "해외Biz정보(해외주재원 전용)", en: "Global Biz Info (Staff Only)" },
+    title: { ko: "해외Biz정보(해외주재원 전용)", en: "Global Biz Info (Overseas Staff Only)" },
     /** 두 단락 (3차 수정 PPT 4쪽) */
     body: [
       {
@@ -94,7 +94,7 @@ export const HOME = {
       },
       {
         ko: "특히, 글로벌Item(예, 화장품, S/W, Game 등)을 소지한 국내기업들의 많은 참여 바랍니다. 해외에서 동시다발적으로 영업이 이루어 집니다.",
-        en: "We especially welcome Korean companies with global items (e.g. cosmetics, software, games). Sales are carried out in many countries at the same time.",
+        en: "We especially welcome Korean companies with global items (e.g. cosmetics, software, games). Sales take place in many countries overseas at the same time.",
       },
     ],
     categories: [
@@ -222,10 +222,10 @@ export const AGENCY = {
         title: { ko: "해외지사대행의 기간과 수수료의 책정", en: "Setting the term and fees of the branch agency" },
         dash: true,
         items: [
-          { ko: "월 수수료 : 50-100만원(업무의 난이도 따라)", en: "Monthly fee: KRW 0.5–1 million (depending on the difficulty of the work)" },
-          { ko: "6개월 단위 계약(최초의 경우 3개월 가능)", en: "6-month contracts (3 months possible for a first contract)" },
-          { ko: "타지역 출장 등 : 실비 별도", en: "Trips to other regions, etc.: actual costs charged separately" },
-          { ko: "인허가, 해외입찰 등 : 별도 협의", en: "Permits, overseas tenders, etc.: negotiated separately" },
+          { ko: "월 수수료 : 50-100만원(업무의 난이도 따라)", en: "Monthly fee: KRW 0.5–1M (by difficulty)" },
+          { ko: "6개월 단위 계약(최초의 경우 3개월 가능)", en: "6-month terms (3 months for a first one)" },
+          { ko: "타지역 출장 등 : 실비 별도", en: "Trips to other regions: actual costs" },
+          { ko: "인허가, 해외입찰 등 : 별도 협의", en: "Permits, tenders, etc.: negotiated" },
         ],
       },
       {

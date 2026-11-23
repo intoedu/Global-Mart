@@ -336,7 +336,7 @@ function PinMark({ ko, className = "" }: { ko: boolean; className?: string }) {
   return (
     <>
       <Icon name="pin" className={`size-4 shrink-0 text-orange ${className}`} />
-      <span className="sr-only">{ko ? "공지: " : "Pinned: "}</span>
+      <span className="sr-only">{ko ? "고정: " : "Pinned: "}</span>
     </>
   );
 }

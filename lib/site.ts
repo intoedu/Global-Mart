@@ -83,7 +83,7 @@ export const NAV: NavItem[] = [
   },
   {
     href: "/biz",
-    label: { ko: "해외Biz정보(해외주재원 전용)", en: "Global Biz Info (Staff Only)" },
+    label: { ko: "해외Biz정보(해외주재원 전용)", en: "Global Biz Info (Overseas Staff Only)" },
     // 회원 비밀번호로 잠긴 게시판 — 메뉴 이름만 공개, 글은 암호화 (?cat= 으로 카테고리 선택, 한 번 로그인하면 전체 이용)
     children: [
       { href: "/biz", label: { ko: "회원로그인", en: "Member login" } },

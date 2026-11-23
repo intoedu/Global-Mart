@@ -66,7 +66,7 @@ export function PostView({
       <header className="border-b-2 border-ink pb-6">
         <div className="flex flex-wrap items-center gap-2">
           {badge && <span className="rounded-md bg-accent/10 px-2.5 py-1 text-xs font-bold text-ink">{badge}</span>}
-          {pinned && <span className="rounded-md bg-ink px-2.5 py-1 text-xs font-bold text-white">{ko ? "공지" : "Pinned"}</span>}
+          {pinned && <span className="rounded-md px-2.5 py-1 text-xs font-bold text-orange-ink ring-1 ring-orange/50">{ko ? "고정" : "Pinned"}</span>}
         </div>
         <Title lang={contentLang} className="mt-3 text-[clamp(24px,1.2rem+0.9vw,36px)] font-extrabold leading-snug tracking-tight text-ink">
           {title}

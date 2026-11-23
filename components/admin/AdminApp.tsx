@@ -898,7 +898,7 @@ function PostEditor({
         </div>
         <label className="flex items-center gap-2.5 self-center text-sm font-semibold">
           <input type="checkbox" name="is_pinned" defaultChecked={initial.is_pinned} className="size-4 accent-ink" />
-          공지로 목록 맨 위에 고정
+          목록 맨 위에 고정
         </label>
       </div>
       <FormButtons busy={busy} onCancel={onCancel} />
@@ -1010,7 +1010,7 @@ function PostList({ title, count, rows, onNew, busy }: { title: string; count: n
                 {r.pinned && (
                   <>
                     <Icon name="pin" className="size-4 shrink-0 text-orange" />
-                    <span className="sr-only">공지</span>
+                    <span className="sr-only">고정</span>
                   </>
                 )}
                 <span className="truncate">{r.title}</span>
@@ -1048,7 +1048,7 @@ function Help() {
         <li><b>국내우수 Item</b> — 단일 게시판. 종류(제품·기술·소프트웨어 등)와 회사명을 적습니다.</li>
         <li><b>공지</b> — 단일 게시판. 본사에서 해외주재원에게 전하는 공지.</li>
       </ul>
-      <p>&lsquo;공지로 목록 맨 위에 고정&rsquo;을 체크하면 그 카테고리 목록의 맨 위에 보입니다.</p>
+      <p>&lsquo;목록 맨 위에 고정&rsquo;을 체크하면 그 카테고리 목록의 맨 위에 보입니다.</p>
       <h3 className="text-lg font-bold text-ink">회원 비밀번호 (하나)</h3>
       <p>
         해외Biz정보(해외주재원 전용)의 모든 카테고리는 회원 비밀번호 하나로 열립니다. 회원가입은 없고, 글로벌마트가 회원(해외주재원 등)에게 알려 줍니다.
