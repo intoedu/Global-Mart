@@ -1,6 +1,6 @@
-:HL["/Global-Mart/_next/static/chunks/34lm73btupo3q.css","style"]
+:HL["/Global-Mart/_next/static/chunks/274s8h2majbj4.css","style"]
 4:[["children",{"s":"__PAGE__","h":160}]]
 3:[["children",{"s":"history","h":96,"c":"$Q4"}]]
 2:[["children",{"s":"company","h":64,"c":"$Q3"}]]
 1:[["children",{"s":{"n":"lang","t":"d","k":"en","s":[]},"h":65584,"c":"$Q2"}]]
-0:{"b":"9I-Y-pPZFsY0EgUErXILL","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"tiIyA4l0xEimFMhDqpqkA","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
