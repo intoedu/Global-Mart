@@ -1,5 +1,5 @@
-:HL["/Global-Mart/_next/static/chunks/0qmxrvw_0bdc2.css","style"]
+:HL["/Global-Mart/_next/static/chunks/34lm73btupo3q.css","style"]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":"biz","h":64,"c":"$Q3"}]]
 1:[["children",{"s":{"n":"lang","t":"d","k":"en","s":[]},"h":65584,"c":"$Q2"}]]
-0:{"b":"P78G6ESlSIRbX9M4eptlC","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"9I-Y-pPZFsY0EgUErXILL","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
