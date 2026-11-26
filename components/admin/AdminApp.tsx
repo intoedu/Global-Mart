@@ -178,6 +178,14 @@ export function AdminApp() {
   );
 }
 
+/**
+ * GitHub 토큰 만들기 화면 (이름·설명·소유자·유효기간·Contents 쓰기 권한을 주소로 미리 채움)
+ * 참고: docs.github.com › Managing your personal access tokens › "Pre-filling … using URL parameters"
+ * 저장소(intoedu/Global-Mart)는 주소로 고를 수 없어 화면에서 직접 선택해야 합니다.
+ */
+const TOKEN_NEW_URL =
+  "https://github.com/settings/personal-access-tokens/new?name=Globalmart+admin&description=Global-Mart+site+admin+(boards)&target_name=intoedu&expires_in=366&contents=write";
+
 // ---------------------------------------------------------------- 로그인 (아이디·비밀번호 / 처음 설정 / 토큰 직접 입력)
 
 type GateMode = "login" | "setup" | "token";
@@ -328,6 +336,33 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
               주의: 아이디·비밀번호를 아는 사람은 누구나 이 토큰으로 저장소를 고칠 수 있습니다. 암호화 파일은 공개되어 있어 짧은 비밀번호는 대입으로 풀릴 수 있으니, 길고 짐작하기 어려운 비밀번호(예: 16자 이상)를 쓰세요.
               토큰은 <b>intoedu/Global-Mart</b> 저장소만, <b>Contents: Read and write</b> 권한만, 짧은 유효기간으로 만드세요.
             </p>
+            {/* 토큰 만들기 안내: 이름·설명·유효기간·권한(Contents 쓰기)이 미리 채워진 GitHub 화면으로 이동 */}
+            <div className="rounded-xl border border-line bg-paper px-4 py-4 text-sm leading-relaxed text-ink-3">
+              <p className="font-bold text-ink">토큰 만드는 방법 (약 2분)</p>
+              <ol className="mt-2 list-decimal space-y-1 pl-5">
+                <li>
+                  아래 버튼을 눌러 GitHub 토큰 만들기 화면을 엽니다. (GitHub 로그인 필요 · 이름·유효기간·권한이 미리 채워져 있습니다)
+                </li>
+                <li>
+                  <b>Repository access</b>에서 <b>Only select repositories</b>를 고르고 <b>intoedu/Global-Mart</b>를 선택합니다.
+                </li>
+                <li>
+                  <b>Permissions › Repositories</b>에 <b>Contents: Read and write</b>가 있는지 확인합니다. (다른 권한은 추가하지 않습니다)
+                </li>
+                <li>
+                  맨 아래 <b>Generate token</b>을 누르고, 나온 토큰(<code>github_pat_…</code>)을 복사해 아래 칸에 붙여 넣습니다.
+                </li>
+              </ol>
+              <a
+                href={TOKEN_NEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary btn-sm mt-3 inline-flex"
+              >
+                GitHub 토큰 만들기 화면 열기 ↗
+              </a>
+              <p className="mt-2 text-xs text-muted">토큰은 화면을 닫으면 다시 볼 수 없으니, 붙여 넣기 전까지 창을 닫지 마세요.</p>
+            </div>
             {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
             <div>
               <label className="label" htmlFor="setup-token">GitHub 토큰 (Fine-grained)</label>
