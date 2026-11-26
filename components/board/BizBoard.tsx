@@ -11,19 +11,15 @@ import type { Locale } from "@/lib/i18n";
 import type { BoardCategory, BoardPost } from "@/lib/types";
 import { Icon } from "../Icon";
 import { Pagination } from "./Pagination";
-import { RegionMap } from "./RegionMap";
 import { ClipIcon } from "./SecureContent";
 
 const PAGE_SIZE = 15;
 
-/** 목록에서 고른 카테고리 — "all" 은 모든 카테고리의 최신 글 */
-export type BoardView = BoardCategory | "all";
-
 /** 목록 주소 (/biz/?cat=…&region=…&q=…&page=…) */
-export function boardHref(locale: Locale, o: { cat: BoardView; region?: string; q?: string; page?: number }) {
+export function boardHref(locale: Locale, o: { cat: BoardCategory; region?: string; q?: string; page?: number }) {
   const p = new URLSearchParams();
-  if (o.cat !== "all") p.set("cat", o.cat);
-  if (o.cat !== "all" && isRegional(o.cat) && o.region && o.region !== "all") p.set("region", o.region);
+  p.set("cat", o.cat);
+  if (isRegional(o.cat) && o.region && o.region !== "all") p.set("region", o.region);
   if (o.q) p.set("q", o.q);
   if (o.page && o.page > 1) p.set("page", String(o.page));
   const s = p.toString();
@@ -32,20 +28,20 @@ export function boardHref(locale: Locale, o: { cat: BoardView; region?: string; 
 
 /**
  * 해외Biz정보(해외주재원 전용) 목록 — 회원 비밀번호로 푼 글
- * - 해외시장·해외입찰: 나라별 게시판 (지역 탭 + 국가 머리말 + 지도)
- * - 국내우수 Item·공지·전체: 단일 게시판
+ * - 해외시장·해외입찰: 나라별 게시판 (지역 탭 + 국가 머리말). 4차 수정 요청으로 지도 그림은 없앴습니다.
+ * - 국내우수 Item·공지: 단일 게시판 (종류 칸 — 국내우수 Item 은 회사명도)
  * 지역·검색·페이지는 주소로 유지. 글 보기는 같은 페이지의 ?post=번호 (components/board/BizApp)
  */
-export function BizBoard({ posts, view, locale, footer }: { posts: BoardPost[]; view: BoardView; locale: Locale; footer?: React.ReactNode }) {
+export function BizBoard({ posts, view, locale, footer }: { posts: BoardPost[]; view: BoardCategory; locale: Locale; footer?: React.ReactNode }) {
   const sp = useSearchParams();
-  const regional = view !== "all" && isRegional(view);
+  const regional = isRegional(view);
   const region: RegionId = regional && isRegionId(sp.get("region")) ? (sp.get("region") as RegionId) : "all";
   const q = sp.get("q")?.trim() || "";
   const page = Math.max(1, Number.parseInt(sp.get("page") ?? "1", 10) || 1);
   return <BoardList key={view} posts={posts} view={view} regional={regional} locale={locale} region={region} q={q} page={page} footer={footer} />;
 }
 
-type ListProps = { posts: BoardPost[]; view: BoardView; regional: boolean; locale: Locale; region: RegionId; q: string; page: number; footer?: React.ReactNode };
+type ListProps = { posts: BoardPost[]; view: BoardCategory; regional: boolean; locale: Locale; region: RegionId; q: string; page: number; footer?: React.ReactNode };
 
 function BoardList({ posts, view, regional, locale, region, q, page: rawPage, footer }: ListProps) {
   const router = useRouter();
@@ -53,7 +49,6 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
   const t = (l: { ko: string; en: string }) => l[locale];
   const [draft, setDraft] = useState(q);
   const navRef = useRef<HTMLElement>(null);
-  const boardRef = useRef<HTMLDivElement>(null);
 
   // 뒤로/앞으로 가기로 주소의 검색어가 바뀌면 입력칸도 맞춤
   useEffect(() => setDraft(q), [q]);
@@ -90,24 +85,13 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
     nav.scrollLeft = el.offsetLeft - (nav.clientWidth - el.offsetWidth) / 2;
   }, [region]);
 
-  // 지도 글 수 ('전체' 글은 모든 지역에 포함)
-  const counts = useMemo(() => {
-    const c: Record<string, number> = {};
-    for (const r of REGIONS) c[r.id] = posts.filter((p) => r.id === "all" || p.region === r.id || p.region === "all").length;
-    return c;
-  }, [posts]);
-
   const regionLabel = (r?: string) => (r && isRegionId(r) ? t(REGION_MAP[r].label) : (r ?? ""));
   const detail = (id: number) => lp(locale, `/biz?post=${id}`);
   const postLang = ko ? undefined : "ko";
-  const toBoardTop = () => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    boardRef.current?.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
-  };
 
   // 머리말
   const current = REGION_MAP[region];
-  const heading = regional ? `${t(categoryLabel(view as BoardCategory))} · ${t(current.label)}` : view === "all" ? (ko ? "전체 글" : "All posts") : t(categoryLabel(view));
+  const heading = regional ? `${t(categoryLabel(view))} · ${t(current.label)}` : t(categoryLabel(view));
   const intro = regional
     ? current.countries
       ? t(current.countries)
@@ -116,15 +100,11 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
           ? "모든 지역의 정보를 모아 봅니다. 지역을 고르면 그 지역의 글만 볼 수 있습니다."
           : "Posts from every region. Choose a region to see only its posts."
         : ""
-    : view === "all"
-      ? ko
-        ? "해외시장·해외입찰·국내우수 Item·공지의 최신 글을 모아 봅니다."
-        : "The latest posts from every category."
-      : t(CATEGORY_MAP[view].intro);
+    : t(CATEGORY_MAP[view].intro);
 
-  // 열 구성 (넓은 화면 표)
+  // 열 구성 (넓은 화면 표) — 국내우수 Item: 종류·회사명·제목·게시일 / 공지: 종류·제목·게시일
   const showRegion = regional;
-  const showCat = view === "all";
+  const showKind = view === "items" || view === "notice";
   const showItem = view === "items";
   const searchHint = regional
     ? ko
@@ -190,10 +170,9 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
             <tr>
               {showRegion && <th className={`${ko ? "w-28" : "w-44"} px-5 py-3.5`}>{ko ? "지역" : "Region"}</th>}
               {showRegion && <th className="w-36 px-3 py-3.5">{ko ? "주 / 국가" : "State / Country"}</th>}
-              {showCat && <th className={`${ko ? "w-32" : "w-48"} px-5 py-3.5`}>{ko ? "구분" : "Category"}</th>}
-              {showItem && <th className="w-28 px-5 py-3.5">{ko ? "종류" : "Type"}</th>}
+              {showKind && <th className="w-28 px-5 py-3.5">{ko ? "종류" : "Type"}</th>}
               {showItem && <th className="w-44 px-3 py-3.5">{ko ? "회사명" : "Company"}</th>}
-              <th className={`${showRegion || showCat || showItem ? "px-3" : "px-5"} py-3.5`}>{ko ? "제목" : "Title"}</th>
+              <th className={`${showRegion || showKind ? "px-3" : "px-5"} py-3.5`}>{ko ? "제목" : "Title"}</th>
               <th className="w-32 px-5 py-3.5 text-right">{ko ? "게시일" : "Date"}</th>
             </tr>
           </thead>
@@ -206,12 +185,7 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
                     {p.country || "-"}
                   </td>
                 )}
-                {showCat && (
-                  <td className="px-5 py-4">
-                    <CategoryBadge category={p.category} label={t(categoryLabel(p.category))} />
-                  </td>
-                )}
-                {showItem && (
+                {showKind && (
                   <td lang={postLang} className="px-5 py-4">
                     {p.kind && <span className="rounded-md bg-accent/10 px-2 py-0.5 text-[12px] font-bold text-ink">{p.kind}</span>}
                   </td>
@@ -221,7 +195,7 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
                     {p.company || "-"}
                   </td>
                 )}
-                <td className={`${showRegion || showCat || showItem ? "px-3" : "px-5"} py-4`}>
+                <td className={`${showRegion || showKind ? "px-3" : "px-5"} py-4`}>
                   <Link href={detail(p.id)} className="flex items-center gap-2 font-semibold text-ink decoration-accent underline-offset-4 hover:underline">
                     {p.is_pinned && <PinMark ko={ko} />}
                     <span lang={postLang} className="truncate">
@@ -242,17 +216,16 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
         {items.map((p) => {
           const sub = showRegion
             ? [regionLabel(p.region), p.country].filter(Boolean)
-            : showItem
-              ? [p.kind, p.company].filter(Boolean)
+            : showKind
+              ? [p.kind, showItem ? p.company : ""].filter(Boolean)
               : [];
           return (
             <li key={p.id}>
               <Link href={detail(p.id)} className="group block py-4">
-                {(showCat || sub.length > 0) && (
-                  <div lang={showItem ? postLang : undefined} className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
-                    {showCat && <CategoryBadge category={p.category} label={t(categoryLabel(p.category))} />}
+                {sub.length > 0 && (
+                  <div lang={showKind ? postLang : undefined} className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
                     {sub.map((s, i) => (
-                      <span key={i} lang={i > 0 || showItem ? postLang : undefined}>
+                      <span key={i} lang={i > 0 || showKind ? postLang : undefined}>
                         {i > 0 ? "· " : ""}
                         {s}
                       </span>
@@ -283,7 +256,7 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
 
   if (!regional)
     return (
-      <div ref={boardRef} className="container-x">
+      <div className="container-x">
         {header}
         {table}
       </div>
@@ -291,7 +264,7 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
 
   return (
     <div className="container-x">
-      <div ref={boardRef} className="grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-12">
+      <div className="grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-12">
         <aside className="min-w-0 lg:sticky lg:top-[calc(var(--header-h)+var(--subnav-h,0px)+1.5rem)] lg:self-start">
           <p className="mb-3 hidden text-xs font-bold uppercase tracking-widest text-muted lg:block">{ko ? "지역" : "Region"}</p>
           <nav
@@ -323,11 +296,6 @@ function BoardList({ posts, view, regional, locale, region, q, page: rawPage, fo
           {table}
         </div>
       </div>
-
-      {/* 지도는 목록 아래 — 첫 화면에서 글이 보이도록. 휴대폰·태블릿에서는 위의 지역 버튼 줄로 대신합니다. */}
-      <div className="mx-auto mt-section-sm hidden max-w-[1100px] lg:block">
-        <RegionMap locale={locale} active={region} counts={counts} hrefFor={(id) => href({ region: id, page: 1 })} onPick={toBoardTop} />
-      </div>
     </div>
   );
 }
@@ -348,17 +316,6 @@ function FilesMark({ ko, className = "" }: { ko: boolean; className?: string }) 
       <span className="sr-only">{ko ? " (첨부 있음)" : " (attachments)"}</span>
     </span>
   );
-}
-
-const BADGE: Record<BoardCategory, string> = {
-  market: "bg-accent/10 text-ink",
-  tender: "bg-orange/15 text-orange-ink",
-  items: "bg-emerald-50 text-emerald-800",
-  notice: "bg-ink text-white",
-};
-
-export function CategoryBadge({ category, label }: { category: BoardCategory; label: string }) {
-  return <span className={`inline-block whitespace-nowrap rounded-md px-2 py-0.5 text-[12px] font-bold ${BADGE[category] ?? BADGE.market}`}>{label}</span>;
 }
 
 function Empty({ ko, search }: { ko: boolean; search?: boolean }) {

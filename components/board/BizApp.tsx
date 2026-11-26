@@ -10,23 +10,30 @@ import type { Locale } from "@/lib/i18n";
 import type { BoardCategory } from "@/lib/types";
 import { Icon } from "../Icon";
 import { SubNav } from "../SubNav";
-import { BizBoard, boardHref, type BoardView } from "./BizBoard";
+import { BizBoard, boardHref } from "./BizBoard";
 import { LockGate } from "./LockGate";
 import { PostView } from "./PostView";
 import { AttachmentList, SecureBody } from "./SecureContent";
 import { useVault } from "./useVault";
 
+type Params = URLSearchParams | { get: (k: string) => string | null };
+
 /**
- * 주소의 카테고리: ?cat=market|tender|items|notice (없으면 전체)
- * 예전 주소도 받습니다: ?category=industry|inquiry (예전 해외 Biz정보), ?region= 만 있으면 해외시장
+ * 주소에 적힌 카테고리: ?cat=market|tender|items|notice — 적혀 있지 않으면 null
+ * 예전 주소도 받습니다: ?category=industry|inquiry (예전 해외 Biz정보)
  */
-export function viewFromParams(sp: URLSearchParams | { get: (k: string) => string | null }): BoardView {
+function explicitView(sp: Params): BoardCategory | null {
   const cat = sp.get("cat");
   if (isCategory(cat)) return cat;
-  const legacy = LEGACY_CATEGORY[sp.get("category") ?? ""];
-  if (legacy) return legacy;
-  if (isRegionId(sp.get("region")) && sp.get("region") !== "all") return "market";
-  return "all";
+  return LEGACY_CATEGORY[sp.get("category") ?? ""] ?? null;
+}
+
+/**
+ * 목록 카테고리 — 4차 수정 요청으로 '전체' 탭을 없앴으므로, ?cat 이 없으면(회원로그인 메뉴 /biz,
+ * 예전 '전체' 주소, ?region= 만 있는 예전 주소) 해외시장을 엽니다.
+ */
+export function viewFromParams(sp: Params): BoardCategory {
+  return explicitView(sp) ?? "market";
 }
 
 /**
@@ -43,7 +50,7 @@ export function BizApp({ locale }: { locale: Locale }) {
   const posts = useMemo(() => sortPosts(data?.posts ?? []), [data]);
   const postId = Number(sp.get("post") ?? 0);
   const post = postId ? (posts.find((p) => p.id === postId) ?? null) : null;
-  const view: BoardView = post ? post.category : viewFromParams(sp);
+  const view: BoardCategory = post ? post.category : viewFromParams(sp);
   const topRef = useRef<HTMLDivElement>(null);
 
   // 글을 열어 볼 때는 상단 소개 문구 숨김 (globals.css: html[data-viewing-post])
@@ -61,7 +68,8 @@ export function BizApp({ locale }: { locale: Locale }) {
     if (postId && el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: "start" });
   }, [postId]);
 
-  if (!data) return <BizGate locale={locale} view={view} state={state} error={error} onSubmit={(pw) => unlock(pw)} />;
+  // 잠금 화면 배지: 카테고리를 골라 들어왔으면 그 이름, 아니면(회원로그인 메뉴 등) 게시판 이름
+  if (!data) return <BizGate locale={locale} view={post ? view : (explicitView(sp) ?? undefined)} state={state} error={error} onSubmit={(pw) => unlock(pw)} />;
 
   const lockButton = (
     <button
@@ -78,11 +86,8 @@ export function BizApp({ locale }: { locale: Locale }) {
 
   const tabs = (
     <SubNav
-      items={[
-        { href: lp(locale, "/biz"), label: ko ? "전체" : "All" },
-        ...BOARD_CATEGORIES.map((c) => ({ href: lp(locale, `/biz?cat=${c.id}`), label: t(c.label) })),
-      ]}
-      current={view === "all" ? "/biz" : `cat=${view}`}
+      items={BOARD_CATEGORIES.map((c) => ({ href: lp(locale, `/biz?cat=${c.id}`), label: t(c.label) }))}
+      current={`cat=${view}`}
     />
   );
 
@@ -109,12 +114,8 @@ export function BizApp({ locale }: { locale: Locale }) {
                 { label: ko ? "주 / 국가" : "State / Country", value: post.country ?? "" },
               ]
             : [
-                ...(cat === "items"
-                  ? [
-                      { label: ko ? "종류" : "Type", value: post.kind ?? "" },
-                      { label: ko ? "회사명" : "Company", value: post.company ?? "" },
-                    ]
-                  : []),
+                ...(cat === "items" || cat === "notice" ? [{ label: ko ? "종류" : "Type", value: post.kind ?? "" }] : []),
+                ...(cat === "items" ? [{ label: ko ? "회사명" : "Company", value: post.company ?? "" }] : []),
                 { label: ko ? "게시자" : "Author", value: post.author_name },
               ]
         }
@@ -143,7 +144,7 @@ export function BizApp({ locale }: { locale: Locale }) {
             </span>
           </p>
         )}
-        <BizBoard posts={view === "all" ? posts : posts.filter((p) => p.category === view)} view={view} locale={locale} footer={lockButton} />
+        <BizBoard posts={posts.filter((p) => p.category === view)} view={view} locale={locale} footer={lockButton} />
       </div>
     );
   }
@@ -156,7 +157,7 @@ export function BizApp({ locale }: { locale: Locale }) {
   );
 }
 
-function BizGate({ locale, view, state, error, onSubmit }: { locale: Locale; view: BoardView; state: string; error: string; onSubmit: (pw: string) => void }) {
+function BizGate({ locale, view, state, error, onSubmit }: { locale: Locale; view?: BoardCategory; state: string; error: string; onSubmit: (pw: string) => void }) {
   const ko = locale === "ko";
   return (
     <LockGate
@@ -165,7 +166,7 @@ function BizGate({ locale, view, state, error, onSubmit }: { locale: Locale; vie
       error={error}
       onSubmit={onSubmit}
       inputId="biz-pw"
-      badge={view === "all" ? (ko ? "해외Biz정보(해외주재원 전용)" : "Global Biz Info (Overseas Staff Only)") : categoryLabel(view)[locale]}
+      badge={view ? categoryLabel(view)[locale] : ko ? "해외Biz정보(해외주재원 전용)" : "Global Biz Info (Overseas Staff Only)"}
       title={ko ? "회원 전용" : "Members only"}
       text={
         ko
@@ -178,5 +179,5 @@ function BizGate({ locale, view, state, error, onSubmit }: { locale: Locale; vie
 
 /** 정적 HTML(자바스크립트 실행 전)에 들어가는 화면 — 비밀번호 입력 화면 (글 내용 없음) */
 export function BizFallback({ locale }: { locale: Locale }) {
-  return <BizGate locale={locale} view="all" state="init" error="" onSubmit={() => {}} />;
+  return <BizGate locale={locale} state="init" error="" onSubmit={() => {}} />;
 }

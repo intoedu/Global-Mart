@@ -65,14 +65,10 @@ export function useVault(ko: boolean) {
 
   useEffect(() => {
     const saved = store.get(PW_KEY);
-    const legacy = store.get(LEGACY_PW_KEY);
-    // 예전 '해외주재원 전용' 탭에서 넣은 비밀번호가 남아 있으면 한 번 시도 (통합 게시판의 회원 비밀번호가 그것임)
+    // 예전 '해외주재원 전용' 탭의 비밀번호는 지움 (2026-11 회원 비밀번호를 바꿔 더 이상 열리지 않음)
     store.remove(LEGACY_PW_KEY);
-    (async () => {
-      if (saved && (await unlock(saved, true))) return;
-      if (legacy && legacy !== saved && (await unlock(legacy, true))) return;
-      if (!saved && !legacy) setState("locked");
-    })();
+    if (saved) void unlock(saved, true);
+    else setState("locked");
   }, [unlock]);
 
   const lock = useCallback(() => {

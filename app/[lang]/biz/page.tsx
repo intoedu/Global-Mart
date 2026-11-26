@@ -22,9 +22,10 @@ export default async function BizPage({ params }: LangParams) {
   const [p1, p2] = BIZ_INTRO[locale];
   return (
     <>
-      <PageHero locale={locale} image="mumbai" eyebrow="Global Biz Info" title={t(TITLE)} lead={p1} crumbs={[{ label: t(TITLE) }]}>
+      {/* 4차 수정 요청: 사진 없는 낮은 머리말 — 1440×900 첫 화면에서 카테고리 탭과 게시판 목록 일부가 보이도록 */}
+      <PageHero locale={locale} noPhoto eyebrow="Global Biz Info" title={t(TITLE)} lead={p1} crumbs={[{ label: t(TITLE) }]}>
         {/* 소개 둘째 문단 — PageHero 의 lead 와 같은 모양 (글을 열면 함께 숨김: globals.css .page-hero-lead) */}
-        <p className="page-hero-lead reveal mt-2 max-w-[44em] text-[clamp(0.9375rem,0.85rem+0.2vw,1.125rem)] leading-[1.65] text-ink-3">{p2}</p>
+        <p className="page-hero-lead reveal mt-2 max-w-[60em] text-[clamp(0.9375rem,0.85rem+0.2vw,1.125rem)] leading-[1.65] text-ink-3">{p2}</p>
       </PageHero>
       <Suspense fallback={<BizFallback locale={locale} />}>
         <BizApp locale={locale} />

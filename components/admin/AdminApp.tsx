@@ -571,7 +571,7 @@ function postSub(p: BoardPost) {
   const parts: string[] = [categoryLabel(p.category).ko];
   if (isRegional(p.category)) parts.push(p.region && isRegionId(p.region) ? REGION_MAP[p.region].label.ko : (p.region ?? "-"), p.country || "-");
   else if (p.category === "items") parts.push(p.kind || "-", p.company || "-", p.author_name);
-  else parts.push(p.author_name);
+  else parts.push(p.kind || "-", p.author_name);
   if (p.files?.length) parts.push(`첨부 ${p.files.length}`);
   return parts.join(" · ");
 }
@@ -627,9 +627,10 @@ function BoardAdmin({ token, notify }: { token: string; notify: Notify }) {
             const region = String(fd.get("region") ?? "all");
             post.region = isRegionId(region) ? region : "all";
             post.country = String(fd.get("country") ?? "").trim();
-          } else if (category === "items") {
+          } else {
+            // 국내우수 Item·공지: 종류 (국내우수 Item 은 회사명도)
             post.kind = String(fd.get("kind") ?? "").trim();
-            post.company = String(fd.get("company") ?? "").trim();
+            if (category === "items") post.company = String(fd.get("company") ?? "").trim();
           }
           const next: BoardData = {
             ...data,
@@ -690,7 +691,7 @@ function BoardAdmin({ token, notify }: { token: string; notify: Notify }) {
   );
 }
 
-/** 글쓰기 양식의 카테고리별 칸: 해외시장·해외입찰 → 지역·주/국가, 국내우수 Item → 종류·회사명, 공지 → 없음 */
+/** 글쓰기 양식의 카테고리별 칸: 해외시장·해외입찰 → 지역·주/국가, 국내우수 Item → 종류·회사명, 공지 → 종류 */
 function CategoryFields({ initial }: { initial: BoardPost }) {
   const [cat, setCat] = useState<BoardCategory>(initial.category);
   return (
@@ -732,7 +733,16 @@ function CategoryFields({ initial }: { initial: BoardPost }) {
           </div>
         </>
       )}
-      {cat === "notice" && <p className="self-end pb-3 text-sm text-muted sm:col-span-2">공지는 지역·회사 구분 없이 한 게시판에 올라갑니다.</p>}
+      {cat === "notice" && (
+        <>
+          <div>
+            <label className="label" htmlFor="kind">종류</label>
+            <input id="kind" name="kind" list="notice-kinds" defaultValue={initial.kind ?? ""} maxLength={40} className="input" placeholder="예: 안내" />
+            <datalist id="notice-kinds">{["안내", "중요", "행사", "기타"].map((c) => <option key={c} value={c} />)}</datalist>
+          </div>
+          <p className="self-end pb-3 text-sm text-muted">공지는 지역·회사 구분 없이 한 게시판에 올라갑니다. 목록에 종류·제목·게시일이 보입니다.</p>
+        </>
+      )}
     </div>
   );
 }
@@ -1046,7 +1056,7 @@ function Help() {
       <ul className="list-disc space-y-1 pl-5">
         <li><b>해외시장 · 해외입찰</b> — 나라별 게시판. 지역(동남아·중동 등)과 주/국가를 고릅니다. &lsquo;전체&rsquo; 지역으로 올린 글은 모든 지역에 함께 보입니다. 게시자는 표시되지 않습니다.</li>
         <li><b>국내우수 Item</b> — 단일 게시판. 종류(제품·기술·소프트웨어 등)와 회사명을 적습니다.</li>
-        <li><b>공지</b> — 단일 게시판. 본사에서 해외주재원에게 전하는 공지.</li>
+        <li><b>공지</b> — 단일 게시판. 본사에서 해외주재원에게 전하는 공지. 종류(안내·중요 등)를 적으면 목록의 &lsquo;종류&rsquo; 칸에 보입니다.</li>
       </ul>
       <p>&lsquo;목록 맨 위에 고정&rsquo;을 체크하면 그 카테고리 목록의 맨 위에 보입니다.</p>
       <h3 className="text-lg font-bold text-ink">회원 비밀번호 (하나)</h3>

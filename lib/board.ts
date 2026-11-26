@@ -79,7 +79,7 @@ export const ADMIN_FILE = { web: "/data/admin.json", repo: "public/data/admin.js
 
 /** 이 탭에 기억해 두는 회원 비밀번호 열쇠 (창을 닫으면 사라짐) */
 export const PW_KEY = "gm_biz_pw";
-/** 예전 해외주재원 전용 게시판의 열쇠 — 그 비밀번호가 통합 게시판의 회원 비밀번호가 되었으므로 한 번 시도해 봅니다. */
+/** 예전 해외주재원 전용 게시판의 열쇠 — 회원 비밀번호가 바뀌어 더 이상 쓰지 않으므로, 남아 있으면 지웁니다. */
 export const LEGACY_PW_KEY = "gm_resident_pw";
 
 /** 첨부 파일 한 개의 최대 크기 */
