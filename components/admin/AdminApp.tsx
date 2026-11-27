@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { ACTIONS_URL, ConflictError, DATA_BRANCH, checkToken, createBinaryFile, deleteRepoFile, fetchAdminFiles, readFile, readFileOrNull, writeFile } from "@/lib/github";
 import {
   MIN_PASSWORD_LENGTH,
-  checkAdminId,
   checkPassword,
   decryptAdminToken,
   decryptJson,
@@ -77,8 +76,8 @@ type Notify = { ok: (what: string) => void; error: (t: string) => void; warn: (t
 
 /**
  * 관리자 화면 (정적 사이트용)
- * - 로그인: 관리자 아이디·비밀번호 → 저장소의 public/data/admin.json(아이디·비밀번호로 암호화한 GitHub 토큰)을 풀어 사용.
- *   처음 한 번은 사이트 소유자가 '처음 설정'에서 GitHub 토큰과 아이디·비밀번호를 정합니다. 토큰 직접 입력도 됩니다.
+ * - 로그인: 관리자 비밀번호 → 저장소의 public/data/admin.json(비밀번호로 암호화한 GitHub 토큰)을 풀어 사용. 아이디는 없습니다.
+ *   처음 한 번은 사이트 소유자가 '처음 설정'에서 GitHub 토큰과 관리자 비밀번호를 정합니다. 토큰 직접 입력도 됩니다.
  * - GitHub 토큰으로 저장소의 public/data/biz.json(회원 비밀번호로 암호화)을 직접 고칩니다.
  *   현재 회원 비밀번호를 넣어야 글을 고칠 수 있습니다.
  * - 본문 이미지·첨부 파일은 게시판 파일 키로 암호화해 public/data/files/biz/ 에 올립니다.
@@ -132,7 +131,7 @@ export function AdminApp() {
           <div className="flex flex-wrap gap-1.5">
             {[
               { v: "board", l: "해외Biz정보(해외주재원 전용)" },
-              { v: "account", l: "아이디·비밀번호 변경" },
+              { v: "account", l: "관리자 비밀번호 변경" },
               { v: "help", l: "사용 안내" },
             ].map((o) => (
               <button
@@ -186,11 +185,11 @@ export function AdminApp() {
 const TOKEN_NEW_URL =
   "https://github.com/settings/personal-access-tokens/new?name=Globalmart+admin&description=Global-Mart+site+admin+(boards)&target_name=intoedu&expires_in=366&contents=write";
 
-// ---------------------------------------------------------------- 로그인 (아이디·비밀번호 / 처음 설정 / 토큰 직접 입력)
+// ---------------------------------------------------------------- 로그인 (관리자 비밀번호 / 처음 설정 / 토큰 직접 입력)
 
 type GateMode = "login" | "setup" | "token";
 
-/** 아이디·비밀번호로 암호화한 토큰을 저장소에 저장 (admin.json). 이미 있으면 덮어씀 — 409 이면 한 번 더 시도 */
+/** 관리자 비밀번호로 암호화한 토큰을 저장소에 저장 (admin.json). 이미 있으면 덮어씀 — 409 이면 한 번 더 시도 */
 async function saveAdminFile(token: string, id: string, pw: string) {
   const file = await encryptAdminToken(token, id, pw);
   for (let attempt = 0; ; attempt++) {
@@ -204,9 +203,12 @@ async function saveAdminFile(token: string, id: string, pw: string) {
   }
 }
 
-/** 새 아이디·비밀번호 검사 — 문제가 없으면 빈 문자열 */
-function checkCredentials(id: string, pw: string, pw2: string) {
-  return checkAdminId(id) || checkPassword(pw) || (pw !== pw2 ? "두 비밀번호가 서로 다릅니다." : "");
+/** 관리자는 아이디 없이 비밀번호만 씁니다 — 암호화 열쇠에 쓰는 고정 이름 */
+const ADMIN_ID = "admin";
+
+/** 새 관리자 비밀번호 검사 — 문제가 없으면 빈 문자열 */
+function checkCredentials(pw: string, pw2: string) {
+  return checkPassword(pw) || (pw !== pw2 ? "두 비밀번호가 서로 다릅니다." : "");
 }
 
 function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void }) {
@@ -244,7 +246,7 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
       <div className="container-x max-w-xl">
         <div className="mb-4 flex flex-wrap gap-1.5" role="group" aria-label="로그인 방법">
           {[
-            { v: "login", l: "아이디 로그인" },
+            { v: "login", l: "관리자 로그인" },
             { v: "setup", l: "처음 설정 (사이트 소유자)" },
             { v: "token", l: "토큰 직접 입력" },
           ].map((o) => (
@@ -267,14 +269,13 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
             onSubmit={(e) => {
               e.preventDefault();
               const fd = new FormData(e.currentTarget);
-              const id = String(fd.get("admin-id") ?? "");
               const pw = String(fd.get("admin-pw") ?? "");
               run("확인 중…", async () => {
                 const files = await fetchAdminFiles();
-                if (!files.length) throw new Error("아직 관리자 아이디가 설정되지 않았습니다. 사이트 소유자가 '처음 설정'에서 GitHub 토큰과 아이디·비밀번호를 정해 주세요. (설정 직후라면 1~2분 뒤 다시 시도해 주세요)");
+                if (!files.length) throw new Error("아직 관리자 비밀번호가 설정되지 않았습니다. 사이트 소유자가 '처음 설정'에서 GitHub 토큰과 관리자 비밀번호를 정해 주세요. (설정 직후라면 1~2분 뒤 다시 시도해 주세요)");
                 let t: string | null = null;
-                for (const f of files) if ((t = await decryptAdminToken(f, id, pw))) break;
-                if (!t) throw new Error("아이디 또는 비밀번호가 올바르지 않습니다.");
+                for (const f of files) if ((t = await decryptAdminToken(f, ADMIN_ID, pw))) break;
+                if (!t) throw new Error("비밀번호가 올바르지 않습니다.");
                 const r = await checkToken(t);
                 if (!r.ok)
                   throw new Error(
@@ -286,14 +287,10 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
             }}
           >
             <h2 className="text-xl font-extrabold">관리자 로그인</h2>
-            <p className="text-sm leading-relaxed text-muted">관리자 아이디와 비밀번호를 입력해 주세요.</p>
+            <p className="text-sm leading-relaxed text-muted">관리자 비밀번호를 입력해 주세요.</p>
             {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
             <div>
-              <label className="label" htmlFor="admin-id">아이디</label>
-              <input id="admin-id" name="admin-id" required autoComplete="username" autoCapitalize="none" spellCheck={false} className="input" />
-            </div>
-            <div>
-              <label className="label" htmlFor="admin-pw">비밀번호</label>
+              <label className="label" htmlFor="admin-pw">관리자 비밀번호</label>
               <input id="admin-pw" name="admin-pw" type="password" required autoComplete="current-password" className="input" />
             </div>
             {remember}
@@ -309,31 +306,30 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
               e.preventDefault();
               const fd = new FormData(e.currentTarget);
               const t = String(fd.get("setup-token") ?? "").trim();
-              const id = String(fd.get("setup-id") ?? "");
               const pw = String(fd.get("setup-pw") ?? "");
-              const problem = checkCredentials(id, pw, String(fd.get("setup-pw2") ?? ""));
+              const problem = checkCredentials(pw, String(fd.get("setup-pw2") ?? ""));
               if (problem) return setErr(problem);
               run("저장 중…", async () => {
                 const r = await checkToken(t);
                 if (!r.ok) throw new Error(r.message);
                 const existing = await readFileOrNull<EncryptedFile>(t, ADMIN_FILE.repo);
-                if (existing && !window.confirm("이미 관리자 아이디가 설정되어 있습니다. 새 토큰·아이디·비밀번호로 바꿀까요? (예전 아이디·비밀번호로는 더 이상 로그인되지 않습니다)")) return;
-                await saveAdminFile(t, id, pw);
+                if (existing && !window.confirm("이미 관리자 비밀번호가 설정되어 있습니다. 새 토큰·비밀번호로 바꿀까요? (예전 비밀번호로는 더 이상 로그인되지 않습니다)")) return;
+                await saveAdminFile(t, ADMIN_ID, pw);
                 tokenStore.save(t, fd.get("remember") === "on");
                 onReady(t, {
                   kind: r.warning ? "warn" : "ok",
-                  text: `관리자 아이디·비밀번호를 저장했습니다. 1~2분 뒤부터 '아이디 로그인'으로 들어올 수 있습니다.${r.warning ? ` ${r.warning}` : ""}`,
+                  text: `관리자 비밀번호를 저장했습니다. 1~2분 뒤부터 '관리자 로그인'에서 비밀번호로 들어올 수 있습니다.${r.warning ? ` ${r.warning}` : ""}`,
                 });
               });
             }}
           >
             <h2 className="text-xl font-extrabold">처음 설정 (사이트 소유자)</h2>
             <p className="text-sm leading-relaxed text-muted">
-              처음 한 번, 또는 GitHub 토큰의 유효기간이 지났을 때 사이트 소유자가 합니다. 저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>을 붙여 넣고 관리자 아이디·비밀번호를 정하면,
-              토큰을 그 아이디·비밀번호로 암호화해 저장소(<code>public/data/admin.json</code>)에 저장합니다. 그 뒤로는 아이디·비밀번호만으로 로그인합니다.
+              처음 한 번, 또는 GitHub 토큰의 유효기간이 지났을 때 사이트 소유자가 합니다. 저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>을 붙여 넣고 관리자 비밀번호를 정하면,
+              토큰을 그 비밀번호로 암호화해 저장소(<code>public/data/admin.json</code>)에 저장합니다. 그 뒤로는 관리자 비밀번호만으로 로그인합니다.
             </p>
             <p className="rounded-xl bg-orange/15 px-4 py-3 text-xs leading-relaxed text-orange-ink">
-              주의: 아이디·비밀번호를 아는 사람은 누구나 이 토큰으로 저장소를 고칠 수 있습니다. 암호화 파일은 공개되어 있어 짧은 비밀번호는 대입으로 풀릴 수 있으니, 길고 짐작하기 어려운 비밀번호(예: 16자 이상)를 쓰세요.
+              주의: 관리자 비밀번호를 아는 사람은 누구나 이 토큰으로 저장소를 고칠 수 있습니다. 암호화 파일은 공개되어 있어 짧은 비밀번호는 대입으로 풀릴 수 있으니, 길고 짐작하기 어려운 비밀번호(예: 16자 이상)를 쓰세요.
               토큰은 <b>intoedu/Global-Mart</b> 저장소만, <b>Contents: Read and write</b> 권한만, 짧은 유효기간으로 만드세요.
             </p>
             {/* 토큰 만들기 안내: 이름·설명·유효기간·권한(Contents 쓰기)이 미리 채워진 GitHub 화면으로 이동 */}
@@ -368,11 +364,6 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
               <label className="label" htmlFor="setup-token">GitHub 토큰 (Fine-grained)</label>
               <input id="setup-token" name="setup-token" type="password" required className="input font-mono" placeholder="github_pat_…" autoComplete="off" />
             </div>
-            <div>
-              <label className="label" htmlFor="setup-id">관리자 아이디</label>
-              <input id="setup-id" name="setup-id" required minLength={3} maxLength={40} autoComplete="username" autoCapitalize="none" spellCheck={false} className="input" />
-              <p className="mt-1 text-xs text-muted">영문·숫자와 . _ - (대소문자 구분 없음)</p>
-            </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <label className="label" htmlFor="setup-pw">관리자 비밀번호</label>
@@ -406,7 +397,7 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
           >
             <h2 className="text-xl font-extrabold">토큰 직접 입력</h2>
             <p className="text-sm leading-relaxed text-muted">
-              저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>으로 바로 로그인합니다(아이디 설정이 없어도 됨). 이 저장소만 고르고 유효기간을 짧게(예: 30~90일) 정한 Fine-grained 토큰을 권장합니다. 만드는 방법은 로그인 후 &lsquo;사용 안내&rsquo; 또는 README에 있습니다.
+              저장소 쓰기 권한이 있는 <b>GitHub 토큰</b>으로 바로 로그인합니다(비밀번호 설정이 없어도 됨). 이 저장소만 고르고 유효기간을 짧게(예: 30~90일) 정한 Fine-grained 토큰을 권장합니다. 만드는 방법은 로그인 후 &lsquo;사용 안내&rsquo; 또는 README에 있습니다.
             </p>
             {err && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{err}</p>}
             <div>
@@ -422,7 +413,7 @@ function AdminGate({ onReady }: { onReady: (t: string, message?: Notice) => void
   );
 }
 
-// ---------------------------------------------------------------- 아이디·비밀번호 변경
+// ---------------------------------------------------------------- 관리자 비밀번호 변경
 
 function AccountAdmin({ token, notify }: { token: string; notify: Notify }) {
   const [busy, setBusy] = useState("");
@@ -433,15 +424,14 @@ function AccountAdmin({ token, notify }: { token: string; notify: Notify }) {
         e.preventDefault();
         const form = e.currentTarget;
         const fd = new FormData(form);
-        const id = String(fd.get("acc-id") ?? "");
         const pw = String(fd.get("acc-pw") ?? "");
-        const problem = checkCredentials(id, pw, String(fd.get("acc-pw2") ?? ""));
+        const problem = checkCredentials(pw, String(fd.get("acc-pw2") ?? ""));
         if (problem) return notify.error(problem);
         setBusy("저장 중…");
         try {
-          await saveAdminFile(token, id, pw);
+          await saveAdminFile(token, ADMIN_ID, pw);
           form.reset();
-          notify.ok("새 관리자 아이디·비밀번호를");
+          notify.ok("새 관리자 비밀번호를");
         } catch (err) {
           notify.error(err instanceof ConflictError ? "다른 곳에서 동시에 바꾸고 있습니다. 잠시 후 다시 시도해 주세요." : (err as Error).message || NET_ERROR);
         } finally {
@@ -449,19 +439,15 @@ function AccountAdmin({ token, notify }: { token: string; notify: Notify }) {
         }
       }}
     >
-      <h3 className="text-lg font-extrabold">관리자 아이디·비밀번호 변경</h3>
+      <h3 className="text-lg font-extrabold">관리자 비밀번호 변경</h3>
       <p className="text-sm leading-relaxed text-muted">
-        지금 로그인한 GitHub 토큰을 새 아이디·비밀번호로 다시 암호화해 저장소(<code>public/data/admin.json</code>)에 저장합니다. 저장하면 예전 아이디·비밀번호로는 로그인되지 않습니다
+        지금 로그인한 GitHub 토큰을 새 비밀번호로 다시 암호화해 저장소(<code>public/data/admin.json</code>)에 저장합니다. 저장하면 예전 비밀번호로는 로그인되지 않습니다
         (사이트 반영 1~2분 동안은 예전 것도 될 수 있습니다). 비밀번호는 {MIN_PASSWORD_LENGTH}자 이상, 글자·숫자·기호 중 두 종류 이상 — 길수록 안전합니다(16자 이상 권장).
       </p>
       <p className="rounded-xl bg-paper px-4 py-3 text-xs leading-relaxed text-ink-3">
-        비밀번호가 새어 나갔다고 생각되면 아이디·비밀번호만 바꾸지 말고, GitHub에서 토큰을 지우고(Revoke) 새 토큰으로 &lsquo;처음 설정&rsquo;을 다시 해 주세요.
-        저장소 기록(git history)에 남은 예전 파일은 예전 아이디·비밀번호로 풀리기 때문입니다.
+        비밀번호가 새어 나갔다고 생각되면 비밀번호만 바꾸지 말고, GitHub에서 토큰을 지우고(Revoke) 새 토큰으로 &lsquo;처음 설정&rsquo;을 다시 해 주세요.
+        저장소 기록(git history)에 남은 예전 파일은 예전 비밀번호로 풀리기 때문입니다.
       </p>
-      <div>
-        <label className="label" htmlFor="acc-id">새 아이디</label>
-        <input id="acc-id" name="acc-id" required minLength={3} maxLength={40} autoComplete="username" autoCapitalize="none" spellCheck={false} className="input" />
-      </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="acc-pw">새 비밀번호</label>
@@ -472,7 +458,7 @@ function AccountAdmin({ token, notify }: { token: string; notify: Notify }) {
           <input id="acc-pw2" name="acc-pw2" type="password" required minLength={MIN_PASSWORD_LENGTH} className="input" autoComplete="new-password" />
         </div>
       </div>
-      <button disabled={!!busy} className="btn-primary">{busy || "아이디·비밀번호 저장"}</button>
+      <button disabled={!!busy} className="btn-primary">{busy || "비밀번호 저장"}</button>
     </form>
   );
 }
@@ -1099,11 +1085,11 @@ function Help() {
         해외Biz정보(해외주재원 전용)의 모든 카테고리는 회원 비밀번호 하나로 열립니다. 회원가입은 없고, 글로벌마트가 회원(해외주재원 등)에게 알려 줍니다.
         글은 이 비밀번호로 암호화되어 저장되므로, 비밀번호를 잊으면 글을 열 수 없습니다. 안전한 곳에 적어 두세요.
       </p>
-      <h3 className="text-lg font-bold text-ink">관리자 아이디·비밀번호</h3>
+      <h3 className="text-lg font-bold text-ink">관리자 비밀번호</h3>
       <p>
-        관리자 아이디·비밀번호는 회원 비밀번호와 별개입니다. 사이트 소유자가 &lsquo;처음 설정&rsquo;에서 GitHub 토큰을 넣고 정하면, 토큰이 아이디·비밀번호로 암호화되어 저장소(public/data/admin.json)에 저장됩니다.
-        아이디·비밀번호를 아는 사람은 이 토큰으로 저장소를 고칠 수 있으므로, 길고 짐작하기 어려운 비밀번호를 쓰고 다른 사람에게 알려 주지 마세요.
-        토큰의 유효기간이 지나면 아이디로 로그인되지 않으니, 새 토큰을 만들어 &lsquo;처음 설정&rsquo;을 다시 해 주세요.
+        관리자 비밀번호는 회원 비밀번호와 별개입니다. 사이트 소유자가 &lsquo;처음 설정&rsquo;에서 GitHub 토큰을 넣고 정하면, 토큰이 관리자 비밀번호로 암호화되어 저장소(public/data/admin.json)에 저장됩니다.
+        관리자 비밀번호를 아는 사람은 이 토큰으로 저장소를 고칠 수 있으므로, 길고 짐작하기 어려운 비밀번호를 쓰고 다른 사람에게 알려 주지 마세요.
+        토큰의 유효기간이 지나면 관리자 로그인이 되지 않으니, 새 토큰을 만들어 &lsquo;처음 설정&rsquo;을 다시 해 주세요.
       </p>
       <h3 className="text-lg font-bold text-ink">이미지·첨부 파일</h3>
       <p>
