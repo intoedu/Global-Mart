@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "alg": "AES-GCM",
+  "kdf": "PBKDF2-SHA256",
+  "iterations": 600000,
+  "salt": "cOfG776SSdPnB+d3LvX/Dg==",
+  "iv": "jArrw2aKMrLf75/X",
+  "data": "sc3TwIxotKARnlg0WxcysKYx/DjOSitt6EOrcsJMbzsxwf+A9F5joEkNPHYAl5ZJl2IkAtVQm9xdmzeqtyjoxw6xOnVTPz0qumByl3yQZNvDkEGXEAf9Q+H+/4MWXLjBy+WWBmjsJpiI1o3xdrfwXpaBvmf9o9t77jVhjP37uoVw4DoBlBs3ODSISkJHvf0DIqa7Vx9WDls3ndv9Yw==",
+  "updated_at": "2026-11-27T08:05:56.186Z",
+  "kind": "admin-token"
+}
